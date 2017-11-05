@@ -1,0 +1,81 @@
+package com.bridgeit.model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Table(name="notes")
+public class NoteBean {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int noteId;
+	@Column(name="note_title")
+	private String title;
+	@Column(name="note_body")
+	private String body;
+	@Column(name="note_color")
+	private String color;
+	@Column(name="create_date")
+	private Date createDate;
+	@Column(name="last_update")
+	private Date lastUpdated;
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name="user_id")
+	UserBean user;
+	public int getNoteId() {
+		return noteId;
+	}
+	public void setNoteId(int noteId) {
+		this.noteId = noteId;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getBody() {
+		return body;
+	}
+	public void setBody(String body) {
+		this.body = body;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public String getLastUpdated() {
+		return (new SimpleDateFormat("dd-MM-yyyy").format(lastUpdated));
+	}
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
+	public UserBean getUser() {
+		return user;
+	}
+	public void setUser(UserBean user) {
+		this.user = user;
+	}
+
+	
+}
