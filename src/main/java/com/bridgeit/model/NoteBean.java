@@ -12,13 +12,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="notes")
 public class NoteBean {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="idgen")
+	@GenericGenerator(name="idgen", strategy="native")
 	private int noteId;
 	@Column(name="note_title")
 	private String title;
@@ -64,8 +67,8 @@ public class NoteBean {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public String getLastUpdated() {
-		return (new SimpleDateFormat("dd-MM-yyyy").format(lastUpdated));
+	public Date getLastUpdated() {
+		return lastUpdated;
 	}
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;

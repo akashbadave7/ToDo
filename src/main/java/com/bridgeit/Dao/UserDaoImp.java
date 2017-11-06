@@ -11,12 +11,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bridgeit.model.UserBean;
 
 
 public class UserDaoImp implements UserDao{
-
+	
+	@Autowired
 	SessionFactory factory;
 	public SessionFactory getFactory() {
 		return factory;
@@ -95,7 +97,7 @@ public class UserDaoImp implements UserDao{
 	}
 
 	@Override
-	public UserBean getUserByEmail(String email) {
+	public UserBean getUserByEmail(UserBean user) {
 		Session session = factory.openSession();
 		 CriteriaBuilder cb = session.getCriteriaBuilder();
 	      CriteriaQuery<UserBean> cq = cb.createQuery(UserBean.class);
@@ -104,13 +106,22 @@ public class UserDaoImp implements UserDao{
 	      Query<UserBean> query = session.createQuery(cq);
 	      List<UserBean> list = query.list();
 		
-	      for(UserBean user:list) {
-	    	  if(user.getEmail().equals(email)) {
-	    		  return user;
+	      for(UserBean userDetails:list) {
+	    	  if(userDetails.getEmail().equals(user.getEmail()) || userDetails.getMobilenumber().equals(user.getMobilenumber())) {
+	    		  return userDetails;
 	    	  }
 	      }
 		return null;
 	}
-	
 
+	@Override
+	public boolean isUserExits(UserBean user) {
+		String email= user.getEmail();
+		UserBean isUserExit = getUserByEmail(user);
+		if(isUserExit==null)
+			return true;
+		else
+			return false;
+	}
+	
 }

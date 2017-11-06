@@ -7,6 +7,7 @@ public interface UserService {
 
 		public int saveUserData(UserBean user);
 		public UserBean getUserById(int id);
-		public UserBean getUserByEmail(String email);
+		public UserBean getUserByEmail(UserBean user);
 		public boolean updateUser(UserBean user);
+		public boolean isUserExits(UserBean user);
 }

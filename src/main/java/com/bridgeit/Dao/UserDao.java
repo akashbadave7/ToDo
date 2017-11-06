@@ -10,7 +10,10 @@ public interface UserDao {
 	
 	boolean deleteUser(UserBean user);
 	
+	
 	UserBean getUserById(int id);
 	
-	UserBean getUserByEmail(String email);
+	UserBean getUserByEmail(UserBean user);
+	
+	boolean isUserExits(UserBean user);
 }

@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
-	<context:component-scan base-package="com.bridgelabz.controller" />
+	<context:component-scan base-package="com.bridgeit" />
 	<mvc:annotation-driven />
 	
 	<bean
@@ -48,7 +48,7 @@
     <property name="host" value="smtp.gmail.com" />
     <property name="port" value="587" />
     <property name="username" value="530akash@gmail.com" />
-    <property name="password" value="akashbadabe26" />
+    <property name="password" value="akashbadave26" />
  
     <property name="javaMailProperties">
 
@@ -59,10 +59,10 @@
         </props>
     </property>
 </bean>
-    <bean id="noteDao" class="com.bridgelabz.dao.NoteDaoImpl"></bean>
-    <bean class="com.bridgelabz.service.NoteServiceImpl"></bean>
-    <bean class="com.bridgelabz.service.MailerImpl"></bean>
-    <bean class="com.bridgelabz.service.UserServiceImpl"></bean>
-	<bean id="userDao" class="com.bridgelabz.dao.UserDaoImpl"></bean>
-	<bean id="validator" class="com.bridgelabz.validation.Validator"></bean>
+    <!-- <bean id="noteDao" class="com.bridgeits.Dao.NoteDaoImpl"></bean> -->
+   <!--  <bean class="com.bridge.Service.NoteServiceImp"></bean> -->
+    <bean class="com.bridgeit.Service.MailImp"></bean>
+    <bean class="com.bridgeit.Service.UserServiceImp"></bean>
+	<bean id="userDao" class="com.bridgeit.Dao.UserDaoImp"></bean>
+	<bean id="validator" class="com.bridgeit.Validation.Validation"></bean>
 </beans>

@@ -10,12 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="user")
 public class UserBean 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="idgen")
+	@GenericGenerator(name="idgen", strategy="increment")
 	private int id;
 	
 	@Column(name="name")
@@ -33,6 +38,7 @@ public class UserBean
 	@Column(name="isActivated")
 	private boolean isActivated;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	Set<NoteBean> notes;
 
