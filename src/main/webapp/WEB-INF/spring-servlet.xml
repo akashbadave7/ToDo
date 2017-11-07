@@ -9,7 +9,9 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 	<context:component-scan base-package="com.bridgeit" />
 	<mvc:annotation-driven />
-	
+
+
+ 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/" />
@@ -59,10 +61,20 @@
         </props>
     </property>
 </bean>
-    <!-- <bean id="noteDao" class="com.bridgeits.Dao.NoteDaoImpl"></bean> -->
-   <!--  <bean class="com.bridge.Service.NoteServiceImp"></bean> -->
+    <bean id="noteDao" class="com.bridgeit.Dao.NoteDaoImp"></bean>
+    <bean class="com.bridgeit.Service.NoteServiceImp"></bean>
     <bean class="com.bridgeit.Service.MailImp"></bean>
     <bean class="com.bridgeit.Service.UserServiceImp"></bean>
 	<bean id="userDao" class="com.bridgeit.Dao.UserDaoImp"></bean>
-	<bean id="validator" class="com.bridgeit.Validation.Validation"></bean>
+	<bean id="validator" class="com.bridgeit.Validation.Validation">
+</bean>
+
+	<bean id="tokenGenerator" class="com.bridgeit.Token.TokenGenerator"/>
+	
+	<bean id="verifyToken" class="com.bridgeit.Token.VerifyToken"/>	
+
+	<!-- <bean id="encoder"
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <constructor-arg name="strength" value="11"/>
+    </bean> -->
 </beans>

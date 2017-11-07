@@ -17,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bridgeit.Service.MailImp;
 import com.bridgeit.Service.UserService;
+import com.bridgeit.Token.TokenGenerator;
+import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
 import com.bridgeit.model.UserBean;
 
@@ -28,7 +30,11 @@ public class UserController {
 	@Autowired
 	private MailImp sendMail;
 	@Autowired
+	TokenGenerator tokenGenerator;
+	@Autowired
 	Validation valid;
+	@Autowired
+	VerifyToken verifyToken;
 	
     //-------------------Retrieve Single User--------------------------------------------------------
 
@@ -56,8 +62,9 @@ public class UserController {
         		int i= userService.saveUserData(user);
         		if(i>0)
         		{
+        			String token = tokenGenerator.createJWT(user.getId(),null);
         			String url = String.valueOf(request.getRequestURL());
-        			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+i;
+        			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
         			System.out.println(url);
         			sendMail.sendMail(user.getEmail(), url);
         			HttpHeaders headers = new HttpHeaders();
@@ -71,29 +78,34 @@ public class UserController {
         		return new ResponseEntity<String>("User Alreay exits",HttpStatus.CONFLICT);
     		}
         }
-        return new ResponseEntity<String>(HttpStatus.CONFLICT);
+        return new ResponseEntity<String>("Invalid data",HttpStatus.CONFLICT);
 	}
 	
     //-------------------Activate a User--------------------------------------------------------
-	@RequestMapping(value="/activate/{id}",method=RequestMethod.GET)
-	public ResponseEntity activateUser(@PathVariable("id") int id){
-		UserBean user = userService.getUserById(id);
-		if(user!=null){
-			user.setActivated(true);
-			if(userService.updateUser(user)){
-				return ResponseEntity.ok("Activated successfull");
+	@RequestMapping(value="/activate/{token:.+}",method=RequestMethod.GET)
+	public ResponseEntity<String> activateUser(@PathVariable("token") String token){
+		int id = verifyToken.parseJWT(token);
+		if(id>0){
+			UserBean user = userService.getUserById(id);
+			if(user!=null){
+				user.setActivated(true);
+				if(userService.updateUser(user)){
+					return ResponseEntity.ok("Activated successfull");
+				}else{
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error in activation");
+				}
 			}else{
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error in activation");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User does not exist");
 			}
 		}else{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User does not exist");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token Expire or Invalid");
 		}
 	}
     //-------------------Login a User--------------------------------------------------------
 	@RequestMapping(value="/Login",method=RequestMethod.POST)
 	public ResponseEntity login(@RequestBody UserBean user,HttpServletRequest request)
 	{
-		String email= user.getEmail();
+		
 		String password = user.getPassword();
 		UserBean getUser = userService.getUserByEmail(user);
 		if(getUser!=null){
@@ -128,7 +140,7 @@ public class UserController {
     //-------------------Login a User--------------------------------------------------------
 
 	@RequestMapping(value="/LogOut",method=RequestMethod.GET)
-	public ResponseEntity logout(HttpSession session){
+	public ResponseEntity<String> logout(HttpSession session){
 		session.removeAttribute(session.getId());
 		return ResponseEntity.ok().body("Logout Successfull");
 	}

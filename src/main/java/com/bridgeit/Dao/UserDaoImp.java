@@ -20,6 +20,9 @@ public class UserDaoImp implements UserDao{
 	
 	@Autowired
 	SessionFactory factory;
+	@Autowired
+    
+	
 	public SessionFactory getFactory() {
 		return factory;
 	}
@@ -34,7 +37,9 @@ public class UserDaoImp implements UserDao{
 		Transaction transaction = session.beginTransaction();
 		int i=0;
 		try
-		{	
+		{
+			/*BCryptPasswordEncoder bc= new BCryptPasswordEncoder();
+			user.setPassword(bc.encode(user.getPassword()));*/
 			i = (int) session.save(user);
 			transaction.commit();
 		}
@@ -99,13 +104,12 @@ public class UserDaoImp implements UserDao{
 	@Override
 	public UserBean getUserByEmail(UserBean user) {
 		Session session = factory.openSession();
-		 CriteriaBuilder cb = session.getCriteriaBuilder();
-	      CriteriaQuery<UserBean> cq = cb.createQuery(UserBean.class);
-	      Root<UserBean> root = cq.from(UserBean.class);
-	      cq.select(root);
-	      Query<UserBean> query = session.createQuery(cq);
+		 CriteriaBuilder builder = session.getCriteriaBuilder();
+	      CriteriaQuery<UserBean> criteriaQuery = builder.createQuery(UserBean.class);
+	      Root<UserBean> root = criteriaQuery.from(UserBean.class);
+	      criteriaQuery.select(root);
+	      Query<UserBean> query = session.createQuery(criteriaQuery);
 	      List<UserBean> list = query.list();
-		
 	      for(UserBean userDetails:list) {
 	    	  if(userDetails.getEmail().equals(user.getEmail()) || userDetails.getMobilenumber().equals(user.getMobilenumber())) {
 	    		  return userDetails;

@@ -1,5 +1,6 @@
 package com.bridgeit.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -40,7 +41,7 @@ public class UserBean
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
-	Set<NoteBean> notes;
+	List<NoteBean> notes;
 
 	public int getId() {
 		return id;
@@ -90,11 +91,11 @@ public class UserBean
 		this.isActivated = isActivated;
 	}
 
-	public Set<NoteBean> getNotes() {
+	public List<NoteBean> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Set<NoteBean> notes) {
+	public void setNotes(List<NoteBean> notes) {
 		this.notes = notes;
 	}
 
