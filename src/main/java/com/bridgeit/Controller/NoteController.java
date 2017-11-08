@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.Service.NoteService;
+import com.bridgeit.Service.UserService;
+import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;
 
@@ -24,13 +28,20 @@ public class NoteController {
 
 	@Autowired
 	private NoteService noteService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private VerifyToken verifyToken;
 	
 	/*----------------------------------Adding note-------------------------------*/
 
 	@RequestMapping(value="/addNote",method=RequestMethod.POST)
-	public ResponseEntity<String> addNote(@RequestBody NoteBean note,HttpSession session) {
-		System.out.println(note);
-		 UserBean user = (UserBean) session.getAttribute(session.getId());
+	public ResponseEntity<String> addNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request) {
+		
+		 /*UserBean user = (UserBean) session.getAttribute(session.getId());*/
+		String token = request.getHeader("Authorization");
+		System.out.println(token);
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		 int id=0;
 		 if (user!=null) {
 			 note.setUser(user);
@@ -51,9 +62,11 @@ public class NoteController {
 	/*----------------------------------Update note-------------------------------*/
 	
 	@RequestMapping(value="/update",method=RequestMethod.POST)
-	public ResponseEntity<String> updateNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request)
+	public ResponseEntity<String> updateNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request,HttpServletResponse response)
 	{
-		 UserBean user = (UserBean) session.getAttribute(session.getId());
+		/* UserBean user = (UserBean) session.getAttribute(session.getId());*/
+		 String token = request.getHeader("Authorization");
+		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		 if(user!=null){
 			 Date updatedDate = new Date();
 		/*	 String url = String.valueOf(request.getRequestURL());
@@ -74,13 +87,15 @@ public class NoteController {
 	
 	/*----------------------------------Delete note-------------------------------*/
 
-	@RequestMapping(value="/delete/{id}",method=RequestMethod.GET)
-	public ResponseEntity<String> delete (@PathVariable("id") int id, HttpSession session)
+	@RequestMapping(value="/delete/{id}",method=RequestMethod.DELETE)
+	public ResponseEntity<String> delete (@PathVariable("id") int id, HttpSession session,HttpServletRequest request)
 	{
-		UserBean user = (UserBean) session.getAttribute(session.getId());
+		//UserBean user = (UserBean) session.getAttribute(session.getId());
+		String token = request.getHeader("Authorization");
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		if(user!=null)
 		{
-			List<NoteBean> list = user.getNotes();
+			List<NoteBean> list = noteService.getAllNotes(user);
 			for (int i=0;i<list.size();i++)
 			{
 				NoteBean note = list.get(i);
@@ -98,13 +113,15 @@ public class NoteController {
 	/*----------------------------------getAllNotes note-------------------------------*/
 	
 	@RequestMapping(value="/getNotes",method=RequestMethod.GET)
-	public ResponseEntity<Object> getAllNotes(HttpSession session)
+	public ResponseEntity<Object> getAllNotes(HttpSession session,HttpServletRequest request)
 	{
-		UserBean user = (UserBean) session.getAttribute(session.getId());
+		//UserBean user = (UserBean) session.getAttribute(session.getId());
+		String token = request.getHeader("Authorization");
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		List<NoteBean> notes=null;
 		if(user!=null)
 		{
-			 notes = user.getNotes();
+			 notes = noteService.getAllNotes(user);
 		}
 		else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");

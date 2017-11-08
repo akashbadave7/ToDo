@@ -1,6 +1,5 @@
 package com.bridgeit.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="notes")
 public class NoteBean {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO, generator="idgen")
-	@GenericGenerator(name="idgen", strategy="native")
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="idgen")
+	@GenericGenerator(name="idgen", strategy="increment")
 	private int noteId;
 	@Column(name="note_title")
 	private String title;

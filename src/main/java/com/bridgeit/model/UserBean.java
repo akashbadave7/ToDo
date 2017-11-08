@@ -1,7 +1,6 @@
 package com.bridgeit.model;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,6 +41,7 @@ public class UserBean
 	private boolean isActivated;
 	
 	@JsonIgnore
+	//@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="user")
 	List<NoteBean> notes;
 
@@ -98,5 +100,4 @@ public class UserBean
 	public void setNotes(List<NoteBean> notes) {
 		this.notes = notes;
 	}
-
 }

@@ -1,13 +1,14 @@
 package com.bridgeit.Controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpSessionRequiredException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,13 +52,13 @@ public class UserController {
 	
     //-------------------Insert a User--------------------------------------------------------
 
-	@RequestMapping(value = "/userResister", method = RequestMethod.POST)
+	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
     public ResponseEntity<String> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) {
 		System.out.println("Creating User " + user.getName());
         if(valid.signUpValidator(user))
         {
         	user.setActivated(false);
-        	if (userService.isUserExits(user)) 
+        	if (userService.isUserExits(user.getEmail(),user.getMobilenumber())) 
         	{	
         		int i= userService.saveUserData(user);
         		if(i>0)
@@ -103,17 +104,20 @@ public class UserController {
 	}
     //-------------------Login a User--------------------------------------------------------
 	@RequestMapping(value="/Login",method=RequestMethod.POST)
-	public ResponseEntity login(@RequestBody UserBean user,HttpServletRequest request)
+	public ResponseEntity<String> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
-		
+		String email= user.getEmail();
 		String password = user.getPassword();
-		UserBean getUser = userService.getUserByEmail(user);
+		UserBean getUser = userService.getUserByEmail(email);
+		
 		if(getUser!=null){
-			if(getUser.getPassword().equals(password)){
+			if(BCrypt.checkpw(password,getUser.getPassword())){
 				if(getUser.isActivated()){
-					System.out.println(getUser.getEmail());
-					HttpSession session = request.getSession();
-					session.setAttribute(session.getId(), getUser);
+					String token = tokenGenerator.createJWT(getUser.getId(),getUser.getPassword());
+					System.out.println(token);
+					response.setHeader("Authorization", token);
+					/*HttpSession session = request.getSession();
+					session.setAttribute(session.getId(), getUser);*/
 					return ResponseEntity.ok("login Successfull");
 				}else{
 					return ResponseEntity.status(HttpStatus.CONFLICT).body("User is not activated");
@@ -127,7 +131,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/isActive",method=RequestMethod.GET)
-	public ResponseEntity isActivated(HttpSession session)
+	public ResponseEntity<Object> isActivated(HttpSession session)
 	{
 		UserBean user = (UserBean) session.getAttribute(session.getId());
 		if(user!=null){
@@ -139,9 +143,17 @@ public class UserController {
 	
     //-------------------Login a User--------------------------------------------------------
 
-	@RequestMapping(value="/LogOut",method=RequestMethod.GET)
-	public ResponseEntity<String> logout(HttpSession session){
-		session.removeAttribute(session.getId());
-		return ResponseEntity.ok().body("Logout Successfull");
+	@RequestMapping(value="/Logout",method=RequestMethod.GET)
+	public ResponseEntity<String> logout(HttpSession session,HttpServletRequest request,HttpServletResponse response){
+		/*if(session.getAttribute(session.getId())==null)*/
+		if(request.getHeader("Authorization").isEmpty())
+		{
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Login first"); 
+		}else{
+			/*session.removeAttribute(session.getId());*/
+			response.getHeader("Authorization").replace("Authorization", "").trim();
+			return ResponseEntity.ok().body("Logout Successfull");
+		}
+		
 	}
 }

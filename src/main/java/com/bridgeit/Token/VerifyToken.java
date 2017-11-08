@@ -15,11 +15,12 @@ public class VerifyToken {
 		try {
 			Claims claims = Jwts.parser().setSigningKey(keyvariable).parseClaimsJws(jwt).getBody();
 			Id = Integer.parseInt(claims.getId());
+			System.out.println(Id);
 		} catch (MissingClaimException e) {
-			System.out.println("missing claims " + e);
+			e.printStackTrace();
 			return Id;
-		} catch (IncorrectClaimException e1) {
-			System.out.println("Incorrect claims " + e1);
+		} catch (Exception e1) {
+			e1.printStackTrace();
 			return Id;
 		}
 

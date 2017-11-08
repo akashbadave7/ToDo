@@ -1,7 +1,6 @@
 package com.bridgeit.Service;
 
 import java.util.List;
-import java.util.Set;
 
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;

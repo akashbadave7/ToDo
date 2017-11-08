@@ -45,6 +45,8 @@ public class NoteDaoImp implements NoteDao{
 				transaction.rollback();
 			}
 			e.printStackTrace();
+		}finally {
+			session.close();
 		}
 		return id;
 	}
@@ -65,6 +67,8 @@ public class NoteDaoImp implements NoteDao{
 				return false;
 			}
 			e.printStackTrace();
+		}finally {
+			session.close();
 		}
 		return true;
 	}
@@ -76,15 +80,17 @@ public class NoteDaoImp implements NoteDao{
 		transaction=session.beginTransaction();
 		try
 		{
-			transaction = session.beginTransaction();
 			session.delete(note);
 			transaction.commit();
+
 		}catch(HibernateException e){
 			if(transaction!=null) {
 				transaction.rollback();
 				return false;
 			}
 			e.printStackTrace();
+		}finally {
+			session.close();
 		}
 		return true;
 	}
@@ -92,7 +98,10 @@ public class NoteDaoImp implements NoteDao{
 	@Override
 	public List<NoteBean> getAllNotes(UserBean user) {
 		Session session = factory.openSession();
-		 CriteriaBuilder builder = session.getCriteriaBuilder();
+		UserBean user1 = session.get(UserBean.class, user.getId());
+		List<NoteBean> note = user1.getNotes();
+		note.size();
+		 /*CriteriaBuilder builder = session.getCriteriaBuilder();
 	      CriteriaQuery<UserBean> criteriaQuery = builder.createQuery(UserBean.class);
 	      Root<UserBean> root = criteriaQuery.from(UserBean.class);
 	      criteriaQuery.select(root);
@@ -101,7 +110,8 @@ public class NoteDaoImp implements NoteDao{
 	      List<NoteBean> note=null;
 	      for(UserBean userDetails:list) {
 	    	  note = userDetails.getNotes();
-	    	  }
+	    	  session.close();
+	    	  }*/
 		return note;
 	 }
 
@@ -110,6 +120,7 @@ public class NoteDaoImp implements NoteDao{
 	public NoteBean getNoteById(int noteId) {
 		Session session  = factory.openSession();
 		NoteBean note = session.get(NoteBean.class, noteId);
+		session.close();
 		return note;
 	}
 	

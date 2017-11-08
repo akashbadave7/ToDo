@@ -13,7 +13,7 @@ public interface UserDao {
 	
 	UserBean getUserById(int id);
 	
-	UserBean getUserByEmail(UserBean user);
+	UserBean getUserByEmail(String email);
 	
-	boolean isUserExits(UserBean user);
+	boolean isUserExits(String email,String mobilenumber);
 }

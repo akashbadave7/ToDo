@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.bridgeit.model.UserBean;
 
@@ -38,8 +39,8 @@ public class UserDaoImp implements UserDao{
 		int i=0;
 		try
 		{
-			/*BCryptPasswordEncoder bc= new BCryptPasswordEncoder();
-			user.setPassword(bc.encode(user.getPassword()));*/
+			BCryptPasswordEncoder encoder= new BCryptPasswordEncoder();
+			user.setPassword(encoder.encode(user.getPassword()));
 			i = (int) session.save(user);
 			transaction.commit();
 		}
@@ -97,32 +98,56 @@ public class UserDaoImp implements UserDao{
 		UserBean user = session.get(UserBean.class, id);
 		session.close();
 		return user;
-		
-		
 	}
 
 	@Override
-	public UserBean getUserByEmail(UserBean user) {
+	public UserBean getUserByEmail(String email) {
 		Session session = factory.openSession();
-		 CriteriaBuilder builder = session.getCriteriaBuilder();
+		UserBean user=null;
+		try {
+		
+		Query<UserBean> query = session.createQuery("from UserBean where email=:email");
+		query.setParameter("email", email);
+		List<UserBean> list = query.list();
+		System.out.println(list);
+		user = list.get(0);
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return user;
+	/*	 CriteriaBuilder builder = session.getCriteriaBuilder();
 	      CriteriaQuery<UserBean> criteriaQuery = builder.createQuery(UserBean.class);
 	      Root<UserBean> root = criteriaQuery.from(UserBean.class);
 	      criteriaQuery.select(root);
 	      Query<UserBean> query = session.createQuery(criteriaQuery);
 	      List<UserBean> list = query.list();
 	      for(UserBean userDetails:list) {
-	    	  if(userDetails.getEmail().equals(user.getEmail()) || userDetails.getMobilenumber().equals(user.getMobilenumber())) {
+	    	  if(userDetails.getEmail().equals(email) || userDetails.getMobilenumber().equals(mobilenumber)) {
+	    		    session.close();
 	    		  return userDetails;
 	    	  }
-	      }
-		return null;
+	      } */
+		
 	}
 
 	@Override
-	public boolean isUserExits(UserBean user) {
-		String email= user.getEmail();
-		UserBean isUserExit = getUserByEmail(user);
-		if(isUserExit==null)
+	public boolean isUserExits(String email,String mobilenumebr) {
+		
+		Session session = factory.openSession();
+		List<UserBean> list=null;
+		try {
+				Query<UserBean> query = session.createQuery("from UserBean where email=:email or mobilenumber=:mobilenumber");
+				query.setParameter("email", email);
+				query.setParameter("mobilenumber", mobilenumebr);
+				list = query.list();
+		}catch (HibernateException e) {
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
+		if(list.isEmpty())
 			return true;
 		else
 			return false;

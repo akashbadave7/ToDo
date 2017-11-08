@@ -20,8 +20,8 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public UserBean getUserByEmail(UserBean user) {
-		return userDao.getUserByEmail(user);
+	public UserBean getUserByEmail(String email) {
+		return userDao.getUserByEmail(email);
 	}
 
 	@Override
@@ -31,8 +31,13 @@ public class UserServiceImp implements UserService{
 
 
 	@Override
-	public boolean isUserExits(UserBean user) {
-		return userDao.isUserExits(user);
+	public boolean isUserExits(String email,String mobilenumber) {
+		return userDao.isUserExits(email,mobilenumber);
+	}
+
+	@Override
+	public boolean deleteUser(UserBean user) {
+		return userDao.deleteUser(user);
 	}
 
 
