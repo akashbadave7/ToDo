@@ -1,5 +1,7 @@
 package com.bridgeit.Controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +70,7 @@ public class UserController {
         			String url = String.valueOf(request.getRequestURL());
         			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
         			System.out.println(url);
-        			sendMail.sendMail(user.getEmail(), url);
+        			sendMail.sendMail(user.getEmail(), url,"Confirmation email");
         			HttpHeaders headers = new HttpHeaders();
                     headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
                     return new ResponseEntity<String>("Inserted successfully",headers, HttpStatus.CREATED);
@@ -86,6 +89,7 @@ public class UserController {
 	@RequestMapping(value="/activate/{token:.+}",method=RequestMethod.GET)
 	public ResponseEntity<String> activateUser(@PathVariable("token") String token){
 		int id = verifyToken.parseJWT(token);
+		System.out.println(id);
 		if(id>0){
 			UserBean user = userService.getUserById(id);
 			if(user!=null){
@@ -107,11 +111,15 @@ public class UserController {
 	public ResponseEntity<String> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
 		String email= user.getEmail();
-		String password = user.getPassword();
+		String password=user.getPassword();
 		UserBean getUser = userService.getUserByEmail(email);
-		
-		if(getUser!=null){
+		System.out.println(getUser.getPassword());
+		if(getUser!=null){			
+				System.out.println(password);
+				System.out.println(getUser.getPassword());
+				System.out.println(BCrypt.checkpw(password,getUser.getPassword()));
 			if(BCrypt.checkpw(password,getUser.getPassword())){
+				
 				if(getUser.isActivated()){
 					String token = tokenGenerator.createJWT(getUser.getId(),getUser.getPassword());
 					System.out.println(token);
@@ -151,9 +159,12 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Login first"); 
 		}else{
 			/*session.removeAttribute(session.getId());*/
-			response.getHeader("Authorization").replace("Authorization", "").trim();
+			/*response.getHeader("Authorization").replace("Authorization", "").trim();*/
+			request.getHeader("Authorization").trim();
 			return ResponseEntity.ok().body("Logout Successfull");
 		}
-		
 	}
+	
+   
+	
 }

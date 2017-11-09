@@ -11,12 +11,12 @@ public class MailImp implements Mail {
 	
 	
 	@Override
-	public void sendMail(String to, String message) {
+	public void sendMail(String to, String message,String subject) {
 		
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom("530akash@gmail");
 		mailMessage.setTo(to);
-		mailMessage.setSubject("Confirmation mail");
+		mailMessage.setSubject(subject);
 		mailMessage.setText(message);
 		mailSender.send(mailMessage);
 	}
