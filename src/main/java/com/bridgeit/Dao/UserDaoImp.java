@@ -105,13 +105,19 @@ public class UserDaoImp implements UserDao{
 		Query<UserBean> query = session.createQuery("from UserBean where email=:email");
 		query.setParameter("email", email);
 		List<UserBean> list = query.list();
-		System.out.println(list);
-		user = list.get(0);
+		if(list.isEmpty())
+		{
+			return null;
+		} else {
+			user = list.get(0);
+		}
+		
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		}finally{
 			session.close();
 		}
+		
 		return user;
 	/*	 CriteriaBuilder builder = session.getCriteriaBuilder();
 	      CriteriaQuery<UserBean> criteriaQuery = builder.createQuery(UserBean.class);

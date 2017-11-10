@@ -115,11 +115,7 @@ public class UserController {
 		UserBean getUser = userService.getUserByEmail(email);
 		System.out.println(getUser.getPassword());
 		if(getUser!=null){			
-				System.out.println(password);
-				System.out.println(getUser.getPassword());
-				System.out.println(BCrypt.checkpw(password,getUser.getPassword()));
 			if(BCrypt.checkpw(password,getUser.getPassword())){
-				
 				if(getUser.isActivated()){
 					String token = tokenGenerator.createJWT(getUser.getId(),getUser.getPassword());
 					System.out.println(token);

@@ -21,6 +21,7 @@ public class UserServiceImp implements UserService{
 
 	@Override
 	public UserBean getUserByEmail(String email) {
+		System.out.println("In user implemetation:"+email);
 		return userDao.getUserByEmail(email);
 	}
 

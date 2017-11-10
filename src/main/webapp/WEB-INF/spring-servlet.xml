@@ -66,12 +66,15 @@
     <bean class="com.bridgeit.Service.MailImp"></bean>
     <bean class="com.bridgeit.Service.UserServiceImp"></bean>
 	<bean id="userDao" class="com.bridgeit.Dao.UserDaoImp"></bean>
-	<bean id="validator" class="com.bridgeit.Validation.Validation">
-</bean>
+	<bean id="validator" class="com.bridgeit.Validation.Validation"></bean>
+	
+	<bean id="fbconnection" class="com.bridgeit.Controller.FacebookConnection"></bean>
+	<bean id="googleconnection" class="com.bridgeit.Controller.GoogleConnection"></bean>
 
 	<bean id="tokenGenerator" class="com.bridgeit.Token.TokenGenerator"/>
 	
 	<bean id="verifyToken" class="com.bridgeit.Token.VerifyToken"/>	
+	
 
 	<!-- <bean id="encoder"
           class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
