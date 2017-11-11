@@ -1,5 +1,6 @@
 package com.bridgeit.model;
 
+import java.sql.Blob;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -39,6 +40,9 @@ public class UserBean
 	
 	@Column(name="isActivated")
 	private boolean isActivated;
+	
+	@Column(name="picUrl")
+	private String picUrl;
 	
 	@JsonIgnore
 	//@LazyCollection(LazyCollectionOption.FALSE)
@@ -91,6 +95,15 @@ public class UserBean
 
 	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
+	}
+	
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
 	}
 
 	public List<NoteBean> getNotes() {

@@ -75,9 +75,16 @@
 	
 	<bean id="verifyToken" class="com.bridgeit.Token.VerifyToken"/>	
 	
-
+	
 	<!-- <bean id="encoder"
           class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <constructor-arg name="strength" value="11"/>
     </bean> -->
+	<mvc:resources location="/template/" mapping="/template/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/controller/" mapping="/controller/**" />
+	<mvc:resources location="/service/" mapping="/service/**" />
+	<mvc:resources location="/script/" mapping="/script/**" />
+	<!-- <mvc:resources location="/Directives/" mapping="/Directives/**" />
+ -->
 </beans>

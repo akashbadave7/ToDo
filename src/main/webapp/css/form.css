@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+.container
+{
+	border : 1px solid black;
+	box-shadow: 0 0 10px black;
+	background-color : white;
+	padding : 10px;
+	bottom : 0;
+	position : relative;
+	max-width: 500px; 
+	/* max-height: 700px; */
+	margin-top: 50px;
+	padding-bottom: 25px;
+	border-radius: 10px;
+	
+}
+
+.body
+{
+	background-color: #F2F3F4;
+    direction: ltr;
+    font-family: 'Roboto'',sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#emsgName,#emsgEmail,#emsgPass,#emsgcpass,#emsgmob{
+    color: red;
+}
+.hidden {
+     visibility:hidden;
+}

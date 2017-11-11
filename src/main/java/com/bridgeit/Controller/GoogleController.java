@@ -71,6 +71,7 @@ public class GoogleController {
 			user.setName(profile.get("displayName").asText());
 			user.setEmail(profile.get("emails").get(0).get("value").asText());
 			user.setPassword("");
+			user.setPicUrl(profile.get("image").get("url").asText());
 			userService.saveUserData(user);
 		}
 		
@@ -81,11 +82,13 @@ public class GoogleController {
 		
 		tokens.setGetUser(user);
 		tokenService.saveToken(tokens);*/
+		user = userService.getUserByEmail(user.getEmail());
 		String token = tokenService.createJWT(user.getId(), user.getEmail());
-		Cookie acccookie = new Cookie("socialaccessToken", token);
-		Cookie refreshcookie = new Cookie("socialrefreshToken", token);
-		response.addCookie(acccookie);
-		response.addCookie(refreshcookie);
+		response.setHeader("Authentication", token);
+		System.out.println(token);
+		Cookie accCookie = new Cookie("socialaccessToken", token);
+		response.addCookie(accCookie);
+		
 		response.sendRedirect("http://localhost:8080/ToDo/#!/home");
 	}
 	

@@ -107,7 +107,7 @@ public class UserController {
 		}
 	}
     //-------------------Login a User--------------------------------------------------------
-	@RequestMapping(value="/Login",method=RequestMethod.POST)
+	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public ResponseEntity<String> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
 		String email= user.getEmail();

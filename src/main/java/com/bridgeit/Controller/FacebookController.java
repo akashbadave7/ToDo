@@ -75,6 +75,7 @@ public class FacebookController {
 		
 			user.setPassword("");
 			user.setActivated(true);
+			user.setPicUrl(profile.get("picture").get("data").get("url").asText());
 			userService.saveUserData(user);
 			/*if(i>0) {
 				String token = tokenGenerator.createJWT(user.getId(),null);
