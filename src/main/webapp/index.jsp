@@ -29,12 +29,13 @@
 <script type="text/javascript" src="script/app.js"></script>
 
 
-
+<!-- --------controller--------- -->
 <script src="controller/loginController.js"></script>
+<script src="controller/registerController.js"></script>
 
-
+<!-- --------Services--------- -->
 <script type="text/javascript" src="service/loginService.js"></script>
-
+<script type="text/javascript" src="service/userRegisterService.js"></script>
 
 </head>
 

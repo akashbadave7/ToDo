@@ -5,13 +5,17 @@ var ToDo = angular.module('ToDo')
 
 ToDo.controller('loginController',function($scope,loginService,$location){
 	$scope.loginUser= function(){
-		var a= loginService.loginUser($scope.user,$scope.error);
+		console.log("At the beggining of controller");
+		var a = loginService.loginUser($scope.user,$scope.error);
+		console.log(a);
 			a.then(function(response){
-				console.log(response.data.responseMessage);
-				localStorage.setItem('token',response.data.responseMessage);
-				$location.path('/register');
+				/*console.log(response.data.responseMessage);
+				localStorage.setItem('token',response.data.responseMessage);*/
+				console.log("login success");
+				$location.path('home');
 			},function(response){
-				$scope.error=response.data.responseMessage;
+				console.log("fails");
+				/*$scope.error=response.data.responseMessage;*/
 			});
 	}
 });

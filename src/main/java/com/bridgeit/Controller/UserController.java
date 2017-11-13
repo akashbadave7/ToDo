@@ -1,17 +1,15 @@
 package com.bridgeit.Controller;
 
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +23,7 @@ import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
 import com.bridgeit.model.UserBean;
+
 
 @RestController
 public class UserController {
@@ -40,6 +39,8 @@ public class UserController {
 	@Autowired
 	VerifyToken verifyToken;
 	
+	private static final Logger logger = Logger.getLogger("loginFile");
+	private static final Logger logger1 = Logger.getRootLogger();
     //-------------------Retrieve Single User--------------------------------------------------------
 
 	@RequestMapping(value="/getUser/{id}",method=RequestMethod.GET)
@@ -56,7 +57,7 @@ public class UserController {
     //-------------------Insert a User--------------------------------------------------------
 
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
-    public ResponseEntity<String> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) {
+    public ResponseEntity<Void> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) {
 		System.out.println("Creating User " + user.getName());
         if(valid.signUpValidator(user))
         {
@@ -73,16 +74,21 @@ public class UserController {
         			sendMail.sendMail(user.getEmail(), url,"Confirmation email");
         			HttpHeaders headers = new HttpHeaders();
                     headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
-                    return new ResponseEntity<String>("Inserted successfully",headers, HttpStatus.CREATED);
+                    logger.info("Registration successfull");
+                    System.out.println("Register successfull");
+                    return new ResponseEntity("Inserted successfully",headers, HttpStatus.CREATED);
         		}
         	}
         	else
     		{
+        		logger.info("User already exits");
     			System.out.println("A User with email " + user.getEmail() + " or mobile "+user.getMobilenumber()+" already exist");
-        		return new ResponseEntity<String>("User Alreay exits",HttpStatus.CONFLICT);
+        		return new ResponseEntity<Void>(HttpStatus.CONFLICT);
     		}
         }
-        return new ResponseEntity<String>("Invalid data",HttpStatus.CONFLICT);
+        System.out.println("Error occured");
+        logger.warn("Error occure");
+        return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 	}
 	
     //-------------------Activate a User--------------------------------------------------------
@@ -107,14 +113,20 @@ public class UserController {
 		}
 	}
     //-------------------Login a User--------------------------------------------------------
+
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ResponseEntity<String> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
+	public ResponseEntity<Void> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
 		String email= user.getEmail();
 		String password=user.getPassword();
 		UserBean getUser = userService.getUserByEmail(email);
-		System.out.println(getUser.getPassword());
-		if(getUser!=null){			
+		
+		if(getUser == null){
+			System.out.println(password);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
+			else{		
+			System.out.println(getUser.getPassword());
 			if(BCrypt.checkpw(password,getUser.getPassword())){
 				if(getUser.isActivated()){
 					String token = tokenGenerator.createJWT(getUser.getId(),getUser.getPassword());
@@ -122,15 +134,17 @@ public class UserController {
 					response.setHeader("Authorization", token);
 					/*HttpSession session = request.getSession();
 					session.setAttribute(session.getId(), getUser);*/
-					return ResponseEntity.ok("login Successfull");
+					logger.info("Login Successfull");
+					System.out.println("login successfull");
+					return new ResponseEntity<Void>(HttpStatus.OK);
 				}else{
-					return ResponseEntity.status(HttpStatus.CONFLICT).body("User is not activated");
+					logger.info("User not activated");
+					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 				}
 			}else{
-				return ResponseEntity.status(HttpStatus.CONFLICT).body("Invalid username or password");
+				logger.info("Invalid password or email");
+				return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 			}
-		}else{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not exists");
 		}
 	}
 	

@@ -67,17 +67,22 @@ public class NoteController {
 		 String token = request.getHeader("Authorization");
 		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		 if(user!=null){
-			 Date updatedDate = new Date();
-		/*	 String url = String.valueOf(request.getRequestURL());
- 			 url = url.substring(0,url.lastIndexOf("/"))+"/update/";
- 			 System.out.println(url);*/
-			 note.setLastUpdated(updatedDate);
-			 note.setUser(user);
-			 if(noteService.updateNote(note))
-			 {
-				 return ResponseEntity.ok().body("Successfully updated");
-			 }else {
-				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Not can not update.");
+			 if(user.getId()==note.getNoteId()){
+
+				 Date updatedDate = new Date();
+			/*	 String url = String.valueOf(request.getRequestURL());
+	 			 url = url.substring(0,url.lastIndexOf("/"))+"/update/";
+	 			 System.out.println(url);*/
+				 note.setLastUpdated(updatedDate);
+				 note.setUser(user);
+				 if(noteService.updateNote(note))
+				 {
+					 return ResponseEntity.ok().body("Successfully updated");
+				 }else {
+					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Not can not update.");
+				 }
+			 } else {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not modify");
 			 }
 		 }else{
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("User Not logged in");
@@ -94,14 +99,21 @@ public class NoteController {
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		if(user!=null)
 		{
-			List<NoteBean> list = noteService.getAllNotes(user);
-			for (int i=0;i<list.size();i++)
+			if(user.getId()==id)
 			{
-				NoteBean note = list.get(i);
-				if(note.getNoteId()==id) {
-					noteService.deleteNote(note);
-					return ResponseEntity.ok().body("Succesfully Deleted");
+				List<NoteBean> list = noteService.getAllNotes(user);
+				for (int i=0;i<list.size();i++)
+				{
+					NoteBean note = list.get(i);
+					if(note.getNoteId()==id) {
+						noteService.deleteNote(note);
+						return ResponseEntity.ok().body("Succesfully Deleted");
+					}
 				}
+			}else
+			{
+				
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not delete");
 			}
 		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
