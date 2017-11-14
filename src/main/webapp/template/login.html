@@ -1,7 +1,9 @@
-
+	<div id="wrapper">
  <div class="container">
+ 
                <form name="myForm">
                 <div class="input-control">
+        		<center><font color="red"><p ng-bind="error" ng-disable></p></font></center>
 				<label for="email">Email:</label>
 		      	<input type="email" class="form-control" id="email" ng-model="user.email" autocomplete="username" name="email" placeholder="Enter email" required">   
 					<span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
@@ -23,5 +25,10 @@
 				      <a  class="btn btn-primary" href="#!/register" role="button"  style="margin-right: 20%; width:80px"><b>SignUp</b></a>
 					<p><span id ="errmsg"></span></p>
 			<br>
+			
+			<a class="twitter" href="#">Twitter</a>
+                    <a class="facebook" href="#">Facebook</a>
+                    <a class="google" href="#">Google+</a>
+		</form>
+		</div>
 </div>
-</form>

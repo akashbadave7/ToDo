@@ -34,7 +34,7 @@ public class ForgotPasswordController {
 	
 	 //-------------------Forgot password--------------------------------------------------------
 
-		@RequestMapping(value="/forgotpass",method=RequestMethod.POST)
+		@RequestMapping(value="/forgotpassword",method=RequestMethod.POST)
 		public ResponseEntity<String> forgot(@RequestBody UserBean user,HttpServletResponse response,HttpServletRequest request/*,UriComponentsBuilder ucBuilder*/)
 		{
 			String email = user.getEmail();
@@ -43,6 +43,7 @@ public class ForgotPasswordController {
 			{
 				String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
 				String url = String.valueOf(request.getRequestURL());
+				System.out.println(url);
 				url = "http://localhost:8080/ToDo/resetpass/"+token;
 				System.out.println(url);
 				sendMail.sendMail(email, url,"Reset password link");

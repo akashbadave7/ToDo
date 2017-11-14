@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,25 +22,30 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 
+ <!-- CSS -->
+<link rel="stylesheet" type="text/css" href="css/signup.css">
+<link rel="stylesheet" type="text/css" href="css/login.css">
 
-<link rel="stylesheet" type="text/css" href="css/form.css">
-
+<!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>
+<!-- <script type="text/javascript" src="script/signUp.js"></script> -->
 
-
-<!-- --------controller--------- -->
+ <!-- CONTROLLERS -->
 <script src="controller/loginController.js"></script>
 <script src="controller/registerController.js"></script>
 
-<!-- --------Services--------- -->
+ <!-- SERVICES -->
 <script type="text/javascript" src="service/loginService.js"></script>
 <script type="text/javascript" src="service/userRegisterService.js"></script>
+
+<!-- DIRECTIVE -->
+
 
 </head>
 
 
 
-<body ng-app="ToDo">
+<body ng-app="ToDo"">
 	<div ui-view></div>
 </body>
 </html>

@@ -67,7 +67,7 @@ public class NoteController {
 		 String token = request.getHeader("Authorization");
 		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		 if(user!=null){
-			 if(user.getId()==note.getNoteId()){
+			 /*if(user.getId()==note.getNoteId()){*/
 
 				 Date updatedDate = new Date();
 			/*	 String url = String.valueOf(request.getRequestURL());
@@ -81,9 +81,9 @@ public class NoteController {
 				 }else {
 					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Not can not update.");
 				 }
-			 } else {
+			 /*} else {
 				 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not modify");
-			 }
+			 }*/
 		 }else{
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("User Not logged in");
 		 }
@@ -99,8 +99,8 @@ public class NoteController {
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		if(user!=null)
 		{
-			if(user.getId()==id)
-			{
+			/*if(user.getId()==id)
+			{*/
 				List<NoteBean> list = noteService.getAllNotes(user);
 				for (int i=0;i<list.size();i++)
 				{
@@ -110,11 +110,11 @@ public class NoteController {
 						return ResponseEntity.ok().body("Succesfully Deleted");
 					}
 				}
-			}else
+			/*}else
 			{
 				
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not delete");
-			}
+			}*/
 		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
 		}

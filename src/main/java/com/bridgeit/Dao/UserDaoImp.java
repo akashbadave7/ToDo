@@ -17,9 +17,7 @@ public class UserDaoImp implements UserDao{
 	
 	@Autowired
 	SessionFactory factory;
-	@Autowired
-    
-	
+
 	public SessionFactory getFactory() {
 		return factory;
 	}
