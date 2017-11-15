@@ -12,8 +12,6 @@ ToDo.controller('loginController',function($scope,loginService,$location){
 				console.log(response.data.responseMessage);
 				localStorage.setItem('token',response.data.responseMessage);
 				console.log("login success");
-/*				$scope.email= $scope.user.email;
-				$scope.name = $scope.user.name;*/
 				$location.path('home');
 			},function(response){
 				if(response.status==409)
@@ -22,8 +20,20 @@ ToDo.controller('loginController',function($scope,loginService,$location){
 					}
 				else
 					{
-						$scope.error=response.data.responseMessage;
+						console.log("fail");
+						$scope.error="Enter valid data";
 					}
+			});
+			
+			
+			var b = loginService.loginByFacebook($scope.error);
+			b.then(function(response){
+				localStorage.setItem('token',response.data.responseMessage);
+				console.log("login success");
+				$location.path('home');
+			},function(response){
+				$scope.error=response.data.responseMessage;
+				console.log("fail");
 			});
 	}
 });

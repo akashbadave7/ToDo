@@ -7,13 +7,17 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
+import com.bridgeit.model.ErrorMessage;
 import com.bridgeit.model.UserBean;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -26,7 +30,8 @@ public class FacebookController {
 	UserService userService;
 	@Autowired
 	TokenGenerator tokenGenerator;
-
+	private static final Logger logger = Logger.getLogger("loginFile");
+	private static final Logger logger1 = Logger.getRootLogger();
 	
 	@RequestMapping(value="/facebookLogin")
 	public void facebookConnection(HttpServletRequest request,HttpServletResponse response) throws IOException
@@ -42,6 +47,7 @@ public class FacebookController {
 	@RequestMapping(value="/connectFB")
 	public void redirectURL(HttpServletRequest request,HttpServletResponse response,UriComponentsBuilder ucBuilder) throws IOException
 	{
+		ErrorMessage errorMessage = new ErrorMessage();
 		String sessionState = (String) request.getSession().getAttribute("State");
 		String googlestate = request.getParameter("state");
 		System.out.println("in connect facebook");
@@ -53,7 +59,7 @@ public class FacebookController {
 
 		String error = request.getParameter("error");
 		if (error != null && error.trim().isEmpty()) {
-			response.sendRedirect("login");
+			errorMessage.setResponseMessage("Error occured Try again.");
 		}
 		
 		String authCode = request.getParameter("code");
@@ -88,6 +94,7 @@ public class FacebookController {
                 return new ResponseEntity<String>("Inserted successfully",headers, HttpStatus.CREATED);
 			}*/
 		}else {
+			logger.warn("User data already exists in database");
 		System.out.println(" user is not new to our db ,it is there in our db");
 		}
 		String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
@@ -97,11 +104,14 @@ public class FacebookController {
 		tokens.setGetUser(user);
 		tokenService.saveToken(tokens);
 		 */
-		Cookie acccookie = new Cookie("socialaccessToken", token);
+		/*Cookie acccookie = new Cookie("socialaccessToken", token);
 		Cookie refreshcookie = new Cookie("socialrefreshToken", token);
 		response.addCookie(acccookie);
-		response.addCookie(refreshcookie);
-		response.sendRedirect("http://localhost:8080/ToDo/#!/index");
+		response.addCookie(refreshcookie);*/
+		errorMessage.setResponseMessage(token);
+		logger.info("login successfull");
+		response.sendRedirect("http://localhost:8080/ToDo/#!/home");
+		
 	}
 
 

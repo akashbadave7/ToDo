@@ -1,4 +1,8 @@
-$(document).ready(function(){
+$(document).ready(function() {
+    var today = new Date().toDateString();
+	$('.today').html(today);
+})
+/*$(document).ready(function(){
 
 	function validateLogin()
 		{ 
@@ -39,4 +43,4 @@ $(document).ready(function(){
 			
 			}
 	});
-});
+});*/

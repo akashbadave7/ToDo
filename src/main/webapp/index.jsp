@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
 
@@ -23,11 +23,12 @@
 
 
  <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="css/signup.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
 <!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>
+<script type="text/javascript" src="script/login.js"></script>
 <!-- <script type="text/javascript" src="script/signUp.js"></script> -->
 
  <!-- CONTROLLERS -->
