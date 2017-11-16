@@ -24,16 +24,5 @@ ToDo.controller('loginController',function($scope,loginService,$location){
 						$scope.error="Enter valid data";
 					}
 			});
-			
-			
-			var b = loginService.loginByFacebook($scope.error);
-			b.then(function(response){
-				localStorage.setItem('token',response.data.responseMessage);
-				console.log("login success");
-				$location.path('home');
-			},function(response){
-				$scope.error=response.data.responseMessage;
-				console.log("fail");
-			});
 	}
 });

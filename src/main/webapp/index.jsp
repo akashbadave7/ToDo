@@ -5,10 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+	src="bower_components/angular/angular.js"></script>
 
 <script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+	src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -16,11 +16,17 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-sanitize.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+
+	  <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+      <script src = "bower_components/angular-animate/angular-animate.min.js"></script>
+      <script src = "bower_components/angular-aria/angular-aria.min.js"></script>
+      <script src = "bower_components/angular-messages/angular-messages.min.js"></script>
+      <script src="bower_components/angular-material/angular-material.min.js"></script> 
 
  <!-- CSS -->
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
@@ -29,11 +35,17 @@
 <!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>
 <script type="text/javascript" src="script/login.js"></script>
+
+<script type="text/javascript" src="script/formInput.js"></script>
+
+
 <!-- <script type="text/javascript" src="script/signUp.js"></script> -->
+
 
  <!-- CONTROLLERS -->
 <script src="controller/loginController.js"></script>
 <script src="controller/registerController.js"></script>
+
 
  <!-- SERVICES -->
 <script type="text/javascript" src="service/loginService.js"></script>

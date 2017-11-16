@@ -152,7 +152,7 @@ public class UserController {
 				}
 			}else{
 				logger.info("Invalid password or email");
-				errorMessage.setResponseMessage("Invalid password or email");
+				errorMessage.setResponseMessage("Wrong Password");
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
 			}
 		}

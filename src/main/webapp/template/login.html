@@ -17,8 +17,8 @@
 		      	<input type="password" class="form-control" id="password" name ="pass" ng-model="user.password" placeholder="Enter password">
 					<span style="color:red" ng-show="myForm.email.$dirty && myForm.password.$invalid">
 					<span ng-show="myForm.password.$error.required">Password is required.</span>
-				</span>
-				<div id="errUser"></div>  
+				</span><br>
+				<a href="#!/ResetEmail" role="button"><span class="text-strong">Forgot Password?</span></a>
 			</div>
 			<br>
 				      <button type="submit" id="submit" class="btn btn-primary" ng-click="loginUser()" ng-disabled="loginform.$invalid" style=" width:80px"><b>Login</b></button>

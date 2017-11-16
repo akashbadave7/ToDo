@@ -1,4 +1,4 @@
-var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize'])
+var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial'])
 
 ToDo.config(['$stateProvider','$urlRouterProvider',
 		function($stateProvider,$urlRouterProvider){
@@ -22,7 +22,13 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 			$stateProvider.state('fb',{
 				url :'/fb',
 				controller : 'facebookController'
-			})
+			});
+			
+			$stateProvider.state('/ResetEmail',{
+				url:'/ResetEmail',
+				templateUrl : 'template/ResetEmail.html',
+				/*controller : 'resetPasswordController'*/
+			});
 			
 			$urlRouterProvider.otherwise('login');
-}])
+}]);
