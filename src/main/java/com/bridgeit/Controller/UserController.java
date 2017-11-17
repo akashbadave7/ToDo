@@ -1,5 +1,9 @@
 package com.bridgeit.Controller;
 
+import java.io.IOException;
+
+import javax.jms.JMSException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,11 +23,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
 import com.bridgeit.Service.MailImp;
+import com.bridgeit.Service.Producer;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
+import com.bridgeit.model.Email;
 import com.bridgeit.model.ErrorMessage;
 import com.bridgeit.model.UserBean;
 
@@ -33,14 +40,17 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private MailImp sendMail;
+	
 	@Autowired
 	TokenGenerator tokenGenerator;
 	@Autowired
 	Validation valid;
 	@Autowired
 	VerifyToken verifyToken;
+	
+	@Autowired
+	Producer producer;
+
 	
 	private static final Logger logger = Logger.getLogger("loginFile");
 	private static final Logger logger1 = Logger.getRootLogger();
@@ -60,7 +70,7 @@ public class UserController {
     //-------------------Insert a User--------------------------------------------------------
 
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
-    public ResponseEntity<ErrorMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
 		ErrorMessage errorMessage = new ErrorMessage();
 		System.out.println("Creating User " + user.getName());
         if(valid.signUpValidator(user))
@@ -75,7 +85,14 @@ public class UserController {
         			String url = String.valueOf(request.getRequestURL());
         			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
         			System.out.println(url);
-        			sendMail.sendMail(user.getEmail(), url,"Confirmation email");
+        			
+        			Email email = new Email();
+    				email.setTo(user.getEmail());
+    				email.setSubject("Confirmation email");
+    				email.setBody(url);	
+    				// Storing message in JMS queue
+        			producer.send(email);
+        			
         			System.out.println("Verification mail sent");
         			HttpHeaders headers = new HttpHeaders();
                     headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
@@ -101,24 +118,40 @@ public class UserController {
 	
     //-------------------Activate a User--------------------------------------------------------
 	@RequestMapping(value="/activate/{token:.+}",method=RequestMethod.GET)
-	public ResponseEntity<String> activateUser(@PathVariable("token") String token){
+	public ErrorMessage activateUser(@PathVariable("token") String token,HttpServletResponse response,HttpServletRequest request){
 		int id = verifyToken.parseJWT(token);
+		ErrorMessage errorMessage = new ErrorMessage();
 		System.out.println(id);
 		if(id>0){
 			UserBean user = userService.getUserById(id);
 			if(user!=null){
 				user.setActivated(true);
 				if(userService.updateUser(user)){
-					return ResponseEntity.ok("Activated successfull");
+			
+						try {
+							response.sendRedirect("http://localhost:8080/ToDo/#!/login");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						/*response.sendRedirect("#!/login");*/
+					
+					errorMessage.setResponseMessage("Activation successfull");
+					return errorMessage;
 				}else{
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error in activation");
+					errorMessage.setResponseMessage("Error in activation");
+					return errorMessage;
 				}
 			}else{
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User does not exist");
+				errorMessage.setResponseMessage("User does not exist");
+				return errorMessage;
 			}
 		}else{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token Expire or Invalid");
+			errorMessage.setResponseMessage("Token Expire or Invalid");
+			return errorMessage;
 		}
+		
 	}
     //-------------------Login a User--------------------------------------------------------
 
