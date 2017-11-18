@@ -87,8 +87,8 @@
 	<mvc:resources location="/service/" mapping="/service/**" />
 	<mvc:resources location="/script/" mapping="/script/**" />
 	<mvc:resources location="/bower_components/" mapping="/bower_components/**"/>
-	<!-- <mvc:resources location="/Directives/" mapping="/Directives/**" />
- -->
+	<mvc:resources location="/directive/" mapping="/directive/**" />
+
  
  
  
@@ -132,8 +132,8 @@
 	
 	<jms:listener-container container-type="default" connection-factory="connectionFactory"  
  acknowledge="auto">  
-<jms:listener destination="myQueue" ref="consumer" method="onMessage"></jms:listener>  
-</jms:listener-container>  
+	<jms:listener destination="myQueue" ref="consumer" method="onMessage"></jms:listener>  
+	</jms:listener-container>  
 
  
 </beans>

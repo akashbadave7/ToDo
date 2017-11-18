@@ -73,6 +73,7 @@ public class UserController {
     public ResponseEntity<ErrorMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
 		ErrorMessage errorMessage = new ErrorMessage();
 		System.out.println("Creating User " + user.getName());
+		System.out.println(user);
         if(valid.signUpValidator(user))
         {
         	user.setActivated(false);
@@ -84,7 +85,6 @@ public class UserController {
         			String token = tokenGenerator.createJWT(user.getId(),null);
         			String url = String.valueOf(request.getRequestURL());
         			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
-        			System.out.println(url);
         			
         			Email email = new Email();
     				email.setTo(user.getEmail());
@@ -92,12 +92,12 @@ public class UserController {
     				email.setBody(url);	
     				// Storing message in JMS queue
         			producer.send(email);
-        			
-        			System.out.println("Verification mail sent");
+        			System.out.println(email);
+        			/*System.out.println("Verification mail sent");*/
         			HttpHeaders headers = new HttpHeaders();
-                    headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
+                    /*headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());*/
                     logger.info("Registration successfull");
-                    System.out.println("Registration successfull");
+                   /* System.out.println("Registration successfull");*/
                     errorMessage.setResponseMessage("Registration successfull");
                     return ResponseEntity.status(HttpStatus.OK).body(errorMessage);
         		}
@@ -162,7 +162,6 @@ public class UserController {
 		String password=user.getPassword();
 		ErrorMessage errorMessage = new ErrorMessage();
 		UserBean getUser = userService.getUserByEmail(email);
-		
 		if(getUser == null){
 			errorMessage.setResponseMessage("Email does not exists try again");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);

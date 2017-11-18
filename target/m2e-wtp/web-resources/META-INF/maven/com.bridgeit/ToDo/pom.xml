@@ -166,6 +166,12 @@
 			<artifactId>spring-jms</artifactId>
 			<version>4.3.8.RELEASE</version>
 		</dependency>
+	<!-- https://mvnrepository.com/artifact/org.springframework.amqp/spring-amqp -->
+<dependency>
+    <groupId>org.springframework.amqp</groupId>
+    <artifactId>spring-amqp</artifactId>
+    <version>1.0.0.RELEASE</version>
+</dependency>
 	
  </dependencies>
  

@@ -7,6 +7,7 @@ public class Validation
 	public boolean signUpValidator(UserBean user) 
 	{
 		boolean isValid=true;
+		
 		String emailPattern = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,3}$";
 		String  mobilePattern="^((\\+)?(\\d{2}[-]))?(\\d{10})?$";
 		String namePattern="^[a-zA-Z\\s]*$";

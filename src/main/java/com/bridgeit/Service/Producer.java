@@ -16,6 +16,7 @@ public class Producer {
 	JmsTemplate jmsTemplate;
 	
 	public void send(Email email) {
+		System.out.println("Produce "+email);
 		jmsTemplate.send(new MessageCreator() {
 			
 			@Override
