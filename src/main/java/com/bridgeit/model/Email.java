@@ -30,7 +30,7 @@ public class Email implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Email [to=" + to + ", body=" + body + ", subject=" + subject + "]";
+		return to +" "+ body +" " + subject;
 	}
 	
 	

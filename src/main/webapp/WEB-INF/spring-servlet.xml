@@ -88,6 +88,7 @@
 	<mvc:resources location="/script/" mapping="/script/**" />
 	<mvc:resources location="/bower_components/" mapping="/bower_components/**"/>
 	<mvc:resources location="/directive/" mapping="/directive/**" />
+	<mvc:resources location="/images/" mapping="/images/**" />
 
  
  
