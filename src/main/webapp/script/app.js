@@ -17,7 +17,8 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 			
 			.state('home', {
 				url : '/home',
-				templateUrl : 'template/home.html'
+				templateUrl : 'template/home.html',
+				controller: 'homeController'
 			})
 		
 			.state('fb',{

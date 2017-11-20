@@ -538,7 +538,7 @@ md-backdrop {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 50; }
+  }
   md-backdrop.md-menu-backdrop {
     position: fixed !important;
     z-index: 99; }

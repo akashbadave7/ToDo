@@ -135,3 +135,31 @@ p {
 
     
     
+.example-container {
+  width: 500px;
+  height: 300px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.md-sidenav-left.make-scrollable {
+    height: 600px; //Or any other height you wish
+    overflow-y: scroll;
+}
+
+
+.note{
+	border : 1px grey;
+	border-collapse:10px:
+	box-shadow: 0 0 10px black;
+	background-color : #ffffff;
+	
+		max-width: 450px; 
+		/* max-height: 700px; */
+	padding:10px;
+	margin-left: 500px;
+	padding-bottom: 20px;	
+}
+
+
+
+    

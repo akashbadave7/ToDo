@@ -5,3 +5,10 @@ ToDo.directive("toolBar",function(){
 		templateUrl :'template/NavBar.html' 
 	};
 });
+
+
+ToDo.directive("sideBar",function(){
+	return {
+		templateUrl :'template/sideBar.html' 
+	};
+});

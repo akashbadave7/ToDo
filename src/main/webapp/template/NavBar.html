@@ -1,26 +1,36 @@
-<!-- <div layout="layout-sm" width="100%">
- <div flex="100%" flex-offset="500">
-<md-toolbar style="background-color:#FFBB33;">
 
-       <div> Google keep</div>
-</md-toolbar>
-</div></div>
- -->
 <div layout="column">
   <md-toolbar style="background-color:#FFBB33;">
 
     <div class="md-toolbar-tools">
-    	<span style="padding:10px; color: black" ng-click="">&#9776;</span>
-    	 <md-icon style="color:wheat" class="material-icons">&#xE8B6;</md-icon>
+    	<!-- <span role button style="padding:10px; color: black" ng-click = "openLeftMenu()">&#9776;</span>
+    	 -->
+    	
+    	<md-button style="padding:10px; color: black" class="md-icon-button"
+        aria-label="Settings"
+        ng-click="toggleLeft()">
+             &#9776; </md-button>
       	<h2 md-truncate flex style="weight:80px;color:black">Google Keep</h2>
-      
-      	<md-input-container flex=>	
-         	<md-icon class="material-icons">&#xE8B6;</md-icon>
-        	 <input ng-model="search.notes" placeholder="Search here">
-     	 </md-input-container>
-    </div>
-
+   
+   <div flex-gt-sm="85">
+		<md-autocomplete flex="50"
+	         
+	          md-no-cache=""	
+	          md-selected-item=""
+	          md-search-text-change=""
+	          md-search-text=""
+	          md-selected-item-change=""
+	          md-items=""
+	          md-item-text=""
+	          md-min-length="0"
+	          placeholder="Search">
+	          </md-autocomplete>
+	        </div> 
+	 </div>
+	 
+	 <span flex></span>
+    <md-icon ng-if="notesView=='grid'" ng-click="doListView()" md-svg-icon="&#9776;"></md-icon>
+    <md-icon ng-if="notesView=='list'" ng-click="doGridView()" md-svg-icon="&#9776;"></md-icon>
   </md-toolbar>
-
 </div>
 

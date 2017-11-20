@@ -11,6 +11,7 @@ ToDo.controller('loginController',function($scope,loginService,$location){
 			a.then(function(response){
 				console.log(response.data.responseMessage);
 				localStorage.setItem('token',response.data.responseMessage);
+				
 				console.log("login success");
 				$location.path('home');
 			},function(response){
@@ -19,7 +20,7 @@ ToDo.controller('loginController',function($scope,loginService,$location){
 						$scope.error=response.data.responseMessage;
 					}
 				else
-					{
+					{	
 						console.log("fail");
 						$scope.error="Enter valid data";
 					}

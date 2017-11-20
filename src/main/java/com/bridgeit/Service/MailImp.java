@@ -19,7 +19,7 @@ public class MailImp implements Mail {
 	
 	@Override
 	public void sendMail(String to, String message,String subject) {
-		
+			System.out.println("inside sendmail");
 	      try {
 	    	  Date date = new Date();
 	    	  MimeMessage msg = mailSender.createMimeMessage();

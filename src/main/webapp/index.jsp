@@ -14,9 +14,6 @@
 
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
 
 	  <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
       <script src = "bower_components/angular-animate/angular-animate.min.js"></script>
@@ -35,7 +32,7 @@
 <link rel="stylesheet" type="text/css" href="css/signup.css">
 <!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>
-<script type="text/javascript" src="script/login.js"></script>
+
 
 <script type="text/javascript" src="script/formInput.js"></script>
 
@@ -46,8 +43,8 @@
  <!-- CONTROLLERS -->
 <script src="controller/loginController.js"></script>
 <script src="controller/registerController.js"></script>
-<!-- <script src="controllerHomeController.js"></script>
- -->
+<script src="controller/homeController.js"></script>
+
  <!-- SERVICES -->
 <script type="text/javascript" src="service/loginService.js"></script>
 <script type="text/javascript" src="service/userRegisterService.js"></script>
