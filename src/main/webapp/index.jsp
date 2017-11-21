@@ -30,6 +30,11 @@
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <link rel="stylesheet" type="text/css" href="css/signup.css">
+<link rel="stylesheet" type="text/css" href="css/navbar.css">
+
+
+
+
 <!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>
 

@@ -22,6 +22,7 @@ public class Consumer implements MessageListener{
 		System.out.println("consumer"+message);
 		System.out.println("Mailservice"+sendMail);
 		ObjectMessage object = (ObjectMessage) message;
+
 		/*byte[] data = SerializationUtils.serialize(object);
 		Map map = (HashMap)SerializationUtils.deserialize(data);*/
 		
@@ -33,6 +34,7 @@ public class Consumer implements MessageListener{
 			e.printStackTrace();
 		}
 		
+
 		
 	}
 	
