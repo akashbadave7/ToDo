@@ -1,6 +1,6 @@
 package com.bridgeit.model;
 
-public class ErrorMessage {
+public class ResponseMessage {
 
 	private String responseMessage;
 

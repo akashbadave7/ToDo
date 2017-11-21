@@ -1,13 +1,47 @@
-<div>
-	<tool-bar></tool-bar>
-</div>
-<div>
-	<side-bar></side-bar>
-</div>
+<div id="home-div">
+	<div>
+		<tool-bar></tool-bar>
+	</div>
+	<div id="main" style="margin-left: {{mleft">
+		<div>
+			<side-bar></side-bar>
+		</div>
 
 
-<div style="padding-top:20px;" style="">
-  <div contenteditable="true" class="note" ng-show="displayDiv" ></div>
-  <div contenteditable="true" class="note" ng-show="true"  ng-click="showDiv()" data-placeholder="Enter some text"></div>
-   <div contenteditable="true" class="note"ng-show="displayDiv"></div>
+		<md-content flex ng-hide="searchNote"> <md-card
+			style="margin-left:30%; margin-right:20%;"> <span
+			class="md-headline" style="font-size: 19px; line-height: 23px;">
+
+			<md-card-title ng-show="click"> <md-card-title-text>
+			<md-input-container class="md-block"
+				style=" padding: 0px; margin: 5px 0; ">
+			<div contenteditable="true" ng-bind-html="note.title"
+				data-text="Title" id="noteTitle" placeholder="Title"></div>
+			</md-input-container> </md-card-title-text> </md-card-title> <md-card-title
+				style="padding-top:0px;padding-right:10px;padding-bottom:0px;padding-left:10px">
+			<md-card-title-text> <span class="md-headline">
+				<md-input-container class="md-block">
+				<div ng-bind-html="note.body" id="noteBody" ng-focus="click=true"
+					contenteditable="true" contenteditabledata aria-multiline="true"
+					role="textbox" data-placeholder="Take a note...."></div>
+				</md-input-container>
+			</span> </md-card-title-text> </md-card-title> <md-card-actions layout="row" layout-align="end center" flex
+				ng-show="click" style="margin: 3px;"> <md-button
+				ng-click="addNote()"> <b>Done</b> </md-button> </md-card-actions>
+		</span> </md-card> </md-content>
+
+		<md-content flex margin-left="200px">
+		<div layout="row" layout-wrap flex
+			style="margin-left: 400px; margin-right: 200px;">
+
+			<div ng-repeat="note in notes" id="note-scope">
+				<md-card flex> <md-card-content> <b><div
+						class="card-title">{{note.title}}</div></b>
+
+				<div class="card-text">{{note.body}}</div>
+				</md-card-content> </md-card>
+			</div>
+		</div>
+		</md-content>
+	</div>
 </div>

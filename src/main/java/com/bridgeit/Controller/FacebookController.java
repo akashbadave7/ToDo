@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
-import com.bridgeit.model.ErrorMessage;
+import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -47,7 +47,7 @@ public class FacebookController {
 	@RequestMapping(value="/connectFB")
 	public void redirectURL(HttpServletRequest request,HttpServletResponse response,UriComponentsBuilder ucBuilder) throws IOException
 	{
-		ErrorMessage errorMessage = new ErrorMessage();
+		ResponseMessage errorMessage = new ResponseMessage();
 		String sessionState = (String) request.getSession().getAttribute("State");
 		String googlestate = request.getParameter("state");
 		System.out.println("in connect facebook");

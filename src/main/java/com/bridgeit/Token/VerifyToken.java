@@ -1,12 +1,16 @@
 package com.bridgeit.Token;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.bridgeit.model.ResponseMessage;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MissingClaimException;
 
 public class VerifyToken {
-
+	
 	String keyvariable = "secreateKey";
 
 	public int parseJWT(String jwt) {
@@ -18,6 +22,8 @@ public class VerifyToken {
 			System.out.println(Id);
 		} catch (MissingClaimException e) {
 			e.printStackTrace();
+			
+			
 			return Id;
 		} catch (Exception e1) {
 			e1.printStackTrace();

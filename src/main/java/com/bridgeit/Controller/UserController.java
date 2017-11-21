@@ -31,7 +31,7 @@ import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
 import com.bridgeit.model.Email;
-import com.bridgeit.model.ErrorMessage;
+import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 
 
@@ -70,8 +70,8 @@ public class UserController {
     //-------------------Insert a User--------------------------------------------------------
 
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
-    public ResponseEntity<ErrorMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
-		ErrorMessage errorMessage = new ErrorMessage();
+    public ResponseEntity<ResponseMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
+		ResponseMessage errorMessage = new ResponseMessage();
 		System.out.println("Creating User " + user.getName());
 		System.out.println(user);
         if(valid.signUpValidator(user))
@@ -119,9 +119,9 @@ public class UserController {
 	
     //-------------------Activate a User--------------------------------------------------------
 	@RequestMapping(value="/activate/{token:.+}",method=RequestMethod.GET)
-	public ErrorMessage activateUser(@PathVariable("token") String token,HttpServletResponse response,HttpServletRequest request){
+	public ResponseMessage activateUser(@PathVariable("token") String token,HttpServletResponse response,HttpServletRequest request){
 		int id = verifyToken.parseJWT(token);
-		ErrorMessage errorMessage = new ErrorMessage();
+		ResponseMessage errorMessage = new ResponseMessage();
 		System.out.println(id);
 		if(id>0){
 			UserBean user = userService.getUserById(id);
@@ -157,11 +157,11 @@ public class UserController {
     //-------------------Login a User--------------------------------------------------------
 
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ResponseEntity<ErrorMessage> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
+	public ResponseEntity<ResponseMessage> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
 		String email= user.getEmail();
 		String password=user.getPassword();
-		ErrorMessage errorMessage = new ErrorMessage();
+		ResponseMessage errorMessage = new ResponseMessage();
 		UserBean getUser = userService.getUserByEmail(email);
 		if(getUser == null){
 			errorMessage.setResponseMessage("Email does not exists try again");

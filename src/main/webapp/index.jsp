@@ -31,6 +31,7 @@
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <link rel="stylesheet" type="text/css" href="css/signup.css">
 <link rel="stylesheet" type="text/css" href="css/navbar.css">
+<link rel="stylesheet" type="text/css" href="css/card.css">
 
 
 
@@ -53,14 +54,20 @@
  <!-- SERVICES -->
 <script type="text/javascript" src="service/loginService.js"></script>
 <script type="text/javascript" src="service/userRegisterService.js"></script>
+<script type="text/javascript" src="service/noteService.js"></script>
+
 
 <!-- DIRECTIVE -->
 <script type="text/javascript" src="directive/CustomDirective.js"></script>
 
 </head>
 
-
-<body ng-app="ToDo"">
+<style type="text/css">
+body {
+	overflow: hidden;
+}
+</style>
+<body id="aaa" ng-app="ToDo"">
 	<div ui-view></div>
 </body>
 </html>
