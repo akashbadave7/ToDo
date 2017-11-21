@@ -44,7 +44,9 @@ public class ForgotPasswordController {
 				String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
 				String url = String.valueOf(request.getRequestURL());
 				System.out.println(url);
+				
 				url = "http://localhost:8080/ToDo/resetpass/"+token;
+				System.out.println(request.getScheme()+" "+request.getAuthType()+" "+request.getContentType()+" "+request.getContextPath()+" "+request.getLocalPort());
 				System.out.println(url);
 				sendMail.sendMail(email, url,"Reset password link");
 				response.setHeader("Location", "http://localhost:8080/ToDo");

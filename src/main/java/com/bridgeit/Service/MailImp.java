@@ -22,14 +22,14 @@ public class MailImp implements Mail {
 		
 	      try {
 	    	  Date date = new Date();
-	    	  MimeMessage msg = mailSender.createMimeMessage();
-	    	  MimeMessageHelper helper = new MimeMessageHelper(msg,true,"UTF-8");
+	    	  MimeMessage mimeMessage = mailSender.createMimeMessage();
+	    	  MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true,"UTF-8");
 	    	  helper.setFrom("Admin");
 	    	  helper.setTo(to);
 	    	  helper.setSubject(subject);
 	    	  helper.setText(message);
 	    	  helper.setSentDate(date);
-	    	  mailSender.send(msg);
+	    	  mailSender.send(mimeMessage);
 	    	  System.out.println("Email send sucessfully");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
