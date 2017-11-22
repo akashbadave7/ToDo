@@ -5,6 +5,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 	
 	$scope.toggleLeft = function(){
 		$mdSidenav('left').toggle();
+		
 	}
    /* 
 	$scope.toggleLeft = buildToggler('left');
@@ -43,9 +44,9 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     $scope.addNote = function() {
     	$scope.note = {};
     	var token = localStorage.getItem('token');
-    	$scope.note.title = document.getElementById("noteTitle").innerHTML;
+    	$scope.note.title = document.getElementById("title").innerHTML;
     	
-    	$scope.note.body = document.getElementById("noteBody").innerHTML;
+    	$scope.note.body = document.getElementById("body").innerHTML;
     	
 		
 		
@@ -56,8 +57,8 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 
 		notes.then(function(response) {
 
-			document.getElementById("noteTitle").innerHTML="";
-			document.getElementById("noteBody").innerHTML="";
+			document.getElementById("title").innerHTML="";
+			document.getElementById("body").innerHTML="";
 			getNotes();
 
 		}, function(response) {
@@ -74,6 +75,11 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     	$scope.displayDiv=true;
     }
     */
+    
+    $scope.displayDiv=false;
+	$scope.show=function(){
+		$scope.displayDiv=true;
+	}
 
     getNotes();
     

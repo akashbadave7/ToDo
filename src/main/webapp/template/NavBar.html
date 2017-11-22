@@ -1,6 +1,4 @@
-
-<div layout="column">
-  <md-toolbar style="background-color:#FFBB33;">
+<md-toolbar style="background-color:#FFBB33;">
 
     <div class="md-toolbar-tools">
     	<!-- <span role button style="padding:10px; color: black" ng-click = "openLeftMenu()">&#9776;</span>
@@ -8,9 +6,12 @@
     	
     	<md-button style="padding:10px; color: black" class="md-icon-button" ng-click="toggleLeft()">&#9776;</md-button>
       	
-      	<h2 md-truncate flex style="weight:80px;color:black">Google Keep</h2>
-   
-   <div flex-gt-sm="85">
+  <div style="padding:10px">    	
+      	<h2 md-truncate  style="weight:80px;color:black">Google Keep</h2>
+      	
+  </div><b><img src="images/search-icon.png" style="width:35px;"/></b>
+  <div hide-xs flex>
+   <div flex-gt-sm="85" >
 		<md-autocomplete flex="50"
 	         
 	          md-no-cache=""	
@@ -21,11 +22,16 @@
 	          md-items=""
 	          md-item-text=""
 	          md-min-length="0"
+	          padding:20px;
 	          placeholder="Search">
 	          </md-autocomplete>
 	        </div> 
+	        </div>
+	        
+	        <img ng-src="images/profilepic.svg" ng-click="" style="width:40px;color:white"/>
+	  
 	 </div>
-
+ 	
   </md-toolbar>
-</div>
+
 

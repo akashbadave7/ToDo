@@ -2,7 +2,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
+   <style type="text/css">
+        .tabData
+        {
+            width: 100%;
+            background-color: Yellow;
+            overflow: auto;
+        }
+    </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,8 +36,8 @@
  <!-- CSS -->
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
 <link rel="stylesheet" type="text/css" href="css/login.css">
-<link rel="stylesheet" type="text/css" href="css/signup.css">
-<link rel="stylesheet" type="text/css" href="css/navbar.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
+<!-- <link rel="stylesheet" type="text/css" href="css/navbar.css"> -->
 <link rel="stylesheet" type="text/css" href="css/card.css">
 
 
@@ -62,12 +69,8 @@
 
 </head>
 
-<style type="text/css">
-body {
-	overflow: hidden;
-}
-</style>
-<body id="aaa" ng-app="ToDo"">
+
+<body ng-app="ToDo">
 	<div ui-view></div>
 </body>
 </html>

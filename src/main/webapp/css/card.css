@@ -1,14 +1,30 @@
 .card{
-	width:200px;
-	height: 100px;
+	width:850px;
 	background-color: white;
-	margin:5px;
 }
 
-body {
-    background-color: rgba(0,0,0,.2);
+/* html,body,.md-content {
+      background-color: rgba(205, 205, 205, 0.45);
 }
 
+md-backdrop.md-sidenav-backdrop {
+    z-index: -1;
+}
 #home-div{
 	background-color: rgba(0,0,0,.2);
 }
+
+md-content{
+	display: inline;
+} */
+
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  display: block;
+}
+
+
+
+
+
+
