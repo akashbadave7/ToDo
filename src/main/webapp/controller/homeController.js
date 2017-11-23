@@ -2,37 +2,25 @@ var ToDo = angular.module('ToDo')
 
 ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteService) {
    
-	
+
 	$scope.toggleLeft = function(){
 		$mdSidenav('left').toggle();
-		
 	}
-   /* 
-	$scope.toggleLeft = buildToggler('left');
-
-    function buildToggler(componentId) {
-      return function() {
-    	  $mdSidenav(componentId).toggle();
-    	  if($scope.width=='0px'){
-  			$scope.width='200px';
-  			$scope.mleft="200px";
-  			
-  		}else{
-  			$scope.width='0px';
-  			$scope.mleft="0px";
-  			
-  		}
-       
-      };
-    }*/
+   
+	var note=function(){
+		$location.path('notes');
+	}
     
     
     var getNotes=function(){
     	
-    	var token = localStorage.getItem('token');
-    	var notes=noteService.getNotes(token);
+    	/*var token = localStorage.getItem('token');*/
+    	var url = 'getNotes';
+    	
+    	var notes=noteService.service(url,'GET',notes);
     	notes.then(function(response){
     		$scope.notes=response.data;
+    		console.log("$scope.notes::",$scope.notes);
     	},function(response){
     		$scope.error=response.data.responseMessage;
     		$location.path('login');
@@ -43,15 +31,12 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     
     $scope.addNote = function() {
     	$scope.note = {};
-    	var token = localStorage.getItem('token');
+    	/*var token = localStorage.getItem('token');*/
     	$scope.note.title = document.getElementById("title").innerHTML;
     	
     	$scope.note.body = document.getElementById("body").innerHTML;
-    	
-		
-		
-		
-		var notes = noteService.addNote(token, $scope.note);
+		var url='addNote'
+		var notes = noteService.service(url,'POST',$scope.note);
 		
 		
 
@@ -69,12 +54,61 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 
 		});
 	}
-    /*$scope.displayDiv=false;
-    $scope.showDiv=function()
-    {
-    	$scope.displayDiv=true;
+    
+    $scope.deleteNoteForever=function(note){
+    	
+    	console.log("inside delete forever")
+   
+    	var url='delete/'+note.noteId;
+    	var notes = noteService.service(url,'DELETE',note);
+    	notes.then(function(response) {
+
+			getNotes();
+
+		}, function(response) {
+
+			getNotes();
+
+			$scope.error = response.data.message;
+
+		});
+    	
     }
-    */
+    
+    	$scope.restoreNote=function(note){
+    		note.trash=0;
+    		var url='update';
+    		var notes = noteService.service(url,'POST',note);
+    		notes.then(function(response) {
+
+    			getNotes();
+
+    		}, function(response) {
+
+    			getNotes();
+
+    			$scope.error = response.data.message;
+
+    		});
+    	}
+    
+    $scope.deleteNote = function(note) {
+
+		note.trash=1;
+		var url='update';
+		var notes = noteService.service(url,'POST',note);
+		notes.then(function(response) {
+
+			getNotes();
+
+		}, function(response) {
+
+			getNotes();
+
+			$scope.error = response.data.message;
+
+		});
+	}
     
     $scope.displayDiv=false;
 	$scope.show=function(){

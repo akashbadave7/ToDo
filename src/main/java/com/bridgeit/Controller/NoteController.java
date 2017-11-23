@@ -51,6 +51,9 @@ public class NoteController {
 			 Date createdDate  = new Date();
 			 note.setCreateDate(createdDate);
 			 note.setLastUpdated(createdDate);
+			 note.setArchive(false);
+			 note.setTrash(false);
+			 note.setPinned(false);
 			 id = noteService.saveNote(note);
 			 
 		 }else{

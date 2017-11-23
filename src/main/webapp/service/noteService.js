@@ -3,7 +3,19 @@ var ToDo = angular.module('ToDo');
 ToDo.factory('noteService', function($http,$location) {
 	var notes={};
 
-	notes.getNotes=function(token){
+	
+	notes.service=function(url,method,note){
+		return $http({	
+		    method: method,
+		    url: url,
+		    data:note,
+		    headers: {
+		        'Authorization': localStorage.getItem('token')
+		    }
+		
+		});
+	}
+/*	notes.getNotes=function(token){
 	return $http({
 	    method: 'GET',
 	    url: 'getNotes',
@@ -32,6 +44,6 @@ ToDo.factory('noteService', function($http,$location) {
 
 		    }
 		});
-	}
+	}*/
 	return notes;
 })

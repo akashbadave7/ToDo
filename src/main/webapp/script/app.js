@@ -26,10 +26,16 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 				controller : 'facebookController'
 			})
 			
-			.state('/ResetEmail',{
+			.state('ResetEmail',{
 				url:'/ResetEmail',
 				templateUrl : 'template/ResetEmail.html',
 				/*controller : 'resetPasswordController'*/
+			})
+			
+			.state('trash',{
+				url : '/trash',
+				templateUrl : 'template/trash.html',
+				controller : 'homeController'
 			});
 			
 			$urlRouterProvider.otherwise('login');
