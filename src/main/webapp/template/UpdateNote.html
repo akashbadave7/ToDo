@@ -1,0 +1,22 @@
+<md-dialog flex="45" style="background-color:{{mdDialogData.color}}">
+ 	<md-dialog-content>
+		<md-input-container class="md-block">
+
+  				<div ng-bind-html="mdDialogData.title"  id="updatedNoteTitle" contenteditable="true" contenteditabledata  aria-multiline="true" role="textbox" style="background-color: rgb(250, 250, 250); outline:none; background-color:{{mdDialogData.color}}"  ></div>
+		</md-input-container>
+
+		<md-input-container class="md-block">
+			  <div ng-bind-html="mdDialogData.body" id="updatedNoteBody" contenteditable="true" contenteditabledata  aria-multiline="true" role="textbox" style="background-color: rgb(250, 250, 250); outline:none; background-color:{{mdDialogData.color}}"  ></div>
+		</md-input-container>
+
+		<md-dialog-actions>
+			<md-panel>
+					<md-button ng-click="saveUpdatedNote()" class="md-primary" >Done</md-button>
+			</md-panel>
+		</md-dialog-actions>
+	
+		<!-- <md-dialog-actions>
+  				<i>Edited on&nbsp;</i>{{mdDialogData.updatedAt ? (mdDialogData.updatedAt.date) : mdDialogData.createdAt.date}}.{{mdDialogData.updatedAt ? mdDialogData.updatedAt.month : mdDialogData.createdAt.month}}.{{mdDialogData.updatedAt ? mdDialogData.updatedAt.year : mdDialogData.createdAt.year}}&nbsp;{{mdDialogData.updatedAt ? mdDialogData.updatedAt.hr : mdDialogData.createdAt.hr}}:{{mdDialogData.updatedAt ? mdDialogData.updatedAt.min : mdDialogData.createdAt.min}}</p>
+  		</md-dialog-actions> -->
+</md-dialog-content>
+</md-dialog>

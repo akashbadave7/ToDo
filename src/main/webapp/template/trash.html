@@ -18,7 +18,7 @@
 	        <md-card-title>
 		          <md-card-title-text>
 		           	<div>
-		            	<div ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
+		            	<div ng-click="updateNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
 		            </div>
 		            <br>
 		            <div>

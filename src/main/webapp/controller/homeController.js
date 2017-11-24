@@ -1,6 +1,6 @@
 var ToDo = angular.module('ToDo')
 
-ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteService) {
+ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteService,$mdDialog) {
    
 
 	$scope.toggleLeft = function(){
@@ -35,12 +35,14 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     	$scope.note.title = document.getElementById("title").innerHTML;
     	
     	$scope.note.body = document.getElementById("body").innerHTML;
-		var url='addNote'
-		var notes = noteService.service(url,'POST',$scope.note);
-		
-		
-
-		notes.then(function(response) {
+		var url='addNote';
+		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="")
+			{
+				$scope.displayDiv=false;
+			}
+		else{
+			var notes = noteService.service(url,'POST',$scope.note);
+			notes.then(function(response) {
 
 			document.getElementById("title").innerHTML="";
 			document.getElementById("body").innerHTML="";
@@ -53,6 +55,9 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 			$scope.error = response.data.message;
 
 		});
+			
+		}
+		
 	}
     
     $scope.deleteNoteForever=function(note){
@@ -76,7 +81,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     }
     
     	$scope.restoreNote=function(note){
-    		note.trash=0;
+    		note.trash=false;
     		var url='update';
     		var notes = noteService.service(url,'POST',note);
     		notes.then(function(response) {
@@ -94,9 +99,10 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     
     $scope.deleteNote = function(note) {
 
-		note.trash=1;
-		note.pinned=0;
+		note.trash=true;
+		note.pinned=false;
 		var url='update';
+		
 		var notes = noteService.service(url,'POST',note);
 		notes.then(function(response) {
 
@@ -113,7 +119,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     
     $scope.pinned = function(note,pinned) {
 		note.pinned=pinned;
-		note.archive=0;
+		note.archive=false;
 		var url = 'update';
 		var notes = noteService.service(url,'POST',note)
 		notes.then(function(response){
@@ -125,12 +131,12 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     
     $scope.archive=function(note,status){
     	console.log("in archive");
-    	note.pinned=0;
+    	note.pinned=false;
     	note.archive=status;
     	var url = 'update';
 		var notes = noteService.service(url,'POST',note)
 		notes.then(function(response){
-			console.log("success")
+			console.log("success");
 		},function(response){
 			$scope.error=response.data.responseMessage;
 		});
@@ -142,8 +148,52 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 		$scope.displayDiv=true;
 	}
 	
-	
 
+	
+	$scope.updateNote = function(note, event) {
+	    // Show dialog box for edit a note
+		console.log("inside updatenote");
+		console.log(note);
+	    $mdDialog.show({
+	      locals: {
+	        dataToPass: note  // Pass the note data into dialog box
+	      },
+	      templateUrl: 'template/UpdateNote.html',
+	      parent: angular.element(document.body),
+	      targetEvent: event,
+	      clickOutsideToClose: true,
+	      controllerAs: 'controller',
+	      controller: mdDialogController
+	    });
+	}
+	
+	function mdDialogController($scope, $state, dataToPass) {
+	      $scope.mdDialogData = dataToPass;
+
+	      // Saving the edited note
+	      	$scope.saveUpdatedNote = function() {
+	    	var url = 'update';
+	    	
+	    	console.log(dataToPass);
+	    	
+	    	dataToPass.title = document.getElementById("updatedNoteTitle").innerHTML;
+	    	
+	    	dataToPass.body = document.getElementById("updatedNoteBody").innerHTML;
+	    	/*var updatedNoteTitle = document.getElementById("updatedNoteTitle").innerHTML;
+	    	
+	    	var updatedNoteBody = document.getElementById("updatedNoteBody").innerHTML;*/
+	    	
+	    	console.log(updatedNoteTitle+' '+updatedNoteBody)
+	  		var notes = noteService.service(url,'POST',dataToPass)
+	  		
+	  		notes.then(function(response){
+				console.log("success")
+			},function(response){
+				$scope.error=response.data.responseMessage;
+			});
+	      }
+	
+	}
     getNotes();
     
 });
