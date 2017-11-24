@@ -1,6 +1,5 @@
 .card{
-	width:850px;
-	background-color: white;
+	width:280px;
 }
 
 /* html,body,.md-content {
@@ -28,6 +27,15 @@ md-content{
 }
 
 #float:hover #lastDiv{
+	visibility: visible;
+}
+
+
+#pinIcon{
+	visibility: hidden;
+}
+
+#float:hover #pinIcon{
 	visibility: visible;
 }
 

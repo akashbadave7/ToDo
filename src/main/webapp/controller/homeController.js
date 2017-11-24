@@ -95,6 +95,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     $scope.deleteNote = function(note) {
 
 		note.trash=1;
+		note.pinned=0;
 		var url='update';
 		var notes = noteService.service(url,'POST',note);
 		notes.then(function(response) {
@@ -110,10 +111,38 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 		});
 	}
     
-    $scope.displayDiv=false;
+    $scope.pinned = function(note,pinned) {
+		note.pinned=pinned;
+		note.archive=0;
+		var url = 'update';
+		var notes = noteService.service(url,'POST',note)
+		notes.then(function(response){
+			console.log("success")
+		},function(response){
+			$scope.error=response.data.responseMessage;
+		});
+	}
+    
+    $scope.archive=function(note,status){
+    	console.log("in archive");
+    	note.pinned=0;
+    	note.archive=status;
+    	var url = 'update';
+		var notes = noteService.service(url,'POST',note)
+		notes.then(function(response){
+			console.log("success")
+		},function(response){
+			$scope.error=response.data.responseMessage;
+		});
+    }
+    
+	
+	$scope.displayDiv=false;
 	$scope.show=function(){
 		$scope.displayDiv=true;
 	}
+	
+	
 
     getNotes();
     
