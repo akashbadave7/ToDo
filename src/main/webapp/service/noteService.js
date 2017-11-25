@@ -5,6 +5,7 @@ ToDo.factory('noteService', function($http,$location) {
 
 	
 	notes.service=function(url,method,note){
+		
 		return $http({	
 		    method: method,
 		    url: url,

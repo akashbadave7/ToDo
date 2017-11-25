@@ -30,8 +30,11 @@
       
       <link rel="stylesheet" href="bower_components/ui-navbar/css/ui-navbar.css">
       <script src="bower_components/ui-navbar/src/navbar.js"></script>
-      
-
+     
+    <!--  <script src="bower_components/tinycolor/dist/tinycolor-min.js"></script> -->
+     <script src="bower_components/colorpicker/dist/colorPicker.js"></script> 
+     
+	 <link rel="stylesheet" href="bower_components/colorpicker/dist/colorPickerStyle.css">
 
  <!-- CSS -->
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->

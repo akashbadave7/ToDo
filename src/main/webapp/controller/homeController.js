@@ -3,6 +3,36 @@ var ToDo = angular.module('ToDo')
 ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteService,$mdDialog) {
    
 
+	$scope.colors = [ '#fff', '#ff8a80', '#ffd180', '#ffff8d',
+		'#ccff90', '#a7ffeb', '#80d8ff', '#82b1ff',
+		'#b388ff', '#f8bbd0', '#d7ccc8', '#cfd8dc' ];
+	
+	 
+	 
+	 $scope.noteColor=function(newColor, oldColor)
+	 {
+		 console.log(newColor);
+		 $scope.color = newColor;
+	 }
+	 
+	$scope.colorChanged = function(newColor, oldColor, note) {
+        note.color=newColor;
+        var url='update';
+		var notes = noteService.service(url,'POST',note);
+		notes.then(function(response) {
+
+			getNotes();
+
+		}, function(response) {
+
+			getNotes();
+
+			$scope.error = response.data.message;
+
+		});
+    }
+	
+	
 	$scope.toggleLeft = function(){
 		$mdSidenav('left').toggle();
 	}
@@ -35,17 +65,25 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     	$scope.note.title = document.getElementById("title").innerHTML;
     	
     	$scope.note.body = document.getElementById("body").innerHTML;
+    	
 		var url='addNote';
 		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="")
 			{
 				$scope.displayDiv=false;
 			}
 		else{
+			console.log("Note color in adding");
+			console.log($scope.color);
+			$scope.note.color=$scope.color;
+			
 			var notes = noteService.service(url,'POST',$scope.note);
 			notes.then(function(response) {
 
 			document.getElementById("title").innerHTML="";
 			document.getElementById("body").innerHTML="";
+			$scope.color='#fff';
+			$scope.displayDiv=false;
+			
 			getNotes();
 
 		}, function(response) {
@@ -194,6 +232,8 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 	      }
 	
 	}
+	
+	
     getNotes();
     
 });

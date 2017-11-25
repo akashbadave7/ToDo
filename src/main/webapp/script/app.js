@@ -1,4 +1,4 @@
-var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial'])
+var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker'])
 
 
 ToDo.config(['$stateProvider','$urlRouterProvider',

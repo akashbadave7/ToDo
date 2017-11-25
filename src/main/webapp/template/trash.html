@@ -14,7 +14,7 @@
 	
 	<div ng-repeat="note in notes | filter:{trash:true}" id="note-scope" flex="30">
 
-	<md-card style="width:260px" id="float" ng-click="showConfirm($event)" >
+	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}">
 	        <md-card-title>
 		          <md-card-title-text>
 		           	<div>
@@ -31,7 +31,8 @@
 	        <md-card-actions>
 		       	 <p id="lastDiv" class="icon">
 				        <md-menu>
-			              <md-button style="min-width:30px;" ng-click="$mdMenu.open($event)">
+			              <md-button style="min-width:30px;" ng-click="$mdMenu.open($event)" aria-label="More">
+			              <md-tooltip md-direction="bottom">More</md-tooltip>
 			                <img ng-src="images/menu.svg" style="width:21px">
 			              </md-button>
 			              <md-menu-content>

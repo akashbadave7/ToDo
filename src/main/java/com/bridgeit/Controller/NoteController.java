@@ -51,9 +51,8 @@ public class NoteController {
 			 Date createdDate  = new Date();
 			 note.setCreateDate(createdDate);
 			 note.setLastUpdated(createdDate);
-			 note.setArchive(false);
 			 note.setTrash(false);
-			 note.setPinned(false);
+			 System.out.println("notecolor::"+note.getColor());
 			 id = noteService.saveNote(note);
 			 
 		 }else{

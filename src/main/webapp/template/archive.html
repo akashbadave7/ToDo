@@ -14,11 +14,16 @@
 	
 	<div ng-repeat="note in notes | filter:{archive:true}" id="note-scope" flex="30">
 
-	<md-card class="card" id="float" ng-click="showConfirm($event)" >
+	<md-card class="card" id="float" ng-style="{'background-color' : note.color}">
 	        <md-card-title>
-		          <md-card-title-text>
-		          	<div>
-           				<img id="pinIcon" ng-src="images/unpin.png" style="width:21px;float:right" ng-click="pinned(note,true)"/>
+		          <md-card-title-text class="update">
+		          
+		          <div aria-label="unpin note">
+		          		<md-button style="min-width:15px;float:right" >
+		          		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
+           				<img id="pinIcon" ng-src="images/pin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"/>
+           				</md-button>
+           				
            			</div>
 		           	<div>
 		            	<div ng-click="updateNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
@@ -51,20 +56,27 @@
 			              </md-menu-content>
 			       </md-menu> 
 			       </md-button>
-			       		<md-button style="min-width:25px";>
+			       		<md-button style="min-width:25px"; arial-label="Share">
+			       			<md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>
-	        			<md-button style="min-width:25px">
-	        				<md-icon md-svg-src="images/color.svg" ng-click="" style="width:21px"></md-icon>
-	        			</md-button style="min-width:30px">
-	        			<md-button style="min-width:25px">
-	        			<md-icon md-svg-src="images/uploadImg.svg" ng-click="" style="width:21px;"></md-icon>
+	        				
+	        			
+	        			<color-picker class ="colorIcon" value ="cardColor" color="color" options="colors" on-color-changed="colorChanged(newColor, oldColor,note)"></color-picker>	 
+	        			
+	        			
+	        			<md-button style="min-width:25px" area-label="Add photo">
+	        				<md-tooltip md-direction="bottom">Add photo</md-tooltip>
+	        				<md-icon md-svg-src="images/uploadImg.svg" ng-click="" style="width:21px;"></md-icon>
 	        			</md-button>
-	        			<md-button style="min-width:25px" ng-click="archive(note,false)">
+	        			
+	        			<md-button style="min-width:25px" ng-click="archive(note,false)" area-label="Unachive">
+	        			<md-tooltip md-direction="bottom">Unarchive</md-tooltip>
 	        				<md-icon md-svg-src="images/unarchive.svg"  style="width:18px;"></md-icon>
 				        </md-button>
 				        <md-menu>
-			              <md-button style="min-width:25px;" ng-click="$mdMenu.open($event)">
+			              <md-button style="min-width:25px;" ng-click="$mdMenu.open($event)" area-label="More">
+			              <md-tooltip md-direction="bottom">More</md-tooltip>
 			                <img ng-src="images/menu.svg" style="width:21px">
 			              </md-button>
 			              <md-menu-content>

@@ -22,13 +22,14 @@ md-content{
   display: block;
 }
 
-#lastDiv{
+#lastDiv,#colorpannel{
 	visibility: hidden;
 }
 
-#float:hover #lastDiv{
+#float:hover #lastDiv,#colorpannel{
 	visibility: visible;
 }
+
 
 
 #pinIcon{
@@ -101,6 +102,20 @@ md-content{
 
 #icon{
 	display: block;
+	
 }
+
+.colorIcon{
+	border: none;
+	display: inline-block;
+	vertical-align: middle;
+	
+}
+
+.update{
+	    outline: none;
+}
+
+
 
 
