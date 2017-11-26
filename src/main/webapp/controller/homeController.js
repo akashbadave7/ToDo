@@ -1,8 +1,49 @@
 var ToDo = angular.module('ToDo')
 
-ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteService,$mdDialog) {
+ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog) {
    
 
+/*	$scope.date = new Date();
+    $scope.time = new Date();
+    $scope.dateTime = new Date();
+    $scope.minDate = moment().subtract(1, 'month');
+    $scope.maxDate = moment().add(1, 'month');
+    $scope.dates = [new Date('2016-11-14T00:00:00'), new Date('2016-11-15T00:00:00'),
+      new Date('2016-11-30T00:00:00'), new Date('2016-12-12T00:00:00'), new Date('2016-12-13T00:00:00'),
+      new Date('2016-12-31T00:00:00')];	*/
+
+    $scope.displayDialog = function (note) {
+      mdcDateTimeDialog.show({
+       /* maxDate: $scope.maxDate,*/
+        time: true
+      })
+        .then(function (date) {
+          $scope.selectedDateTime = date;
+          note.reminder=date;
+          console.log('New Date / Time selected:', date);
+          
+          	var url='update';
+  		
+	  		var notes = noteService.service(url,'POST',note);
+	  		notes.then(function(response) {
+	
+	  			getNotes();
+	
+	  		}, function(response) {
+	
+	  			getNotes();
+	
+	  			$scope.error = response.data.message;
+	
+	  		});
+        });
+    };
+	
+    
+
+	
+	
+	
 	$scope.colors = [ '#fff', '#ff8a80', '#ffd180', '#ffff8d',
 		'#ccff90', '#a7ffeb', '#80d8ff', '#82b1ff',
 		'#b388ff', '#f8bbd0', '#d7ccc8', '#cfd8dc' ];
@@ -17,7 +58,8 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 	 
 	$scope.colorChanged = function(newColor, oldColor, note) {
         note.color=newColor;
-        var url='update';
+        update(note);
+        /*var url='update';
 		var notes = noteService.service(url,'POST',note);
 		notes.then(function(response) {
 
@@ -29,7 +71,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 
 			$scope.error = response.data.message;
 
-		});
+		});*/
     }
 	
 	
@@ -120,7 +162,8 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
     
     	$scope.restoreNote=function(note){
     		note.trash=false;
-    		var url='update';
+    		update(note);
+    		/*var url='update';
     		var notes = noteService.service(url,'POST',note);
     		notes.then(function(response) {
 
@@ -132,14 +175,15 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 
     			$scope.error = response.data.message;
 
-    		});
+    		});*/
     	}
     
     $scope.deleteNote = function(note) {
 
 		note.trash=true;
 		note.pinned=false;
-		var url='update';
+		update(note);
+		/*var url='update';
 		
 		var notes = noteService.service(url,'POST',note);
 		notes.then(function(response) {
@@ -152,32 +196,34 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 
 			$scope.error = response.data.message;
 
-		});
+		});*/
 	}
     
     $scope.pinned = function(note,pinned) {
 		note.pinned=pinned;
 		note.archive=false;
-		var url = 'update';
+		update(note);
+		/*var url = 'update';
 		var notes = noteService.service(url,'POST',note)
 		notes.then(function(response){
 			console.log("success")
 		},function(response){
 			$scope.error=response.data.responseMessage;
-		});
+		});*/
 	}
     
     $scope.archive=function(note,status){
     	console.log("in archive");
     	note.pinned=false;
     	note.archive=status;
-    	var url = 'update';
+    	update(note);
+    	/*var url = 'update';
 		var notes = noteService.service(url,'POST',note)
 		notes.then(function(response){
 			console.log("success");
 		},function(response){
 			$scope.error=response.data.responseMessage;
-		});
+		});*/
     }
     
 	
@@ -188,7 +234,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 	
 
 	
-	$scope.updateNote = function(note, event) {
+	$scope.updateEditedNote = function(note, event) {
 	    // Show dialog box for edit a note
 		console.log("inside updatenote");
 		console.log(note);
@@ -210,7 +256,7 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 
 	      // Saving the edited note
 	      	$scope.saveUpdatedNote = function() {
-	    	var url = 'update';
+	    	/*var url = 'update';*/
 	    	
 	    	console.log(dataToPass);
 	    	
@@ -221,19 +267,61 @@ ToDo.controller('homeController', function ($scope, $timeout, $mdSidenav,noteSer
 	    	
 	    	var updatedNoteBody = document.getElementById("updatedNoteBody").innerHTML;*/
 	    	
-	    	console.log(updatedNoteTitle+' '+updatedNoteBody)
-	  		var notes = noteService.service(url,'POST',dataToPass)
+	    	update(dataToPass);
+	  		/*var notes = noteService.service(url,'POST',dataToPass)
 	  		
 	  		notes.then(function(response){
 				console.log("success")
 			},function(response){
 				$scope.error=response.data.responseMessage;
-			});
+			});*/
 	      }
 	
-	}
+	   }
 	
+		$scope.deleteRemender=function(note){
+			
+			note.reminder=null;
+			update(note);
+		}
 	
+		var getUser=function(){
+		var url='getUser';
+		var user = noteService.service(url,'GET');
+	
+		user.then(function(response) {
+			var User=response.data;
+			if(User.profileUrl==null){
+				User.profileUrl="images/profilepic.svg";
+				$scope.user=User
+			}
+			$scope.user=User;
+			
+		}, function(response) {
+
+		});
+		
+		}
+	
+		var update=function(note){
+			
+			var url='update';
+			var notes = noteService.service(url,'POST',note);
+			notes.then(function(response) {
+
+				getNotes();
+
+			}, function(response) {
+
+				getNotes();
+
+				$scope.error = response.data.message;
+
+			});
+		}
+		
+		
     getNotes();
+    getUser();
     
 });

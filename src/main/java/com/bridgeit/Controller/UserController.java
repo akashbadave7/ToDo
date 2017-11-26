@@ -56,15 +56,17 @@ public class UserController {
 	private static final Logger logger1 = Logger.getRootLogger();
     //-------------------Retrieve Single User--------------------------------------------------------
 
-	@RequestMapping(value="/getUser/{id}",method=RequestMethod.GET)
-	public ResponseEntity<UserBean> getUserById(@PathVariable("id") int id) {
-		 System.out.println("Fetching User with id " + id);
-		 UserBean user = userService.getUserById(id);
-		 if (user == null) {
-	            System.out.println("User with id " + id + " not found");
-	            return new ResponseEntity<UserBean>(HttpStatus.BAD_GATEWAY);
+	@RequestMapping(value="/getUser",method=RequestMethod.GET)
+	public ResponseEntity<UserBean> getUser(HttpServletRequest request) {
+		
+		String token= request.getHeader("Authorization");
+		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		 if (user!=null) {
+			 	return ResponseEntity.ok(user);
+	        }else {
+	        	 return ResponseEntity.ok(user);
 	        }
-	        return new ResponseEntity<UserBean>(user, HttpStatus.OK);
+		
 	}
 	
     //-------------------Insert a User--------------------------------------------------------

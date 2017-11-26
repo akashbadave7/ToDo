@@ -1,4 +1,4 @@
-var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker'])
+var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker','ngMaterialDatePicker'])
 
 
 ToDo.config(['$stateProvider','$urlRouterProvider',
@@ -42,6 +42,12 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 				url : '/archive',
 				templateUrl : 'template/archive.html',
 				controller : 'homeController'
+			})
+			
+			.state('dummy', {
+				url : '/dummy',
+				templateUrl : 'template/dummypage.html',
+				controller : 'dummyController'
 			});
 			
 			$urlRouterProvider.otherwise('login');

@@ -35,6 +35,13 @@
      <script src="bower_components/colorpicker/dist/colorPicker.js"></script> 
      
 	 <link rel="stylesheet" href="bower_components/colorpicker/dist/colorPickerStyle.css">
+	 
+	 <!--==============DATE PICKER  -->
+	 <script src="bower_components/angular-material-datetimepicker/dist/angular-material-datetimepicker.min.js"></script>
+	<script src="bower_components/angular-material-datetimepicker/dist/angular-material-datetimepicker.min.js.map"></script>
+	 <link rel="stylesheet" href="bower_components/angular-material-datetimepicker/dist/material-datetimepicker.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+	
 
  <!-- CSS -->
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
@@ -60,12 +67,13 @@
 <script src="controller/loginController.js"></script>
 <script src="controller/registerController.js"></script>
 <script src="controller/homeController.js"></script>
+<script src="controller/dummyController.js"></script>
 
  <!-- SERVICES -->
 <script type="text/javascript" src="service/loginService.js"></script>
 <script type="text/javascript" src="service/userRegisterService.js"></script>
 <script type="text/javascript" src="service/noteService.js"></script>
-
+<script type="text/javascript" src="service/tokenservice.js"></script>
 
 <!-- DIRECTIVE -->
 <script type="text/javascript" src="directive/CustomDirective.js"></script>

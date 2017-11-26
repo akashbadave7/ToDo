@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -47,9 +48,13 @@ public class NoteBean {
 	@Column(name="TRASH")
 	private boolean isTrash;
 	
-	@Column(name="REMINDER")
-	private boolean remender;
 
+	@Column(name="REMINDER")
+	private Date reminder;
+	
+	@Lob
+	@Column(columnDefinition = "LONGBLOB")
+	private String image;
 	
 	@ManyToOne
 	@JsonIgnore
@@ -130,13 +135,7 @@ public class NoteBean {
 		this.isTrash = isTrash;
 	}
 
-	public boolean isRemender() {
-		return remender;
-	}
-
-	public void setRemender(boolean remender) {
-		this.remender = remender;
-	}
+	
 
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
@@ -150,5 +149,21 @@ public class NoteBean {
 		this.user = user;
 	}
 
-	
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public Date getReminder() {
+		return reminder;
+	}
+
+	public void setReminder(Date reminder) {
+		this.reminder = reminder;
+	}
+
 }

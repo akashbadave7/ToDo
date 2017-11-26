@@ -26,7 +26,7 @@
            				
            			</div>
 		           	<div>
-		            	<div ng-click="updateNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
 		            </div>
 		            <br>
 		            <div>
@@ -35,7 +35,8 @@
 		           
 		          </md-card-title-text>
 	        </md-card-title>
-	     
+	     	<p class="lastDive" ng-if="note.reminder" style="font-size:10px;padding:8px">Reminder : {{note.reminder | date:'medium'}}
+		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
 	        <md-card-actions>
 		       	<p id="lastDiv" class="icon">
 		       	<md-button style="min-width:25px";>
@@ -45,13 +46,8 @@
 	       			<!-- </md-button> -->
 			              <md-menu-content>
 			                <md-menu-item>
-			                  <md-button ng-click="">Later Today 20:00</md-button>
-			                </md-menu-item>
-			                <md-menu-item>
-			                  <md-button ng-click="">Tomorrow 8:00</md-button>
-			                </md-menu-item>
-			                <md-menu-item>
-			                  <md-button ng-click="">Pick Date and Time</md-button>
+			                  <button class="md-raised md-primary md-button md-ink-ripple" type="button"=""
+							ng-click="displayDialog(note)">Display Picker</button>
 			                </md-menu-item>
 			              </md-menu-content>
 			       </md-menu> 
