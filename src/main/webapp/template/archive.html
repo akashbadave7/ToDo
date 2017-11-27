@@ -75,12 +75,15 @@
 			              <md-tooltip md-direction="bottom">More</md-tooltip>
 			                <img ng-src="images/menu.svg" style="width:21px">
 			              </md-button>
-			              <md-menu-content>
+			           <md-menu-content>
 			                <md-menu-item>
-			                  <md-button ng-click="deleteNoteForever(note)">Delete Forever</md-button>
+			                  <md-button class="primary" ng-click="deleteNote(note)">Delete</md-button>
 			                </md-menu-item>
 			                <md-menu-item>
-			                  <md-button ng-click="restoreNote(note)">Restore</md-button>
+			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
+			                </md-menu-item>
+			                <md-menu-item>
+			                  <md-button class="primary" ng-click="addLabelWindow()">Add Label</md-button>
 			                </md-menu-item>
 			              </md-menu-content>
 			            </md-menu>

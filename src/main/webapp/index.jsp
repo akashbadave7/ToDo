@@ -21,7 +21,10 @@
 
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
-
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
 	  <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
       <script src = "bower_components/angular-animate/angular-animate.min.js"></script>
       <script src = "bower_components/angular-aria/angular-aria.min.js"></script>
@@ -41,8 +44,13 @@
 	<script src="bower_components/angular-material-datetimepicker/dist/angular-material-datetimepicker.min.js.map"></script>
 	 <link rel="stylesheet" href="bower_components/angular-material-datetimepicker/dist/material-datetimepicker.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+		
+		
+		 <!--==============Toster  -->
 	
-
+	<link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
+	<script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
+	
  <!-- CSS -->
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
 <link rel="stylesheet" type="text/css" href="css/login.css">

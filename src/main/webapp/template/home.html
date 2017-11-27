@@ -17,8 +17,10 @@
         <md-card-title>
           <md-card-title-text>
             <div aria-label="unpin note">
-           				<img ng-src="images/unpin.svg"  ng-show="displayDiv" style="width:21px;float:right" ng-click="pinned(note,false)"/>
-           				
+            <span style="cursor: pointer" ng-click="pinUnpin()">
+           				<img ng-if="!pinStatus" ng-src="images/unpin.svg"  ng-show="displayDiv" style="width:21px;float:right" />
+           				<img ng-if="pinStatus" ng-src="images/pin.svg"  style="width:21px;float:right" />
+           			</span>
            			</div>
            	<div>
             	<div contenteditable="true"  ng-bind-html="note.title" ng-show="displayDiv" id="title" placeholder="Title"  style="width:500px;border:0px;outline:0px"></div>
@@ -41,15 +43,8 @@
 	       				<img src="images/remender.svg" >
 	       			</md-button>
 			              <md-menu-content>
-			                <md-menu-item>
-			                  <md-button ng-click="">Later Today 20:00</md-button>
-			                </md-menu-item>
-			                <md-menu-item>
-			                  <md-button ng-click="">Tomorrow 8:00</md-button>
-			                </md-menu-item>
-			                <md-menu-item>
-			                  <md-button ng-click="">Pick Date and Time</md-button>
-			                </md-menu-item>
+			                <button class="md-raised md-primary md-button md-ink-ripple" type="button"=""
+							ng-click="displayDialog(note)">Display Picker</button>
 			              </md-menu-content>
 			       </md-menu>
 	        			
@@ -67,6 +62,12 @@
 	        			</md-button> -->
 	        			
 	        			<md-button style="min-width:25px;padding:5px" aria-label="Add Image">
+	        			
+	        			<!-- <input ng-show="false" id="image" type="file" ng-file-select="onFileSelect($files)" ng-model="imagaaeSrc"> -->
+	        			<input type="file"
+                ng-file-select="onFileSelect($files)" ng-model="imgUpload" ng-show="false" ng-change="lastImageChaned()" id="image-upload"
+                accept="image/*">
+ 
 	        			<md-tooltip md-direction="bottom">Add Image</md-tooltip>
 	        				<md-icon md-svg-src="images/uploadImg.svg" ng-click="" style="width:21px;"></md-icon>
 	        			</md-button>
@@ -89,7 +90,7 @@
 			              </md-menu-content>
 			            </md-menu>
 			            
-			            <md-button ng-click="addNote()" style="width:30px;float:right">Done</md-button>
+			            <md-button ng-click="addNote(pinStatus)" style="width:30px;float:right">Done</md-button>
 		          </p>
 		          </md-panel>
 	        	</md-card-actions>
@@ -105,8 +106,9 @@
 		<!--=========================Pinned=============================================  -->
 	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="30">
 	
-	<md-card class="card" id="float" ng-style="{'background-color' : note.color}">
+	<md-card layout="column" flex="66" class="card" id="float" ng-style="{'background-color' : note.color}">
 	        <md-card-title>
+	        	<img ng-src={{note.image}}>
 		          <md-card-title-text class="update" ng-click="updateEditedNote(note,$event)">
 		          <div aria-label="unpin note">
 		          		<md-button style="min-width:15px;float:right" >
@@ -163,9 +165,10 @@
 	        				<md-icon md-svg-src="images/color.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>
 	        			 -->
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Add image" ng-click="openImageUploader(note)">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Add image" ng-click="uploadImage(note)">
 	        			<md-tooltip md-direction="bottom">Add image</md-tooltip>
 	        				<md-icon md-svg-src="images/uploadImg.svg" style="width:21px;"></md-icon>
+	        				
 	        			</md-button>
 	        			
 	        			<md-button style="min-width:25px;padding:5px" ng-click="archive(note,true)" aria-label="Archive">
@@ -180,10 +183,13 @@
 			              </md-button>
 			              <md-menu-content>
 			                <md-menu-item>
-			                  <md-button ng-click="deleteNote(note)">Delete</md-button>
+			                  <md-button class="primary" ng-click="deleteNote(note)">Delete</md-button>
 			                </md-menu-item>
 			                <md-menu-item>
-			                  <md-button ng-click="addLabelWindow()">Add Label</md-button>
+			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
+			                </md-menu-item>
+			                <md-menu-item>
+			                  <md-button class="primary" ng-click="addLabelWindow()">Add Label</md-button>
 			                </md-menu-item>
 			              </md-menu-content>
 			            </md-menu>
@@ -269,12 +275,15 @@
 			              <md-tooltip md-direction="bottom">More</md-tooltip>
 			                <img ng-src="images/menu.svg" style="width:21px">
 			              </md-button>
-			              <md-menu-content>
+			             <md-menu-content>
 			                <md-menu-item>
-			                  <md-button ng-click="deleteNote(note)">Delete</md-button>
+			                  <md-button class="primary" ng-click="deleteNote(note)">Delete</md-button>
 			                </md-menu-item>
 			                <md-menu-item>
-			                  <md-button ng-click="addLabelWindow()">Add Label</md-button>
+			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
+			                </md-menu-item>
+			                <md-menu-item>
+			                  <md-button class="primary" ng-click="addLabelWindow()">Add Label</md-button>
 			                </md-menu-item>
 			              </md-menu-content>
 			            </md-menu>
