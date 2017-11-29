@@ -55,13 +55,14 @@ public class NoteDaoImp implements NoteDao{
 		{
 			transaction = session.beginTransaction();
 			session.saveOrUpdate(note);
-			System.out.println(note.getImage());
+			
 			transaction.commit();
 		}catch(HibernateException e){
 			if(transaction!=null) {
 				transaction.rollback();
 				return false;
 			}
+			System.out.println("exception occured");
 			e.printStackTrace();
 		}finally {
 			session.close();

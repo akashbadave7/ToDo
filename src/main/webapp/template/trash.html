@@ -15,6 +15,7 @@
 	<div ng-repeat="note in notes" ng-if="note.trash" id="note-scope" flex="30">
 
 	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}">
+	         <div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
 	        <md-card-title>
 		          <md-card-title-text>
 		           	<div>

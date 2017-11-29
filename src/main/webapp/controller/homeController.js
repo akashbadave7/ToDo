@@ -124,8 +124,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     		$scope.notes=response.data;
     		console.log(response.data);
     		/*==============REMINDER CHECKER====================*/
-    		
-    		   $interval(function () {
+      		   $interval(function () {
     		       
     		          for (var i = 0; i < response.data.length; i++) {
     		            if(response.data[i].reminder) {
@@ -135,7 +134,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     		              }
     		            }
     		          }
-    		      }, 60000);
+    		      });
     		   
     	},function(response){
     		$scope.error=response.data.responseMessage;
@@ -356,9 +355,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		var user = noteService.service(url,'GET');
 	
 		user.then(function(response) {
-			console.log("User ::"+response.data.picUrl);
+			
 			var User=response.data;
-			console.log("User pic ::"+User.picUrl);
+			
 			
 			$scope.user=User;
 			
@@ -380,8 +379,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			}, function(response) {
 
 				getNotes();
-
-				$scope.error = response.data.message;
+				console.log(response);
+				$scope.error = response.data.responseMessage;
 
 			});
 		}
@@ -402,8 +401,10 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 
 		$scope.imageUpload = function(element){
 		    var reader = new FileReader();
+		    console.log("ele"+element);
 		    reader.onload = $scope.imageIsLoaded;
 		    reader.readAsDataURL(element.files[0]);
+		    console.log(element.files[0]);
 		}
 	
 		$scope.imageIsLoaded = function(e){
@@ -412,6 +413,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		        console.log(e.target.result);
 		        var imageSrc=e.target.result;
 		        $scope.type.image=imageSrc;
+		        console.log(e.target.result);
+		        console.log(imageSrc);
 		        update($scope.type);
 		    });
 		};

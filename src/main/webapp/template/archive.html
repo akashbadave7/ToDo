@@ -15,16 +15,18 @@
 	<div ng-repeat="note in notes" ng-if="note.archive" id="note-scope" flex="30">
 
 	<md-card class="card" id="float" ng-style="{'background-color' : note.color}">
+	<div aria-label="unpin note">
+   		<md-button style="min-width:15px;float:right" >
+   		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
+  				<img id="pinIcon" ng-src="images/pin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"/>
+  				</md-button>
+  				
+  			</div>
+	          <div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
 	        <md-card-title>
 		          <md-card-title-text class="update">
 		          
-		          <div aria-label="unpin note">
-		          		<md-button style="min-width:15px;float:right" >
-		          		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
-           				<img id="pinIcon" ng-src="images/pin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"/>
-           				</md-button>
-           				
-           			</div>
+		          
 		           	<div>
 		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
 		            </div>
@@ -61,7 +63,8 @@
 	        			<color-picker class ="colorIcon" value ="cardColor" color="color" options="colors" on-color-changed="colorChanged(newColor, oldColor,note)"></color-picker>	 
 	        			
 	        			
-	        			<md-button style="min-width:25px" area-label="Add photo">
+	        			<md-button style="min-width:25px" area-label="Add photo" ng-click="openImageUploader(note)">
+	        			<input ng-show="false" id="image" type='file' ng-model-instant ng-model="file" onchange="angular.element(this).scope().imageUpload(this)" />
 	        				<md-tooltip md-direction="bottom">Add photo</md-tooltip>
 	        				<md-icon md-svg-src="images/uploadImg.svg" ng-click="" style="width:21px;"></md-icon>
 	        			</md-button>

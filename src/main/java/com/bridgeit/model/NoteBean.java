@@ -52,7 +52,7 @@ public class NoteBean {
 	@Column(name="REMINDER")
 	private Date reminder;
 	
-	@Lob
+	
 	@Column(columnDefinition = "LONGBLOB")
 	private String image;
 	
