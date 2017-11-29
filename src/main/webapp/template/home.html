@@ -1,3 +1,4 @@
+<div layout="column">
 <div>
 <tool-bar></tool-bar>
 
@@ -7,7 +8,7 @@
         <side-bar></side-bar>
       </md-content>
     </md-sidenav>
-    
+   
   <div  layout="column" style="margin-left:100px"></div>
  <div>
    <md-content layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible;">
@@ -63,11 +64,14 @@
 	        			
 	        			<md-button style="min-width:25px;padding:5px" aria-label="Add Image">
 	        			
-	        			<!-- <input ng-show="false" id="image" type="file" ng-file-select="onFileSelect($files)" ng-model="imagaaeSrc"> -->
-	        			<input type="file"
-                ng-file-select="onFileSelect($files)" ng-model="imgUpload" ng-show="false" ng-change="lastImageChaned()" id="image-upload"
-                accept="image/*">
+	        			<!-- <input type="file"
+              		 		 ng-file-select="onFileSelect($files)"  id="image" ng-model="imgUpload" ng-show="false" ng-change="lastImageChaned()" id="image-upload"
+               				 accept="image/*"> -->
  
+<!-- 	  							<div id="image" base-sixty-four-input class="button" ngf-select ng-model="file" ngf-multiple="false"></div>
+ -->  					
+			<input id="image" type='file' ng-model-instant ng-model="file" onchange="angular.element(this).scope().imageUpload(this)" />
+  						
 	        			<md-tooltip md-direction="bottom">Add Image</md-tooltip>
 	        				<md-icon md-svg-src="images/uploadImg.svg" ng-click="" style="width:21px;"></md-icon>
 	        			</md-button>
@@ -165,7 +169,7 @@
 	        				<md-icon md-svg-src="images/color.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>
 	        			 -->
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Add image" ng-click="uploadImage(note)">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Add image" ng-click="openImageUploader(note)">
 	        			<md-tooltip md-direction="bottom">Add image</md-tooltip>
 	        				<md-icon md-svg-src="images/uploadImg.svg" style="width:21px;"></md-icon>
 	        				

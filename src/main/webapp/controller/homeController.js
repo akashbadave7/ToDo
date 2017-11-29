@@ -1,9 +1,10 @@
 var ToDo = angular.module('ToDo')
 
 ToDo.controller('homeController', function ($scope,fileReader,$location, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog,toastr
-							,$filter,$interval,$http) {
+							,$filter,$interval,$state,Upload, $base64) {
    
-	$scope.file_changed = function(element) {
+	
+/*	$scope.file_changed = function(element) {
 
         var photofile = element.files[0];
         var reader = new FileReader();
@@ -14,7 +15,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
         };
         reader.readAsDataURL(photofile);
         console.log(photofile.name); 
-	};
+	};*/
 	
 	$scope.pinStatus = false;
 	$scope.pinUnpin=function(){
@@ -130,7 +131,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     		            if(response.data[i].reminder) {
     		            	var date=new Date(response.data[i].reminder);
     		            	if ($filter('date')(date)== $filter('date')(new Date())) {
-    		                toastr.success(response.data[i].body, response.data[i].title);
+    		                toastr.success(response.data[i].body, response.data[i].title,"Reminder");
     		              }
     		            }
     		          }
@@ -348,17 +349,17 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			note.reminder=null;
 			update(note);
 		}
-	
+	/*/////////////////////////////=======GET USER===================/////////////////////*/
+		
 		var getUser=function(){
 		var url='getUser';
 		var user = noteService.service(url,'GET');
 	
 		user.then(function(response) {
+			console.log("User ::"+response.data.picUrl);
 			var User=response.data;
-			if(User.profileUrl==null){
-				/*User.profileUrl="images/user-icon.svg";*/
-				$scope.user=User
-			}
+			console.log("User pic ::"+User.picUrl);
+			
 			$scope.user=User;
 			
 		}, function(response) {
@@ -388,47 +389,60 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		
 		/*//////////////////////////////=====UPLOAD Image======///////////////////////////// */
 		
-		$scope.imageSrc = "";
+		
+		
+		$scope.openImageUploader = function(type) {
+			$scope.type = type;
+			$('#image').trigger('click');
+			return false;
+		}
+		
+		
+		$scope.stepsModel = [];
+
+		$scope.imageUpload = function(element){
+		    var reader = new FileReader();
+		    reader.onload = $scope.imageIsLoaded;
+		    reader.readAsDataURL(element.files[0]);
+		}
+	
+		$scope.imageIsLoaded = function(e){
+		    $scope.$apply(function() {
+		        $scope.stepsModel.push(e.target.result);
+		        console.log(e.target.result);
+		        var imageSrc=e.target.result;
+		        $scope.type.image=imageSrc;
+		        update($scope.type);
+		    });
+		};
+		
+		
 
 		$scope.$on("fileProgress", function(e, progress) {
 			$scope.progress = progress.loaded / progress.total;
 		});
-
-		$scope.uploadImage = function(c) {
-			$scope.cardClick = c;
-			//$scope.imgUpload = '';
-			console.log(c + " : " + $scope.imgUpload);
-			$('#image-upload').trigger('click');
-		}
 		
 		$scope.type = {};
-		$scope.type.image = '';
-
-		$scope.$watch('imgUpload', function updateCardImage(oldImg,
-				newImage) {
-			console.log($scope.cardClick);
-			console.log($scope.imgUpload);
-			console.log('hello');
-		});
-		/*$scope.$watch('imageSrc', function(newimg, oldimg) {
-			console.log("hello watcher");
-			if ($scope.imageSrc != '') {
-				if ($scope.type === 'input') {
-					$scope.addimg = $scope.imageSrc;
-				} 
-				else if($scope.type === 'user'){
-					$scope.User.profile=$scope.imageSrc;
-					$scope.changeProfile($scope.User);
-				}
-				else {
-					console.log("hello");
-					$scope.type.image = $scope.imageSrc;
-					$scope.updateNote($scope.type);
-				}
-			}
-
-		});*/
-
+		$scope.type.image = ''; 
+		
+		 /*$scope.$watch('file', function () {
+			 console.log($scope.file);
+		        if ($scope.file != null) {
+		        	 $scope.files = [$scope.file]; 
+			            console.log($scope.files);
+			            console.log("note"+' '+$scope.type.image);
+			            $scope.type.image=$scope.file;
+			            
+		        	if ($scope.type === 'input') {
+						$scope.addimg = $scope.files;
+					} else{
+						console.log("upload:"+imageSrc);
+					}
+		        }
+		    });*/
+		
+		 
+	    
 		
 		/*//////////////////////////////=====Make a Copy of  note======///////////////////////////// */
 		
@@ -457,7 +471,33 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				
 		}
 		
+		/*//////////////////////////////=====LOGOUT ======///////////////////////////// */
+
+		$scope.logout = function() {
+			localStorage.removeItem('token');
+			$location.path('/login');
+		}
 		
+		/*//////////////////////////////=====CHANGING COLOR ======///////////////////////////// */
+
+		if($state.current.name=='home'){
+				$scope.navBarColor="#ffbb33";
+				$scope.editable = true;
+				$scope.title = "Google Keep";
+		} else if($state.current.name=='archive'){
+			$scope.navBarColor = "#607D8B";
+			$scope.editable = true;
+			$scope.title = "Archive";
+		} else if($state.current.name=='trash'){
+			$scope.navBarColor = "#636363";
+			$scope.editable = false;
+			$scope.title = "Trash";
+		} 
+		else if($state.current.name=='reminder'){
+			$scope.navBarColor = "#607D8B";
+			$scope.editable = true;
+			$scope.title = "Reminder";
+		} 
 		
     getNotes();
     getUser();

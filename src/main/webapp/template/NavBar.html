@@ -1,4 +1,4 @@
-<md-toolbar style="background-color:#FFBB33;">
+<md-toolbar ng-style="{'background-color':navBarColor}">
 
     <div class="md-toolbar-tools">
     	<!-- <span role button style="padding:10px; color: black" ng-click = "openLeftMenu()">&#9776;</span>
@@ -7,7 +7,7 @@
     	<md-button style="padding:10px; color: black" class="md-icon-button" ng-click="toggleLeft()">&#9776;</md-button>
       	
   <div style="padding:10px">    	
-      	<h2 md-truncate  style="weight:80px;color:black">Google Keep</h2>
+      	<h2 md-truncate  style="weight:100px;color:black" ng-bind="title"></h2>
       	
   </div><b><img src="images/search-icon.png" style="width:35px;"/></b>
   <div hide-xs flex>
@@ -28,7 +28,40 @@
 	        </div> 
 	        </div>
 	        
-	        <md-icon ng-src={{user.profileUrl}} ng-click=""></md-icon>
+	        <md-button style="min-width:25px;padding:5px" aria-label="Share">
+	        	 <md-tooltip md-direction="bottom">List view</md-tooltip>
+		      	 <md-icon md-svg-src="images/list.svg" ng-click="" style="width:21px;fill:black"></md-icon>
+	        </md-button>
+	        
+	        <md-menu>
+	       	<md-button class="md-fab md-icon my-icon-button" aria-label="User" ng-click="$mdMenu.open($event)">
+	       		 	<md-tooltip md-direction="bottom">{{user.email}}</md-tooltip>
+            	<img ng-src="{{user.picUrl}}" alt="{{user.name.charAt(0)}}" style=" height: 100%;width: 100%;">
+        	</md-button>
+	 			
+			<md-menu-content width="4" md-direction="bottom">
+                
+                <div flex="33">
+                	
+	                <span class="md-avatar">
+	               		 <md-button class="md-fab md-icon my-icon-button" aria-label="User" ng-click="$mdMenu.open($event)">
+	   			         	<img ng-src="{{user.picUrl}}" alt="{{user.name.charAt(0)}}" style=" height: 100%;width: 100%;">
+	        			</md-button>
+	        			<b>{{user.name}}</b>
+	  					<p>{{user.email}}</p>
+	  				</span><br>
+	  				 <md-divider></md-divider>
+	  				 
+	  				  <md-button class="md-raised">Change Profile</md-button>
+	  					<md-button class="md-raised md-primary" ng-click="logout()">Logout</md-button>
+	  				
+  				</div>
+  				
+          </md-menu-content>
+          
+        </md-menu>
+	    	
+	  </b>
 	  
 	 </div>
  	

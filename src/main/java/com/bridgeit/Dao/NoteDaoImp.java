@@ -55,6 +55,7 @@ public class NoteDaoImp implements NoteDao{
 		{
 			transaction = session.beginTransaction();
 			session.saveOrUpdate(note);
+			System.out.println(note.getImage());
 			transaction.commit();
 		}catch(HibernateException e){
 			if(transaction!=null) {

@@ -46,20 +46,23 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 		
 		
-		 <!--==============Toster  -->
+		 <!--==============Toster==================================  -->
 	
 	<link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
 	<script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
 	
+	<!--==============FileUpload==================================  -->
+	
+	<script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
+	<script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+		
+		
  <!-- CSS -->
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
-<!-- <link rel="stylesheet" type="text/css" href="css/navbar.css"> -->
 <link rel="stylesheet" type="text/css" href="css/card.css">
-
-
-
+<link rel="stylesheet" type="text/css" href="css/navbar.css">
 
 <!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>
@@ -86,6 +89,9 @@
 <!-- DIRECTIVE -->
 <script type="text/javascript" src="directive/CustomDirective.js"></script>
 
+<script src="bower_components/angular-base64/angular-base64.js"></script>
+<script src="bower_components/angular-base64-upload/dist/angular-base64-upload.js"></script>
+<script src="bower_components/angular-base64-upload/dist/angular-base64-upload.min.js"></script>
 </head>
 
 

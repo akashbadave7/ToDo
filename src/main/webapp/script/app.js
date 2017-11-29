@@ -1,4 +1,4 @@
-var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker','ngMaterialDatePicker','toastr'])
+var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker','ngMaterialDatePicker','toastr','ngFileUpload', 'naif.base64','base64'])
 
 
 ToDo.config(['$stateProvider','$urlRouterProvider',
@@ -35,6 +35,12 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 			.state('trash',{
 				url : '/trash',
 				templateUrl : 'template/trash.html',
+				controller : 'homeController'
+			})
+			
+			.state('reminder',{
+				url : '/trash',
+				templateUrl : 'template/reminder.html',
 				controller : 'homeController'
 			})
 			

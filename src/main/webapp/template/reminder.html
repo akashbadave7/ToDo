@@ -12,7 +12,7 @@
 
 	<div flex="85" layout="row" layout-wrap>
 	
-	<div ng-repeat="note in notes" ng-if="note.archive" id="note-scope" flex="30">
+	<div ng-if="note.reminder" ng-repeat="note in notes" id="note-scope" flex="30">
 
 	<md-card class="card" id="float" ng-style="{'background-color' : note.color}">
 	        <md-card-title>
