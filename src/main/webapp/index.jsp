@@ -96,6 +96,6 @@
 
 
 <body ng-app="ToDo">
-	<div ui-view></div>
+	<div ui-view ></div>
 </body>
 </html>

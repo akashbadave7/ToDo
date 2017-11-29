@@ -1,15 +1,17 @@
-
+<div layout="column">
 <div>
-	<tool-bar></tool-bar>
-</div>
+<tool-bar></tool-bar>
 
-<div layout="row">
-	<md-content>
- 	<side-bar></side-bar>	
-</md-content> 	  
- 	  <div flex="10"></div>
- 	 	 <div flex="80">
- <md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible;">
+ <div flex layout="row">
+    <md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-z1">
+      <md-content>
+        <side-bar></side-bar>
+      </md-content>
+    </md-sidenav>
+   
+  <div  layout="row" style="margin-left:100px"></div>
+ <div>
+   <md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible;">
     <div flex="33">
       <md-card style="background-color: {{color}}">
      
@@ -92,13 +94,16 @@
 	        	</md-card-actions>
       </md-card>
    </div>
- </md-content> 
+	</md-content>
+    <br>	
+	
+	<div>
 		<h4>Pinned</h4>
 	
 	<div layout="row" layout-wrap flex>
 		<!--=========================Pinned=============================================  -->
 	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="30">
-		<md-card layout="column" ng-style="{'background-color' : note.color}" flex="66">
+		<md-card layout="column" class="card" id="float"  id="float" ng-style="{'background-color' : note.color}" flex="66">
 	<!-- <md-card layout="column" class="card" id="float" ng-style="{'background-color' : note.color}"> -->
 		 <div aria-label="unpin note">
       		<md-button style="min-width:15px;float:right" >
@@ -196,7 +201,10 @@
       
 	</div>
 	
-		<h4>Others</h4><br>
+		
+	</div>	
+		
+	<h4>Others</h4><br>
 	<div layout="row" layout-wrap flex>
 		<!--=========================OTHER=============================================  -->
 	<div ng-repeat="note in notes | filter:{pinned:false,trash:false,archive:false}"  id="note-scope" flex="30">
@@ -286,12 +294,11 @@
 	        	</md-card-actions>
      			 </md-card>
          	</div>
-			</div>
-	
-	
-   </div>
-    <div flex="5">
-    [flex]
+			</div>	
+		</div>
+	</div>
+  			 <div  layout="column" style="margin-right:100px"></div>
   </div>
+
 </div>
- 
+

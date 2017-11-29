@@ -4,19 +4,20 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 							,$filter,$interval,$state,Upload, $base64) {
    
 	
-/*	$scope.file_changed = function(element) {
+	 
+	/*var vm =   $scope.search;
+	vm.goal = DataService.goals().one();
+	vm.selectedItemChange = selectedItemChange;
+	vm.searchTextChange   = searchTextChange;
 
-        var photofile = element.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            $scope.$apply(function() {
-                $scope.prev_img = e.target.result;
-            });
-        };
-        reader.readAsDataURL(photofile);
-        console.log(photofile.name); 
-	};*/
-	
+	function searchTextChange(text) {
+	      vm.goal.name = text;
+	    }
+
+	    function selectedItemChange(item) {
+	      vm.goal.name = item.name;
+	    }*/
+	    
 	$scope.pinStatus = false;
 	$scope.pinUnpin=function(){
 		if ($scope.pinStatus == false) {
@@ -25,6 +26,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			$scope.pinStatus = false;
 		}
 	}
+	
+	
+
 
 /*	$scope.date = new Date();
     $scope.time = new Date();
@@ -53,7 +57,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
   		
 	  		var notes = noteService.service(url,'POST',note);
 	  		notes.then(function(response) {
-	
+	  			console.log(respose.data);
 	  			getNotes();
 	
 	  		}, function(response) {
@@ -113,13 +117,14 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	}
     
 	/*//////////////////////////////=====GET ALL NOTES======///////////////////////////// */
-
+	$scope.search={};
     var getNotes=function(){
     	
     	/*var token = localStorage.getItem('token');*/
     	var url = 'getNotes';
     	
     	var notes=noteService.service(url,'GET',notes);
+    	search=notes;
     	notes.then(function(response){
     		$scope.notes=response.data;
     		console.log(response.data);

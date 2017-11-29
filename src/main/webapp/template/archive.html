@@ -14,7 +14,7 @@
 	
 	<div ng-repeat="note in notes" ng-if="note.archive" id="note-scope" flex="30">
 
-	<md-card class="card" id="float" ng-style="{'background-color' : note.color}">
+	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}" flex>
 	<div aria-label="unpin note">
    		<md-button style="min-width:15px;float:right" >
    		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
