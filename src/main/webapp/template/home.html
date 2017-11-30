@@ -4,12 +4,12 @@
 </div>
 
 <div layout="row">
-	<md-content>
+
  	<side-bar></side-bar>	
-</md-content> 	  
+	  
  	  <div flex="10"></div>
  	 	 <div flex="80">
- <md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible;">
+ <md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible; margin-top: 5em;">
     <div flex="33">
       <md-card style="background-color: {{color}}">
      
@@ -47,7 +47,7 @@
 			              </md-menu-content>
 			       </md-menu>
 	        			
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Share">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="">
 	        			 <md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>
@@ -93,13 +93,12 @@
       </md-card>
    </div>
  </md-content> 
-		<h4>Pinned</h4>
+		<h4 >Pinned</h4>
 	
 	<div layout="row" layout-wrap flex>
 		<!--=========================Pinned=============================================  -->
-	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="30">
-		<md-card layout="column" ng-style="{'background-color' : note.color}" flex="66">
-	<!-- <md-card layout="column" class="card" id="float" ng-style="{'background-color' : note.color}"> -->
+	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="30" >
+	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}" flex>	
 		 <div aria-label="unpin note">
       		<md-button style="min-width:15px;float:right" >
       		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
@@ -145,7 +144,7 @@
 			              </md-menu-content>
 			       </md-menu>
 	        			
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Share">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="collaborators(note,$event)">
 	        			<md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>
@@ -196,12 +195,12 @@
       
 	</div>
 	
-		<h4>Others</h4><br>
+		<h4>Others</h4>
 	<div layout="row" layout-wrap flex>
 		<!--=========================OTHER=============================================  -->
-	<div ng-repeat="note in notes | filter:{pinned:false,trash:false,archive:false}"  id="note-scope" flex="30">
+	<div ng-repeat="note in notes | filter:{pinned:false,trash:false,archive:false} "  id="note-scope" flex="90" >
 	
-	<md-card ng-style="{'background-color' : note.color}" class="card" id="float" ng-click="showConfirm($event)" >
+	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}" flex>
 	        <div>
 		         	 <md-button style="min-width:15px;float:right" arial-label="Pin note">
 		          		<md-tooltip md-direction="bottom">Pin note</md-tooltip>
@@ -291,7 +290,6 @@
 	
    </div>
     <div flex="5">
-    [flex]
   </div>
 </div>
  

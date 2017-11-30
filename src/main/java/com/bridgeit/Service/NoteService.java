@@ -16,4 +16,6 @@ public interface NoteService {
 	public List<NoteBean> getAllNotes(UserBean user);
 	
 	public NoteBean getNoteById(int noteId);
+	
+	
 }

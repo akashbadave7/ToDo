@@ -16,6 +16,22 @@ ToDo.factory('noteService', function($http,$location) {
 		
 		});
 	}
+	
+		notes.collaborate=function(url,method,note,email){
+		console.log("inside collaborated");
+		return $http({	
+		    method: method,
+		    url: url,
+		    data:note,
+		    headers: {
+		        
+		    	'Authorization': localStorage.getItem('token'),
+		    	'Email': email
+		    }
+		
+		});
+	}
+	
 /*	notes.getNotes=function(token){
 	return $http({
 	    method: 'GET',

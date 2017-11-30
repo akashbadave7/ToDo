@@ -1,12 +1,16 @@
 package com.bridgeit.Dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.dialect.identity.SybaseAnywhereIdentityColumnSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;
@@ -117,10 +121,11 @@ public class NoteDaoImp implements NoteDao{
 	public NoteBean getNoteById(int noteId) {
 		Session session  = factory.openSession();
 		NoteBean note = session.get(NoteBean.class, noteId);
+		note.getCollaborator().size();
 		session.close();
 		return note;
 	}
-	
-	
+
+
 
 }

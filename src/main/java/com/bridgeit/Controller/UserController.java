@@ -1,5 +1,6 @@
 package com.bridgeit.Controller;
 
+import java.util.List;
 import java.io.IOException;
 
 import javax.jms.JMSException;
@@ -31,6 +32,7 @@ import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
 import com.bridgeit.model.Email;
+import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 
@@ -213,4 +215,25 @@ public class UserController {
 			/*UserBean user = userService.getUserById(id);*/
 			request.removeAttribute(header);
 	}
+	
+	
+	@RequestMapping(value="/getUsers/{keyword}" ,method=RequestMethod.GET)
+	public ResponseEntity<List<String>> getUsers(@RequestHeader(value="token") String header, @PathVariable("keyword") String keyword,HttpServletRequest request){
+		//ResponseMessage responseMessage = new ResponseMessage();
+		String token = request.getHeader("Authorization");
+		List<String> emails= null;
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		
+		if(user!=null)
+		{
+			emails = userService.getUsers(keyword);
+		}
+		else{
+			//responseMessage.setResponseMessage("User Not Logged In");
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(emails, HttpStatus.OK);
+	}
+	
+	
 }

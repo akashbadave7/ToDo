@@ -141,11 +141,9 @@ public class NoteController {
 	}
 	
 	/*----------------------------------getAllNotes note-------------------------------*/
-	
 	@RequestMapping(value="/getNotes",method=RequestMethod.GET)
 	public ResponseEntity<Object> getAllNotes(HttpSession session,HttpServletRequest request)
 	{
-		ResponseMessage responseMessage = new ResponseMessage();
 		//UserBean user = (UserBean) session.getAttribute(session.getId());
 		String token = request.getHeader("Authorization");
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
@@ -155,10 +153,42 @@ public class NoteController {
 			 notes = noteService.getAllNotes(user);
 		}
 		else{
-			responseMessage.setResponseMessage("User Not Logged In");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
 		}
 		return ResponseEntity.ok(notes);
+	}
+	
+	/*----------------------------------Collaborate note-------------------------------*/
+	@RequestMapping(value="/collaborate",method=RequestMethod.POST)
+	public ResponseEntity<Object> collaborate(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request)
+	{
+		System.out.println("inside collaborator");
+		ResponseMessage responseMessage = new ResponseMessage();
+		String token = request.getHeader("Authorization");
+		UserBean currentUser = userService.getUserById(verifyToken.parseJWT(token));
+		if(currentUser!=null){
+			String cEmail = request.getHeader("email");
+			System.out.println("collaborated user "+cEmail);
+			UserBean collaboratedUser = userService.getUserByEmail(cEmail);
+			if(collaboratedUser!=null)
+			{
+				System.out.println(collaboratedUser.getMobilenumber());
+				NoteBean oldNote = noteService.getNoteById(note.getNoteId());
+				oldNote.getCollaborator().add(collaboratedUser);
+				noteService.updateNote(oldNote);
+				
+			}else{
+				responseMessage.setResponseMessage("Enter Valid Email");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+			}
+			
+		}else
+		{
+			responseMessage.setResponseMessage("User Not logged in");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+		}
+		return null;
+		
 	}
 	
 }

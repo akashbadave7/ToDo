@@ -1,6 +1,8 @@
 package com.bridgeit.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,11 +10,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ManyToAny;
+import org.springframework.security.core.userdetails.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -56,6 +62,19 @@ public class NoteBean {
 	@Column(columnDefinition = "LONGBLOB")
 	private String image;
 	
+	
+	@ManyToMany
+	@JoinTable(name = "collaborator", joinColumns = @JoinColumn(name = "note_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<UserBean> collaborators = new HashSet<>(); 
+	
+	public Set<UserBean> getCollaborator() {
+		return collaborators;
+	}
+
+	public void setCollaborator(Set<UserBean> collaborators) {
+		this.collaborators = collaborators;
+	}
+
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name="user_id")

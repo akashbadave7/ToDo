@@ -2,6 +2,8 @@ package com.bridgeit.Service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bridgeit.Dao.NoteDao;
@@ -40,5 +42,7 @@ public class NoteServiceImp implements NoteService{
 		// TODO Auto-generated method stub
 		return noteDao.getNoteById(noteId);
 	}
+
+	
 
 }

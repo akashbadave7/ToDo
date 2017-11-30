@@ -21,7 +21,9 @@
                   <div ng-messages = "userForm.password.$error">
                      <div ng-message = "required">This is required.</div>
                   </div>
-               </md-input-container>                             
+                   <a ui-sref="ResetEmail">Forgot Password?</a>    
+               </md-input-container>   
+                                      
 				      <!-- <button type="submit" id="submit" class="btn btn-primary"  width:80px"><b>Login</b></button> -->
 				      <md-button md-no-ink class="md-primary" ng-click="loginUser()" ng-disabled="loginform.$invalid" style=""">Login</md-button>
 				      <a  href="#!/register" role="button"  style="margin-right: 20%; width:80px"><b>New User?</b></a>

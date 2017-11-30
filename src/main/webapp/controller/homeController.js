@@ -4,20 +4,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 							,$filter,$interval,$state,Upload, $base64) {
    
 	
-	 
-	/*var vm =   $scope.search;
-	vm.goal = DataService.goals().one();
-	vm.selectedItemChange = selectedItemChange;
-	vm.searchTextChange   = searchTextChange;
+	
 
-	function searchTextChange(text) {
-	      vm.goal.name = text;
-	    }
-
-	    function selectedItemChange(item) {
-	      vm.goal.name = item.name;
-	    }*/
-	    
 	$scope.pinStatus = false;
 	$scope.pinUnpin=function(){
 		if ($scope.pinStatus == false) {
@@ -28,16 +16,6 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	}
 	
 	
-
-
-/*	$scope.date = new Date();
-    $scope.time = new Date();
-    $scope.dateTime = new Date();
-    $scope.minDate = moment().subtract(1, 'month');
-    $scope.maxDate = moment().add(1, 'month');
-    $scope.dates = [new Date('2016-11-14T00:00:00'), new Date('2016-11-15T00:00:00'),
-      new Date('2016-11-30T00:00:00'), new Date('2016-12-12T00:00:00'), new Date('2016-12-13T00:00:00'),
-      new Date('2016-12-31T00:00:00')];	*/
 
 	/*//////////////////////////////=====REMINDER======///////////////////////////// */
 	
@@ -139,7 +117,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     		              }
     		            }
     		          }
-    		      });
+    		      },90000);
     		   
     	},function(response){
     		$scope.error=response.data.responseMessage;
@@ -297,7 +275,40 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		$scope.displayDiv=true;
 	}
 	
+	/*//////////////////////////////=====Collaborators NOTE======///////////////////////////// */
 
+	$scope.collaborators = function(note,event)
+	{
+		console.log("inside collaboarator");
+		$mdDialog.show({
+			locals:{
+				dataToPass : note
+			},
+			templateUrl : 'template/collaborator.html',
+			 parent: angular.element(document.body),
+		     targetEvent: event,
+		     clickOutsideToClose: true,
+		     controllerAs: 'controller',
+		     controller: opencollaboratorsModel
+		});
+	}
+	
+	function opencollaboratorsModel($scope, $state, dataToPass) {
+	      	$scope.getUserEmail = function() {
+	    	/*var url = 'update';*/
+	    	console.log($scope.search);
+	    	
+	    	var url = 'collaborate'; 
+	    	var a=noteService.collaborate(url,'POST',dataToPass,$scope.search);
+	    	a.then(function(response){
+	    		console.log("success");
+	    	},function(response){
+	    		console.log("Error");
+	    	})
+	    	
+	      }
+	
+	   }
 	
 	/*//////////////////////////////=====UPDATE NOTE======///////////////////////////// */
 
@@ -506,9 +517,15 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			$scope.editable = true;
 			$scope.title = "Reminder";
 		} 
+		/*//////////////////////////////=====GET ALL USERS ======///////////////////////////// */
+		
+
+
+		
 		
     getNotes();
     getUser();
+    
     
     
   
