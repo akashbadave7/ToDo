@@ -176,7 +176,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     $scope.deleteNoteForever=function(note){
     	
     	console.log("inside delete forever")
-   
+    	console.log("deleting Note"+note);
     	var url='delete/'+note.noteId;
     	var notes = noteService.service(url,'DELETE',note);
     	notes.then(function(response) {
@@ -187,8 +187,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		}, function(response) {
 
 			getNotes();
-
-			$scope.error = response.data.message;
+			console.log(response.data);
+			$scope.error = response.data;
 
 		});
     	
@@ -294,7 +294,53 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	}
 	
 	function opencollaboratorsModel($scope, $state, dataToPass) {
-	      	$scope.getUserEmail = function() {
+			
+			var getOwner=function(){
+				var url = 'getOwner';
+				var a= noteService.service(url,'POST',dataToPass)
+				a.then(function(response){
+					console.log(response.data);
+					$scope.owner=response.data;
+				},function(response){
+					$scope.error=response.data;
+				})
+			}
+		
+			var getCollabUser=function(){
+				var url = 'getCollabUser';
+				var b = noteService.service(url,'POST',dataToPass);
+				b.then(function(response){
+					$scope.users=response.data;
+				},function(response){
+					$scope.error=response.data;
+				});
+			}
+			
+			$scope.removeCollaborator=function(user){
+				/*console.log('remove collab='+user.name);
+				var url='removeCollaborator';
+				console.log(note);
+				var a = noteService.collaborate(url,'POST',dataToPass,user.email);
+				a.then(function(response){
+					console.log('removed successfully');
+					getNotes();
+				},function(response){
+					console.log("remove collabe fail");
+				});*/
+				
+				var array = dataToPass.collaborator;
+				console.log(dataToPass);
+				var index = array.indexOf(user);
+				array.splice(index, 1);
+				update(dataToPass);
+			}
+			
+			
+			getOwner();
+			getCollabUser();
+			
+			$scope.getUserEmail = function() {
+	      		
 	    	/*var url = 'update';*/
 	    	console.log($scope.search);
 	    	
@@ -517,11 +563,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			$scope.editable = true;
 			$scope.title = "Reminder";
 		} 
-		/*//////////////////////////////=====GET ALL USERS ======///////////////////////////// */
-		
-
-
-		
+		/*//////////////////////////////=====GET OWNER ======///////////////////////////// */
+	
 		
     getNotes();
     getUser();

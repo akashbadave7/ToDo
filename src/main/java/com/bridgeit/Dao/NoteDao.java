@@ -1,6 +1,7 @@
 package com.bridgeit.Dao;
 
 import java.util.List;
+import java.util.Set;
 
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;
@@ -17,7 +18,8 @@ public interface NoteDao {
 	
 	public NoteBean getNoteById(int noteId);
 
-	
+	public List<NoteBean> getCollboratedNotes(int userId);
 
+	public Object removeCollabeUser(NoteBean oldNote, UserBean user);
 
 }

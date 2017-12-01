@@ -20,6 +20,7 @@ md-content{
 [contenteditable=true]:empty:before{
   content: attr(placeholder);
   display: block;
+  color: grey;
 }
 
 #lastDiv,#colorpannel{

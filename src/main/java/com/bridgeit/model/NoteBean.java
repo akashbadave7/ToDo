@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,10 +64,18 @@ public class NoteBean {
 	private String image;
 	
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "collaborator", joinColumns = @JoinColumn(name = "note_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<UserBean> collaborators = new HashSet<>(); 
 	
+	@Override
+	public String toString() {
+		return "NoteBean [noteId=" + noteId + ", title=" + title + ", body=" + body + ", color=" + color
+				+ ", createDate=" + createDate + ", lastUpdated=" + lastUpdated + ", isArchive=" + isArchive
+				+ ", isPinned=" + isPinned + ", isTrash=" + isTrash + ", reminder=" + reminder + ", image=" + image
+				+ ", collaborators=" + collaborators + ", user=" + user + "]";
+	}
+
 	public Set<UserBean> getCollaborator() {
 		return collaborators;
 	}

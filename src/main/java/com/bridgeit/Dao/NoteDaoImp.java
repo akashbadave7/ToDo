@@ -4,14 +4,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.dialect.identity.SybaseAnywhereIdentityColumnSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 
+import com.bridgeit.Service.NoteService;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;
 
@@ -124,6 +128,31 @@ public class NoteDaoImp implements NoteDao{
 		note.getCollaborator().size();
 		session.close();
 		return note;
+	}
+
+	@Override
+	public List<NoteBean> getCollboratedNotes(int userId) {
+		// TODO Auto-generated method stub
+		Session session = factory.openSession();
+		/*NoteBean notes = session.get(NoteBean.class, userId);
+		System.out.println(notes.to);*/
+		
+		Criteria criteria = session.createCriteria(NoteBean.class);
+		criteria.createAlias("collaborators", "c");
+		criteria.add(Restrictions.eq("c.id", userId));
+		List<NoteBean> collaboratedNotes = criteria.list();
+		
+		session.close();
+		return collaboratedNotes;
+	}
+		/*=========================REMOVE COLLABE USER=============*/
+	@Override
+	public Object removeCollabeUser(NoteBean oldNote, UserBean user) {
+		// TODO Auto-generated method stub
+		Session session = factory.openSession();
+		Transaction transaction = session.beginTransaction();
+	 
+		return null;
 	}
 
 

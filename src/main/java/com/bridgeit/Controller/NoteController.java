@@ -2,6 +2,7 @@ package com.bridgeit.Controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,10 +11,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.Service.NoteService;
@@ -86,7 +90,8 @@ public class NoteController {
 	 			 url = url.substring(0,url.lastIndexOf("/"))+"/update/";
 	 			 System.out.println(url);*/
 				 note.setLastUpdated(updatedDate);
-				 note.setUser(user);
+				 NoteBean oldNote = noteService.getNoteById(note.getNoteId());
+				 note.setUser(oldNote.getUser());
 				 if(noteService.updateNote(note))
 				 {
 					 responseMessage.setResponseMessage("Updated Successfully");
@@ -112,26 +117,18 @@ public class NoteController {
 		//UserBean user = (UserBean) session.getAttribute(session.getId());
 		ResponseMessage responseMessage = new ResponseMessage();
 		String token = request.getHeader("Authorization");
+		System.out.println("Inside delete");
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		NoteBean oldNote = noteService.getNoteById(id);
 		if(user!=null)
 		{
-			/*if(user.getId()==id)
-			{*/
-				List<NoteBean> list = noteService.getAllNotes(user);
-				for (int i=0;i<list.size();i++)
-				{
-					NoteBean note = list.get(i);
-					if(note.getNoteId()==id) {
-						noteService.deleteNote(note);
-						responseMessage.setResponseMessage("Successfully deleted");
-						return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-					}
-				}
-			/*}else
+			if(user.getId()==oldNote.getUser().getId()){
+				noteService.deleteNote(oldNote);
+			}else
 			{
-				
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not delete");
-			}*/
+				responseMessage.setResponseMessage(" deleted unsuccessfull");
+				return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+			}
 		}else {
 			responseMessage.setResponseMessage("User Not logged in");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
@@ -141,6 +138,7 @@ public class NoteController {
 	}
 	
 	/*----------------------------------getAllNotes note-------------------------------*/
+	
 	@RequestMapping(value="/getNotes",method=RequestMethod.GET)
 	public ResponseEntity<Object> getAllNotes(HttpSession session,HttpServletRequest request)
 	{
@@ -151,6 +149,8 @@ public class NoteController {
 		if(user!=null)
 		{
 			 notes = noteService.getAllNotes(user);
+			 List<NoteBean> collborated =noteService.getCollboratedNotes(user.getId());
+			 notes.addAll(collborated);
 		}
 		else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
@@ -159,8 +159,9 @@ public class NoteController {
 	}
 	
 	/*----------------------------------Collaborate note-------------------------------*/
+	
 	@RequestMapping(value="/collaborate",method=RequestMethod.POST)
-	public ResponseEntity<Object> collaborate(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request)
+	public ResponseEntity<Object> collaborate(@RequestBody NoteBean note,HttpServletRequest request)
 	{
 		System.out.println("inside collaborator");
 		ResponseMessage responseMessage = new ResponseMessage();
@@ -190,5 +191,59 @@ public class NoteController {
 		return null;
 		
 	}
+	
+	
+	/*----------------------------------GET OWNER-------------------------------*/
+
+	@RequestMapping(value="/getOwner",method=RequestMethod.POST)
+	public ResponseEntity<Object> getOwner(@RequestBody NoteBean note)
+	{
+		
+		NoteBean ownerNote = noteService.getNoteById(note.getNoteId());
+		return ResponseEntity.ok(ownerNote.getUser());
+		
+	}
+	
+	@RequestMapping(value="/getCollabUser",method=RequestMethod.POST)
+	public ResponseEntity<Object> getCollabUser(@RequestBody NoteBean note)
+	{
+		NoteBean collabNoteUsers = noteService.getNoteById(note.getNoteId());
+		return ResponseEntity.ok(collabNoteUsers.getCollaborator());
+		
+	}
+	
+	/*----------------------------------REMOVE COLLABORATE-------------------------------*/
+	
+	@RequestMapping(value="/removeCollaborator",method=RequestMethod.POST)
+	public ResponseEntity<Void> removeCollaborator(@RequestBody NoteBean note,HttpServletRequest request)
+	{
+		
+		NoteBean oldNote = noteService.getNoteById(note.getNoteId());
+		String collabeUserEmail= request.getHeader("email");
+		UserBean user=userService.getUserByEmail(collabeUserEmail);
+		if(user!=null)
+		{
+			System.out.println("Collabeuser "+user.getEmail());
+			System.out.println("Before remove ="+oldNote.getCollaborator());
+			oldNote.getCollaborator().remove(user);
+			System.out.println("After Remove ="+oldNote.getCollaborator());
+			noteService.updateNote(oldNote);
+			
+		}else{
+			
+		}
+		return null;
+		
+	}
+
+	
+	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(value=Exception.class)
+	public String handlerException(Exception e){
+		e.printStackTrace();
+		System.out.println();
+		return "Exception"+e;
+	}
+	
 	
 }

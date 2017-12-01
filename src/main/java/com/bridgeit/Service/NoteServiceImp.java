@@ -1,6 +1,7 @@
 package com.bridgeit.Service;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -41,6 +42,17 @@ public class NoteServiceImp implements NoteService{
 	public NoteBean getNoteById(int noteId) {
 		// TODO Auto-generated method stub
 		return noteDao.getNoteById(noteId);
+	}
+
+	@Override
+	public List<NoteBean> getCollboratedNotes(int id) {
+		return noteDao.getCollboratedNotes(id);	
+	}
+
+	@Override
+	public void removeCollabeUser(NoteBean oldNote, UserBean user) {
+		// TODO Auto-generated method stub
+		noteDao.removeCollabeUser(oldNote,user);
 	}
 
 	
