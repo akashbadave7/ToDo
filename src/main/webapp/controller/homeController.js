@@ -1,11 +1,42 @@
 var ToDo = angular.module('ToDo')
 
 ToDo.controller('homeController', function ($scope,fileReader,$location, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog,toastr
-							,$filter,$interval,$state,Upload, $base64) {
+							,$filter,$interval,$state,Upload, $base64,$q) {
    
 	
 	
-
+	/*//////////////////////////////=====LIST/GRID VIEW======///////////////////////////// */
+	
+	
+	$scope.view=function(){
+		var view = localStorage.getItem('view');
+		if(view=='list'){
+			$scope.displayView('list');
+		}else{
+			$scope.displayView('grid');
+		}
+		
+	}
+	
+	$scope.displayView=function(type){
+		
+		if(type=='list'){
+			$scope.view='90';
+			$scope.width='100%';
+			$scope.list=false
+			$scope.grid=true
+			localStorage.setItem('view','list');
+		}else{
+			$scope.view='30';
+			$scope.width='260px';
+			$scope.grid=false;
+			$scope.list=true;
+			localStorage.setItem('view','grid');
+		}
+			
+	}
+	
+	
 	$scope.pinStatus = false;
 	$scope.pinUnpin=function(){
 		if ($scope.pinStatus == false) {
@@ -95,17 +126,20 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	}
     
 	/*//////////////////////////////=====GET ALL NOTES======///////////////////////////// */
-	$scope.search={};
+	var search=[];
     var getNotes=function(){
     	
     	/*var token = localStorage.getItem('token');*/
     	var url = 'getNotes';
     	
     	var notes=noteService.service(url,'GET',notes);
-    	search=notes;
+    	
     	notes.then(function(response){
     		$scope.notes=response.data;
     		console.log(response.data);
+    		 for (var i = 0; i < response.data.length; i++) {
+    			 search.push(response.data[i]);
+    		 }
     		/*==============REMINDER CHECKER====================*/
       		   $interval(function () {
     		       
@@ -333,6 +367,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				var index = array.indexOf(user);
 				array.splice(index, 1);
 				update(dataToPass);
+				$mdDialog.close();
 			}
 			
 			
@@ -378,6 +413,11 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	function mdDialogController($scope, $state, dataToPass) {
 	      $scope.mdDialogData = dataToPass;
 
+	      /*=========================Remove Image=============*/
+	      $scope.removeImage=function(mdDialogData){
+	    	  mdDialogData.image=null;
+	    	  update(note);
+	      }
 	      // Saving the edited note
 	      	$scope.saveUpdatedNote = function() {
 	    	/*var url = 'update';*/
@@ -562,9 +602,50 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			$scope.navBarColor = "#607D8B";
 			$scope.editable = true;
 			$scope.title = "Reminder";
+		} else if($state.current.name=='search'){
+			$scope.navBarColor = "#512DA8";
+			$scope.title = "Google Keep";
 		} 
-		/*//////////////////////////////=====GET OWNER ======///////////////////////////// */
+		/*//////////////////////////////=====REFRESH OWNER ======///////////////////////////// */
 	
+		$scope.refresh=function(){
+			$state.reload()
+
+		}
+		
+		
+		/*============================SEARCHING=======================*/
+		
+		 $scope.querySearch=function(searchText){
+			var arr=[];
+			j=-1;
+		//	console.log('ssdsdas'+search);
+			for(var i=0;i<search.length;i++)
+				{
+					if(searchText==search[i].title){
+						j++;
+						arr[j]=search[i];
+					}
+				}
+			console.log(arr);
+			return arr;
+		 }
+		 
+	      $scope.searchTextChange = function(searchText) {
+	          var arr = [];
+	          var j = -1;
+	          for(var i=0; i<search.length; i++) {
+	            if(search[i].title == searchText)  {
+	              // console.log(res.data.notes[i]);
+	              ++j;
+	              arr[j] = search[i];
+	            }
+	          }
+	          $scope.searchResultNotes = arr;
+	        }
+		    
+	   
+
 		
     getNotes();
     getUser();

@@ -11,7 +11,7 @@
 
 
 	<div flex="85" layout="row" layout-wrap style=" margin-top: 5em;">
-	<div ng-if="note.reminder" ng-repeat="note in notes" id="note-scope" flex="30">
+	<div ng-if="note.reminder" ng-repeat="note in notes" id="note-scope" flex={{view}}>
 
 	<md-card class="card" id="float" ng-style="{'background-color' : note.color}">
 	<div aria-label="unpin note">
@@ -53,7 +53,7 @@
 			              </md-menu-content>
 			       </md-menu> 
 			       </md-button>
-			       		<md-button style="min-width:25px"; arial-label="Share">
+			       		<md-button style="min-width:25px"; arial-label="Share" ng-click="collaborators(note,$event)">
 			       			<md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>

@@ -47,7 +47,7 @@
 			              </md-menu-content>
 			       </md-menu>
 	        			
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="collaborators(note,$event)">
 	        			 <md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>
@@ -97,8 +97,8 @@
 	
 	<div layout="row" layout-wrap flex>
 		<!--=========================Pinned=============================================  -->
-	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="30" >
-	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}" flex>	
+	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="{{view}}" >
+	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex>	
 		 <div aria-label="unpin note">
       		<md-button style="min-width:15px;float:right" >
       		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
@@ -146,7 +146,7 @@
 	        			
 	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="collaborators(note,$event)">
 	        			<md-tooltip md-direction="bottom">Share</md-tooltip>
-		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
+		       				<md-icon md-svg-src="images/share.svg" style="width:21px"></md-icon>
 	        			</md-button>
 	        			
 	        			
@@ -198,16 +198,16 @@
 		<h4>Others</h4>
 	<div layout="row" layout-wrap flex>
 		<!--=========================OTHER=============================================  -->
-	<div ng-repeat="note in notes | filter:{pinned:false,trash:false,archive:false} "  id="note-scope" flex="30" >
+	<div ng-repeat="note in notes | filter:{pinned:false,trash:false,archive:false} "  id="note-scope" flex="{{view}}" >
 	
-	<md-card style="width:260px" id="float" ng-style="{'background-color' : note.color}" flex>
-	        <div>
-		         	 <md-button style="min-width:15px;float:right" arial-label="Pin note">
+	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex>
+	        <span>
+		         	 	<md-button style="min-width:15px;float:right" arial-label="Pin note">
 		          		<md-tooltip md-direction="bottom">Pin note</md-tooltip>
-           				<md-icon id="lastDiv" md-svg-src="images/unpin.svg" style="width:15px;float:right" ng-click="pinned(note,true)"></md-icon>
+           				<md-icon id="lastDiv" md-svg-src="images/unpin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"></md-icon>
            				</md-button>
-           	</div>
-	       <div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
+           	</span>
+	       	<div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
 	        <md-card-title>
 		          <md-card-title-text class="update">
 		         	 
@@ -241,7 +241,7 @@
 			       </md-menu>
 			     <!--   </md-button> -->
 	        			
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Share">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="collaborators(note,$event)">
 	        			<md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>

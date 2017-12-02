@@ -81,7 +81,7 @@ public class UserController {
         if(valid.signUpValidator(user))
         {
         	// setting user activation false bydefault
-        	user.setActivated(true);
+        	user.setActivated(false);
         	if (userService.isUserExits(user.getEmail(),user.getMobilenumber())) 
         	{	
         		int i= userService.saveUserData(user);

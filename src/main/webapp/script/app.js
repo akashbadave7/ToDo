@@ -3,6 +3,9 @@ var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMat
 
 ToDo.config(['$stateProvider','$urlRouterProvider',
 		function($stateProvider,$urlRouterProvider){
+	
+			/*var token=localStorage.getItem('token');*/
+			
 			$stateProvider.state('register',{
 				url:'/register',
 				templateUrl:'template/signup.html',
@@ -54,7 +57,18 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 				url : '/dummy',
 				templateUrl : 'template/dummypage.html',
 				controller : 'dummyController'
+			})
+			
+			.state('search', {
+			url : '/search',
+			templateUrl : 'template/search.html',
+			controller : 'homeController'
 			});
 			
-			$urlRouterProvider.otherwise('login');
+		/*	if(token!==null){
+				$location.path('home');
+			}else{*/
+				$urlRouterProvider.otherwise('login');
+		/*	}*/
+			
 }]);
