@@ -414,9 +414,10 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	      $scope.mdDialogData = dataToPass;
 
 	      /*=========================Remove Image=============*/
+	      
 	      $scope.removeImage=function(mdDialogData){
 	    	  mdDialogData.image=null;
-	    	  update(note);
+	    	  update(mdDialogData);
 	      }
 	      // Saving the edited note
 	      	$scope.saveUpdatedNote = function() {

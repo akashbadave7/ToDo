@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 
 import com.bridgeit.Service.NoteService;
+import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;
 
@@ -152,6 +153,57 @@ public class NoteDaoImp implements NoteDao{
 		Session session = factory.openSession();
 		Transaction transaction = session.beginTransaction();
 	 
+		return null;
+	}
+
+	/*-----------------------------ADD LABEL------------------------------*/
+
+	@Override
+	public int addLabel(Label label, int userId) {
+		Session session = factory.openSession();
+		Transaction transaction = null;
+		int i = 0;
+		try {
+			transaction = session.beginTransaction();
+			UserBean user = new UserBean();
+			user.setId(userId);
+			label.setUser(user);
+			i=(int) session.save(label);
+			transaction.commit();
+			
+		} catch (HibernateException e) {
+			if(transaction!=null) {
+				transaction.rollback();
+			}
+				e.printStackTrace();
+		}finally {
+			session.close();
+		}
+		
+		return i;
+	}
+
+	/*-----------------------------DELETE LABEL------------------------------*/
+
+	@Override
+	public boolean deleteLabel(int id, int userId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*-----------------------------UPDATE LABEL------------------------------*/
+
+	@Override
+	public boolean updateLabel(Label label, int userId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*-----------------------------GET ALL LABEL------------------------------*/
+
+	@Override
+	public Set<Label> getAllLabel(int userId) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

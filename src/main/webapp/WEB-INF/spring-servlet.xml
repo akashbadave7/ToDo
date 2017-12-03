@@ -81,6 +81,7 @@
           class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <constructor-arg name="strength" value="11"/>
     </bean> -->
+    
 	<mvc:resources location="/template/" mapping="/template/**" />
 	<mvc:resources location="/css/" mapping="/css/**" />
 	<mvc:resources location="/controller/" mapping="/controller/**" />

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgeit.Service.NoteService;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.VerifyToken;
+import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
@@ -235,7 +236,23 @@ public class NoteController {
 		return null;
 		
 	}
-
+	
+	/*----------------------------------ADD LABEL-------------------------------*/
+	@RequestMapping(value = "/addlabel", method = RequestMethod.POST)
+	public ResponseEntity<ResponseMessage> addLabel(@RequestBody Label label,HttpServletRequest request)
+	{
+		int userId = (int) request.getAttribute("userId");
+		ResponseMessage responseMessage = new ResponseMessage();
+		int i=noteService.addLabel(label, userId);
+		System.out.println("Label successfully added "+ i);
+		if(i!=0){
+			 responseMessage.setResponseMessage("Label successfully added");
+			 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+		 }else{
+			 responseMessage.setResponseMessage("Label could not be added");
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+		 }
+	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value=Exception.class)
