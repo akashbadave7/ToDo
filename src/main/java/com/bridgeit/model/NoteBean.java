@@ -68,14 +68,6 @@ public class NoteBean {
 	@JoinTable(name = "collaborator", joinColumns = @JoinColumn(name = "note_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<UserBean> collaborators = new HashSet<>(); 
 	
-	@Override
-	public String toString() {
-		return "NoteBean [noteId=" + noteId + ", title=" + title + ", body=" + body + ", color=" + color
-				+ ", createDate=" + createDate + ", lastUpdated=" + lastUpdated + ", isArchive=" + isArchive
-				+ ", isPinned=" + isPinned + ", isTrash=" + isTrash + ", reminder=" + reminder + ", image=" + image
-				+ ", collaborators=" + collaborators + ", user=" + user + "]";
-	}
-
 	public Set<UserBean> getCollaborator() {
 		return collaborators;
 	}
@@ -88,6 +80,10 @@ public class NoteBean {
 	@JsonIgnore
 	@JoinColumn(name="user_id")
 	UserBean user;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "noteId") })
+	private Set<Label> labels = new HashSet<Label>();
 	
 	public int getNoteId() {
 		return noteId;
@@ -194,4 +190,29 @@ public class NoteBean {
 		this.reminder = reminder;
 	}
 
+	public Set<UserBean> getCollaborators() {
+		return collaborators;
+	}
+
+	public void setCollaborators(Set<UserBean> collaborators) {
+		this.collaborators = collaborators;
+	}
+
+	public Set<Label> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(Set<Label> labels) {
+		this.labels = labels;
+	}
+
+	@Override
+	public String toString() {
+		return "NoteBean [noteId=" + noteId + ", title=" + title + ", body=" + body + ", color=" + color
+				+ ", createDate=" + createDate + ", lastUpdated=" + lastUpdated + ", isArchive=" + isArchive
+				+ ", isPinned=" + isPinned + ", isTrash=" + isTrash + ", reminder=" + reminder + ", image=" + image
+				+ ", collaborators=" + collaborators + ", user=" + user + ", labels=" + labels + "]";
+	}
+	
+	
 }

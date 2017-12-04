@@ -241,17 +241,43 @@ public class NoteController {
 	@RequestMapping(value = "/addlabel", method = RequestMethod.POST)
 	public ResponseEntity<ResponseMessage> addLabel(@RequestBody Label label,HttpServletRequest request)
 	{
-		int userId = (int) request.getAttribute("userId");
+		String token = request.getHeader("Authorization");
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		System.out.println(label.getName());
 		ResponseMessage responseMessage = new ResponseMessage();
-		int i=noteService.addLabel(label, userId);
-		System.out.println("Label successfully added "+ i);
-		if(i!=0){
-			 responseMessage.setResponseMessage("Label successfully added");
-			 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-		 }else{
-			 responseMessage.setResponseMessage("Label could not be added");
-			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-		 }
+		if(user!=null){
+			
+			int i=noteService.addLabel(label, user.getId());
+			System.out.println("Label successfully added "+ i);
+			if(i!=0){
+				 responseMessage.setResponseMessage("Label successfully added");
+				 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+			 }else{
+				 responseMessage.setResponseMessage("Label could not be added");
+				 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+			 }
+		}else{
+			 responseMessage.setResponseMessage("User Not exits");
+			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/getAllLabel", method = RequestMethod.POST)
+	public ResponseEntity<Object> getAllLabel(HttpServletRequest request)
+	{
+		String token = request.getHeader("Authorization");
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		List<Label> labels=null;
+		if(user!=null)
+		{
+			 labels=(List<Label>) user.getLabels();
+		}
+		else{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
+		}
+		return ResponseEntity.ok(labels);
+	
 	}
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)

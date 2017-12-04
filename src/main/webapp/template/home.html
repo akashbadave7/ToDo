@@ -31,7 +31,7 @@
            
           </md-card-title-text>
         </md-card-title>
-        
+       
         <md-card-actions>
 	        <md-panel>
 		      <p ng-show="displayDiv" class="icon">
@@ -123,6 +123,7 @@
 	       
 	     	 	<p class="lastDive" ng-if="note.reminder" style="font-size:10px;padding:8px">Reminder : {{note.reminder | date:'medium'}}
 		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
+	         <span ng-repeat="label in note.labels">{{label.name}}</span>
 	        
 	        <md-card-actions>
 	        <md-panel>
@@ -133,8 +134,7 @@
 	       				<md-tooltip md-direction="bottom">Reminder</md-tooltip>
 	       				<img src="images/remender.svg" >
 	       			</md-button>
-			              <md-menu-content>
-			              
+			              <md-menu-content>	
 			                <md-menu-item>
 			             
 							<button class="md-raised md-primary md-button md-ink-ripple" type="button"=""
@@ -181,9 +181,20 @@
 			                <md-menu-item>
 			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
 			                </md-menu-item>
-			                <md-menu-item>
-			                  <md-button class="primary" ng-click="addLabelWindow()">Add Label</md-button>
-			                </md-menu-item>
+			               
+			                 <md-menu>
+			                 
+               					   <md-button class="primary"  ng-click="$mdMenu.open($event)">Add Label</md-button>
+               						 <md-menu-content>
+              							<md-menu-item>
+               							 <md-checkbox ng-checked="checkboxCheck(note, label)" ng-click="labelToggle(note,label)" ng-repeat="label in user.labels">
+               						 		{{label.name}}
+               						 	</md-checkbox>
+               						</md-menu-item><br>
+               					</md-menu-content>
+               				
+               				</md-menu> 	
+			                
 			              </md-menu-content>
 			            </md-menu>
 		          </p>
@@ -221,7 +232,7 @@
 		           
 		          </md-card-title-text>
 	        </md-card-title>
-	     
+	      <span ng-repeat="label in note.labels">{{label.name}}</span>
 	     	<p class="lastDive" ng-if="note.reminder" style="font-size:10px;padding:8px">Reminder : {{note.reminder | date:'medium'}}
 		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
 	        <md-card-actions>
@@ -277,7 +288,18 @@
 			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
 			                </md-menu-item>
 			                <md-menu-item>
-			                  <md-button class="primary" ng-click="addLabelWindow()">Add Label</md-button>
+			                  <md-menu>
+			                 
+               					   <md-button class="primary"  ng-click="$mdMenu.open($event)">Add Label</md-button>
+               						 <md-menu-content>
+              							<md-menu-item>
+               							 <md-checkbox ng-checked="checkboxCheck(note, label)" ng-click="labelToggle(note,label)" ng-repeat="label in user.labels">
+               						 		{{label.name}}
+               						 	</md-checkbox>
+               						</md-menu-item><br>
+               					</md-menu-content>
+               				
+               				</md-menu> 	
 			                </md-menu-item>
 			              </md-menu-content>
 			            </md-menu>

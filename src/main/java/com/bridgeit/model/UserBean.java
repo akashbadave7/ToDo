@@ -1,10 +1,13 @@
 package com.bridgeit.model;
 
 import java.sql.Blob;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,6 +51,10 @@ public class UserBean
 	//@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="user")
 	List<NoteBean> notes;
+
+	
+	@OneToMany(mappedBy = "user",fetch=FetchType.EAGER)
+	private Set<Label> labels = new HashSet<Label>();
 
 	public int getId() {
 		return id;
@@ -113,4 +120,14 @@ public class UserBean
 	public void setNotes(List<NoteBean> notes) {
 		this.notes = notes;
 	}
+
+	public Set<Label> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(Set<Label> labels) {
+		this.labels = labels;
+	}
+	
+	
 }

@@ -35,6 +35,7 @@
 			<list>
 				<value>com.bridgeit.model.UserBean</value>
 				<value>com.bridgeit.model.NoteBean</value>
+				<value>com.bridgeit.model.Label</value>
 			</list>
 		</property>
 		

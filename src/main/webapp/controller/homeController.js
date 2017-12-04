@@ -367,7 +367,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				var index = array.indexOf(user);
 				array.splice(index, 1);
 				update(dataToPass);
-				$mdDialog.close();
+				$mdDialog.hide();
 			}
 			
 			
@@ -433,6 +433,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    	var updatedNoteBody = document.getElementById("updatedNoteBody").innerHTML;*/
 	    	
 	    	update(dataToPass);
+			$mdDialog.hide();
+
 	  		/*var notes = noteService.service(url,'POST',dataToPass)
 	  		
 	  		notes.then(function(response){
@@ -460,7 +462,8 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		user.then(function(response) {
 			
 			var User=response.data;
-			
+			console.log(User.labels);
+			console.log("label"+response.data.labels);
 			
 			$scope.user=User;
 			
@@ -524,12 +527,12 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		
 		
 
-		$scope.$on("fileProgress", function(e, progress) {
+	/*	$scope.$on("fileProgress", function(e, progress) {
 			$scope.progress = progress.loaded / progress.total;
 		});
 		
 		$scope.type = {};
-		$scope.type.image = ''; 
+		$scope.type.image = ''; */
 		
 		 /*$scope.$watch('file', function () {
 			 console.log($scope.file);
@@ -647,7 +650,74 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		    
 	   
 
-		
+		/*===========================Create Label========================*/
+	      
+	      $scope.createLabel=function($event,user){
+	    	  $mdDialog.show({
+	    		  locals: {
+	    		        dataToPass: user  // Pass the note data into dialog box
+	    		      },
+	    		 templateUrl : 'template/createLabel.html',
+	    		 parent : angular.element(document.body),
+	    		 targetEvent : event,
+	    		 clickOutsideToClose: true,
+	    		 controllerAs : 'controller',
+	    		 controller : createLabelController
+	    	  });
+	      }
+	      
+	      function createLabelController($scope,dataToPass){
+	    	  $scope.userlabel=dataToPass;
+	    	  $scope.createLabel=function(labelName){
+	    		  console.log(labelName)
+	    		  $scope.label={};
+	    		  $scope.label.name=labelName;
+	    		  url = 'addlabel';
+	    		  
+	    		  var addLabel= noteService.service(url,'POST',$scope.label)
+	    		  addLabel.then(function(response){
+	    			  console.log("label added successfully");
+	    			  $state.reload();
+	    			  $mdDialog.hide();
+	    		  },function(response){
+	    			  console.log("label failed to add")
+	    		  })
+	    	  }
+	      }
+	      
+	      $scope.labelToggle=function(note,label){
+	    	  console.log("clicked");
+	    	  
+	    	  var index = -1;
+	    	  var i=0;
+				for ( i = 0; i<note.labels.length;i++) {
+					if (note.labels[i].name === label.name) {
+						index = i;
+						break;
+					}
+				}
+
+				if (index == -1) {
+					note.labels.push(label);
+					update(note);
+				} else {
+					note.labels.splice(index, 1);
+					update(note);
+				}
+	    	  
+	      }
+	      
+			$scope.checkboxCheck = function(note, label) {
+				
+				var labels = note.labels;
+				for (var i = 0; i < labels.length; i++) {
+					if (labels[i].name === label.name) {
+						return true;
+					}
+				}
+				return false;
+			}
+	      
     getNotes();
     getUser();
     

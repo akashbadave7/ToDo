@@ -1,4 +1,4 @@
-<!-- md-sidenav --><nav class="md-sidenav-left" id="left" width="150px" padding-top="20px" style=" margin-top:50px;width:150px">
+<!-- md-sidenav --><nav class="md-sidenav-left" id="left" padding-top="20px" style=" margin-top:50px;width:10em">
 
     <md-list >
       <md-list-item ui-sref="home">
@@ -16,12 +16,16 @@
           Reminders
         
       </md-list-item>
-      
-      <md-list-item >
-       
-          Labels
-          
-     
+         <p> Labels</p>
+         		<div ng-repeat="labels in user.labels">
+  				<md-icon md-svg-src="images/label.svg" ></md-icon>
+  					{{labels.name}}	
+  				</div>
+  		<md-list-item ng-click="createLabel($event,user)">
+  				
+  				Create new label
+  		</md-list-item>
+
       </md-list-item>
       <md-list-item  ui-sref="trash">
             Trash
