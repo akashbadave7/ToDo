@@ -1,14 +1,20 @@
-.search{
-	width: 500px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-   	padding-right:50px;
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
+@CHARSET "UTF-8";
+.md-avatar{
+ line-height: 3rem;
+      width: 3rem;
+      height: 3rem;
+      margin-left:10px;
+      border-radius: 44px;
 }
+
+/* .md-button.md-fab.md-mini {
+      line-height: 3rem;
+      width: 3rem;
+      height: 3rem;
+} */
+
+.profileMenu{
+	 padding-right: 227px;
+    padding-top: 15px;
+}
+   

@@ -1,5 +1,7 @@
 package com.bridgeit.Dao;
 
+import java.util.List;
+
 import com.bridgeit.model.UserBean;
 
 public interface UserDao {
@@ -16,4 +18,6 @@ public interface UserDao {
 	UserBean getUserByEmail(String email);
 	
 	boolean isUserExits(String email,String mobilenumber);
+	
+	public List<String> getUsers(String keyword);
 }

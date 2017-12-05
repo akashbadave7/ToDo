@@ -533,17 +533,16 @@ md-autocomplete {
 md-backdrop {
   -webkit-transition: opacity 450ms;
   transition: opacity 450ms;
-  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 50; }
+  }
   md-backdrop.md-menu-backdrop {
     position: fixed !important;
-    z-index: 99; }
+    z-index: 0; }
   md-backdrop.md-select-backdrop {
-    z-index: 81;
+    z-index: 0;
     -webkit-transition-duration: 0;
             transition-duration: 0; }
   md-backdrop.md-dialog-backdrop {
@@ -551,9 +550,9 @@ md-backdrop {
   md-backdrop.md-bottom-sheet-backdrop {
     z-index: 69; }
   md-backdrop.md-sidenav-backdrop {
-    z-index: 59; }
+    z-index: 0; }
   md-backdrop.md-click-catcher {
-    position: absolute; }
+ }
   md-backdrop.md-opaque {
     opacity: .48; }
     md-backdrop.md-opaque.ng-enter {

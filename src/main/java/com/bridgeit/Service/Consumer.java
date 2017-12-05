@@ -10,7 +10,7 @@ import javax.jms.ObjectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.SerializationUtils;
 
-
+import com.bridgeit.model.Email;
 public class Consumer implements MessageListener{
 
 	
@@ -20,10 +20,21 @@ public class Consumer implements MessageListener{
 	public void onMessage(Message message) {
 		// TODO Auto-generated method stub
 		System.out.println("consumer"+message);
+		System.out.println("Mailservice"+sendMail);
 		ObjectMessage object = (ObjectMessage) message;
-		byte[] data = SerializationUtils.serialize(object);
-		Map map = (HashMap)SerializationUtils.deserialize(data);
-		sendMail.sendMail(map.get("to")+"",map.get("body")+"",map.get("subject")+"");
+
+		/*byte[] data = SerializationUtils.serialize(object);
+		Map map = (HashMap)SerializationUtils.deserialize(data);*/
+		
+		try {
+			Email email = (Email) object.getObject();
+			System.out.println(email);
+			sendMail.sendMail(email.getTo(), email.getBody(), email.getSubject());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
 		
 	}
 	

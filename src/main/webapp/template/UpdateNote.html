@@ -1,0 +1,97 @@
+<md-dialog flex="45" style="background-color:{{mdDialogData.color}}">
+ 	<md-dialog-content>
+ 		<md-icon  md-svg-src="images/unpin.svg" style="width:15px;float:right" ng-click="pinned(note,true)"></md-icon>
+ 		
+		
+		 <div ng-if="mdDialogData.image"><img ng-src={{mdDialogData.image}} style="width: 95%;padding-left: 5px;">		
+			<span>
+			
+			<md-button style="margin-left:500px" ng-click="removeImage(mdDialogData)" aria-label="Delete">
+			<md-tooltip md-direction="bottom">Delete</md-tooltip>
+			<md-icon md-svg-src="images/cancel.svg" aria-lable="Delete"></md-icon>
+			</md-button>
+			</span>
+		</div>
+		<md-input-container class="md-block">
+  				<div ng-bind-html="mdDialogData.title"  id="updatedNoteTitle" contenteditable="{{editable}}" contenteditabledata  aria-multiline="true" role="textbox" style="background-color: rgb(250, 250, 250); outline:none; background-color:{{mdDialogData.color}}"  ></div>
+		</md-input-container>
+
+		<md-input-container class="md-block">
+			  <div ng-bind-html="mdDialogData.body" id="updatedNoteBody" contenteditable="{{editable}}" contenteditabledata  aria-multiline="true" role="textbox" style="background-color: rgb(250, 250, 250); outline:none; background-color:{{mdDialogData.color}}"  ></div>
+		</md-input-container>
+		<div layout="row" layout-align="end start">Edited {{mdDialogData.lastUpdated | date:'medium'}}</div>
+		<md-dialog-actions>
+		
+		 <md-card-actions>
+	        <md-panel>
+		      <p class="icon">
+		       	<!--  <md-button style="min-width:25px";> -->	
+		       	 <md-menu>
+	       			 <md-button style="min-width:25px;padding:5px" ng-click="$mdMenu.open($event)" area-label="Remender">
+	       				<md-tooltip md-direction="bottom">Reminder</md-tooltip>
+	       				<img src="images/remender.svg" >
+	       			</md-button>
+			              <md-menu-content>
+			              
+			                <md-menu-item>
+			             
+							<button class="md-raised md-primary md-button md-ink-ripple" type="button"=""
+							ng-click="displayDialog(note)">Display Picker</button>
+							
+			                </md-menu-item>
+			              </md-menu-content>
+			       		</md-menu>
+	        			
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Share">
+	        			<md-tooltip md-direction="bottom">Share</md-tooltip>
+		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
+	        			</md-button>
+	        			
+	        			
+	        			
+						<color-picker class ="colorIcon" value ="cardColor" color="color" options="colors" on-color-changed="colorChanged(newColor, oldColor,note)"></color-picker>	 
+	        			
+	        			<!-- <md-button style="min-width:25px;padding:5px" aria-label="Change color">
+	        			<md-tooltip md-direction="bottom">Change color</md-tooltip>
+	        				<md-icon md-svg-src="images/color.svg" ng-click="" style="width:21px"></md-icon>
+	        			</md-button>
+	        			 -->
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Add image" ng-click="openImageUploader(mdDialogData)">
+	        			<input ng-show="false" id="image" type='file' ng-model-instant ng-model="file" onchange="angular.element(this).scope().imageUpload(this)" />
+	        			<md-tooltip md-direction="bottom">Add image</md-tooltip>
+	        				<md-icon md-svg-src="images/uploadImg.svg" style="width:21px;"></md-icon>
+	        				
+	        			</md-button>
+	        			
+	        			<md-button style="min-width:25px;padding:5px" ng-click="archive(note,true)" aria-label="Archive">
+	        			<md-tooltip md-direction="bottom">Archive</md-tooltip>
+	        				<md-icon md-svg-src="images/archive.svg" aria-lable="archive note"></md-icon>
+	        			</md-button>
+	        			<!--  <img ng-src="images/menu.svg" style="width:21px"> -->
+				        <md-menu>
+			              <md-button style="min-width:25px;padding:5px" ng-click="$mdMenu.open($event)" aria-label="More">
+			              <md-tooltip md-direction="bottom">More</md-tooltip>
+			                <img ng-src="images/menu.svg" style="width:21px">
+			              </md-button>
+			              <md-menu-content>
+			                <md-menu-item>
+			                  <md-button class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                </md-menu-item>
+			                <md-menu-item>
+			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
+			                </md-menu-item>
+			                <md-menu-item>
+			                  <md-button class="primary" ng-click="addLabelWindow()">Add Label</md-button>
+			                </md-menu-item>
+			              </md-menu-content>
+			              <md-button ng-click="saveUpdatedNote()" class="md-primary" >Done</md-button>
+			            </md-menu>
+		          </p>
+		          </md-panel>
+	        	</md-card-actions>
+     		
+		
+		</md-dialog-actions>
+	
+</md-dialog-content>
+</md-dialog>

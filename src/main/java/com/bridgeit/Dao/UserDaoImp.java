@@ -2,10 +2,14 @@ package com.bridgeit.Dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -151,6 +155,26 @@ public class UserDaoImp implements UserDao{
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public List<String> getUsers(String keyword) {
+		Session session = factory.openSession();
+		
+		List<UserBean> users= null;
+		try {
+			Criteria criteria = session.createCriteria(UserBean.class);
+			
+			criteria.add(Restrictions.ilike("email", keyword));
+			criteria.setProjection(Projections.property("email"));
+			List<String> emails = criteria.list();
+			return emails;
+		} catch (Exception e) {
+			
+		}
+		return null;
+		
+		
 	}
 	
 }

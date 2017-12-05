@@ -1,13 +1,22 @@
 package com.bridgeit.Dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.dialect.identity.SybaseAnywhereIdentityColumnSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 
+import com.bridgeit.Service.NoteService;
+import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.UserBean;
 
@@ -55,12 +64,14 @@ public class NoteDaoImp implements NoteDao{
 		{
 			transaction = session.beginTransaction();
 			session.saveOrUpdate(note);
+			
 			transaction.commit();
 		}catch(HibernateException e){
 			if(transaction!=null) {
 				transaction.rollback();
 				return false;
 			}
+			System.out.println("exception occured");
 			e.printStackTrace();
 		}finally {
 			session.close();
@@ -115,10 +126,87 @@ public class NoteDaoImp implements NoteDao{
 	public NoteBean getNoteById(int noteId) {
 		Session session  = factory.openSession();
 		NoteBean note = session.get(NoteBean.class, noteId);
+		note.getCollaborator().size();
 		session.close();
 		return note;
 	}
-	
-	
+
+	@Override
+	public List<NoteBean> getCollboratedNotes(int userId) {
+		// TODO Auto-generated method stub
+		Session session = factory.openSession();
+		/*NoteBean notes = session.get(NoteBean.class, userId);
+		System.out.println(notes.to);*/
+		
+		Criteria criteria = session.createCriteria(NoteBean.class);
+		criteria.createAlias("collaborators", "c");
+		criteria.add(Restrictions.eq("c.id", userId));
+		List<NoteBean> collaboratedNotes = criteria.list();
+		
+		session.close();
+		return collaboratedNotes;
+	}
+		/*=========================REMOVE COLLABE USER=============*/
+	@Override
+	public Object removeCollabeUser(NoteBean oldNote, UserBean user) {
+		// TODO Auto-generated method stub
+		Session session = factory.openSession();
+		Transaction transaction = session.beginTransaction();
+	 
+		return null;
+	}
+
+	/*-----------------------------ADD LABEL------------------------------*/
+
+	@Override
+	public int addLabel(Label label, int userId) {
+		Session session = factory.openSession();
+		Transaction transaction = null;
+		int i = 0;
+		try {
+			transaction = session.beginTransaction();
+			UserBean user = new UserBean();
+			user.setId(userId);
+			label.setUser(user);
+			i=(int) session.save(label);
+			transaction.commit();
+			
+		} catch (HibernateException e) {
+			if(transaction!=null) {
+				transaction.rollback();
+			}
+				e.printStackTrace();
+		}finally {
+			session.close();
+		}
+		
+		return i;
+	}
+
+	/*-----------------------------DELETE LABEL------------------------------*/
+
+	@Override
+	public boolean deleteLabel(int id, int userId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*-----------------------------UPDATE LABEL------------------------------*/
+
+	@Override
+	public boolean updateLabel(Label label, int userId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*-----------------------------GET ALL LABEL------------------------------*/
+
+	@Override
+	public Set<Label> getAllLabel(int userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

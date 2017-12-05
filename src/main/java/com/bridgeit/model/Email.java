@@ -31,6 +31,7 @@ public class Email implements Serializable {
 	@Override
 	public String toString() {
 		return to +" "+ body +" " + subject;
+
 	}
 	
 	

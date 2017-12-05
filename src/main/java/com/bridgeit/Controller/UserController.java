@@ -1,5 +1,6 @@
 package com.bridgeit.Controller;
 
+import java.util.List;
 import java.io.IOException;
 
 import javax.jms.JMSException;
@@ -31,7 +32,8 @@ import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
 import com.bridgeit.model.Email;
-import com.bridgeit.model.ErrorMessage;
+import com.bridgeit.model.NoteBean;
+import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 
 
@@ -56,28 +58,30 @@ public class UserController {
 	private static final Logger logger1 = Logger.getRootLogger();
     //-------------------Retrieve Single User--------------------------------------------------------
 
-	@RequestMapping(value="/getUser/{id}",method=RequestMethod.GET)
-	public ResponseEntity<UserBean> getUserById(@PathVariable("id") int id) {
-		 System.out.println("Fetching User with id " + id);
-		 UserBean user = userService.getUserById(id);
-		 if (user == null) {
-	            System.out.println("User with id " + id + " not found");
-	            return new ResponseEntity<UserBean>(HttpStatus.BAD_GATEWAY);
+	@RequestMapping(value="/getUser",method=RequestMethod.GET)
+	public ResponseEntity<UserBean> getUser(HttpServletRequest request) {
+		
+		String token= request.getHeader("Authorization");
+		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		 if (user!=null) {
+			 	return ResponseEntity.ok(user);
+	        }else {
+	        	 return ResponseEntity.ok(user);
 	        }
-	        return new ResponseEntity<UserBean>(user, HttpStatus.OK);
+		
 	}
 	
     //-------------------Insert a User--------------------------------------------------------
 
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
-    public ResponseEntity<ErrorMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
-		ErrorMessage errorMessage = new ErrorMessage();
+    public ResponseEntity<ResponseMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
+		ResponseMessage errorMessage = new ResponseMessage();
 		System.out.println("Creating User " + user.getName());
 		System.out.println(user);
         if(valid.signUpValidator(user))
         {
         	// setting user activation false bydefault
-        	user.setActivated(true);
+        	user.setActivated(false);
         	if (userService.isUserExits(user.getEmail(),user.getMobilenumber())) 
         	{	
         		int i= userService.saveUserData(user);
@@ -119,9 +123,9 @@ public class UserController {
 	
     //-------------------Activate a User--------------------------------------------------------
 	@RequestMapping(value="/activate/{token:.+}",method=RequestMethod.GET)
-	public ErrorMessage activateUser(@PathVariable("token") String token,HttpServletResponse response,HttpServletRequest request){
+	public ResponseMessage activateUser(@PathVariable("token") String token,HttpServletResponse response,HttpServletRequest request){
 		int id = verifyToken.parseJWT(token);
-		ErrorMessage errorMessage = new ErrorMessage();
+		ResponseMessage errorMessage = new ResponseMessage();
 		System.out.println(id);
 		if(id>0){
 			UserBean user = userService.getUserById(id);
@@ -157,11 +161,11 @@ public class UserController {
     //-------------------Login a User--------------------------------------------------------
 
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ResponseEntity<ErrorMessage> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
+	public ResponseEntity<ResponseMessage> login(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
 		String email= user.getEmail();
 		String password=user.getPassword();
-		ErrorMessage errorMessage = new ErrorMessage();
+		ResponseMessage errorMessage = new ResponseMessage();
 		UserBean getUser = userService.getUserByEmail(email);
 		if(getUser == null){
 			errorMessage.setResponseMessage("Email does not exists try again");
@@ -211,4 +215,25 @@ public class UserController {
 			/*UserBean user = userService.getUserById(id);*/
 			request.removeAttribute(header);
 	}
+	
+	
+	@RequestMapping(value="/getUsers/{keyword}" ,method=RequestMethod.GET)
+	public ResponseEntity<List<String>> getUsers(@RequestHeader(value="token") String header, @PathVariable("keyword") String keyword,HttpServletRequest request){
+		//ResponseMessage responseMessage = new ResponseMessage();
+		String token = request.getHeader("Authorization");
+		List<String> emails= null;
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		
+		if(user!=null)
+		{
+			emails = userService.getUsers(keyword);
+		}
+		else{
+			//responseMessage.setResponseMessage("User Not Logged In");
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(emails, HttpStatus.OK);
+	}
+	
+	
 }

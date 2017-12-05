@@ -1,18 +1,104 @@
+
 <div>
-  <md-toolbar style="background-color:#FFBB33;">
+<md-toolbar ng-style="{'background-color':navBarColor};" style="position: fixed;" >
 
     <div class="md-toolbar-tools">
-    	<span style="padding:10px; color: black" ng-click="">&#9776;</span>
+    	<!-- <span role button style="padding:10px; color: black" ng-click = "openLeftMenu()">&#9776;</span>
+    	 -->
     	
-    <!-- 	 <md-icon style="color:wheat" class="material-icons">&#xE8B6;</md-icon> -->
-      	<h2 md-truncate flex style="weight:80px;color:black">Google Keep</h2>
-      <div layout="column" layout-xs="column">
-      	 <div flex = "33">
-      	 <button class="gb_2e" aria-label="Search" role="button"><svg focusable="false" height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" style="
-    stroke-width: initial;"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></button>
-   		 <input type="text" class="search" name="search" placeholder="Search">
-   		</div>
-   		</div>
-  </md-toolbar>
-</div>
+    	<md-button style="padding:10px; color: black" class="md-icon-button" ng-click="toggleLeft()">&#9776;</md-button>
+      	
+  <div style="padding:10px">    	
+      	<h2 md-truncate  style="weight:100px;color:black" ng-bind="title"></h2>
+      	
+  </div><b><img src="images/search-icon.png" style="width:35px;"/></b>
+  <div hide-xs flex>
+   <div flex-gt-sm="85" >
+   
+		   <md-autocomplete flex="50"
+		    md-items=""
+		    placeholder="Search Note"
+		    ui-sref="search">
+		    <!-- <md-item-template>
+		          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.title}}</span>
+		        </md-item-template> -->
+		
+		    </md-autocomplete>
+		<!-- <md-autocomplete flex="50"
+          md-selected-item="selectedItem"
+          md-search-text-change="searchTextChange(searchText)"
+          md-search-text="searchText"
+          md-items="item in querySearch(searchText)"
+          md-min-length="1"
+          placeholder="Search."
+          md-menu-class="autocomplete-custom-template">
 
+        <md-item-template>
+          <span class="item-title">
+            <span> {{item.name}} </span>
+          </span>
+        </md-item-template>
+
+      </md-autocomplete> -->
+	  </div>
+	
+	    </div>
+	        
+	      
+	         <md-button style="min-width:25px;padding:5px" aria-label="Refresh" ng-click="refresh()">	 
+	        	 <md-tooltip md-direction="bottom">Refresh</md-tooltip>
+		      	 <md-icon  md-svg-src="images/refresh.svg"  style="width:21px;fill:black" ></md-icon>
+	        </md-button>
+	        
+	        <div ng-init="view()">
+	        <md-button ng-if="list" style="min-width:25px;padding:5px" aria-label="Share" ng-click="displayView('list')">	 
+	        	 <md-tooltip md-direction="bottom">List view</md-tooltip>
+		      	 <md-icon  md-svg-src="images/list.svg"  style="width:21px;fill:black" ></md-icon>
+	        </md-button>
+	        
+	         <md-button ng-if="grid" style="min-width:25px;padding:5px" aria-label="View" ng-click="displayView('grid')">	 
+	        	 <md-tooltip md-direction="bottom">Grid view</md-tooltip>
+		      	  <md-icon  md-svg-src="images/grid.svg"  style="width:21px;fill:black" ></md-icon>
+	        </md-button>
+	        </div>
+	        <md-menu>
+	       	<md-button class="md-fab md-icon my-icon-button" aria-label="User" ng-click="$mdMenu.open($event)">
+	       		 	
+	       		 	<md-tooltip md-direction="bottom">{{user.email}}</md-tooltip>
+	       		 	
+            	<img ng-src="{{user.picUrl}}" alt="{{user.name.charAt(0)}}" style=" height: 100%;width: 100%;">
+        	</md-button>
+	 			
+			<md-menu-content width="4" md-direction="bottom">
+                
+                <div flex>
+                	
+	          <div layout="row" flex>
+				<div layout="column">
+							<md-button class="md-fab md-icon my-icon-button" aria-label="User">
+	   			         	<img ng-src="{{user.picUrl}}" style=" height: 100%;width: 100%;">
+	       		</md-button>
+	       		</div><span class="profileMenu">
+			       		<div layout="column" flex="15">
+			       			{{user.name}}
+			   				{{user.email}}
+			   			</div>
+			   			</span>
+	   			</div>
+	  				 <md-divider></md-divider>
+	  				 
+	  				 	<!--  <md-button class="md-raised">Change Profile</md-button> -->
+	  					<md-button class="md-raised md-primary" ng-click="logout()">Logout</md-button>
+	  				
+  				</div>
+  				
+          </md-menu-content>
+          
+        </md-menu>
+	    	
+	  </b> 	 	
+	  
+	 </div>
+  </md-toolbar>
+
+</div>

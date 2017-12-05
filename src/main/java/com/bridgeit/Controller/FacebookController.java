@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
-import com.bridgeit.model.ErrorMessage;
+import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -45,9 +46,9 @@ public class FacebookController {
 	}
 	
 	@RequestMapping(value="/connectFB")
-	public void redirectURL(HttpServletRequest request,HttpServletResponse response,UriComponentsBuilder ucBuilder) throws IOException
+	public void redirectURL(HttpServletRequest request,HttpServletResponse response,HttpSession session,UriComponentsBuilder ucBuilder) throws IOException
 	{
-		ErrorMessage errorMessage = new ErrorMessage();
+		ResponseMessage errorMessage = new ResponseMessage();
 		String sessionState = (String) request.getSession().getAttribute("State");
 		String googlestate = request.getParameter("state");
 		System.out.println("in connect facebook");
@@ -70,7 +71,7 @@ public class FacebookController {
 		System.out.println(profile.get("email").asText());
 		String email= profile.get("email").asText();
 		UserBean user = userService.getUserByEmail(email);
-		System.out.println("fb img "+ profile.get("picture").get("data").get("url").asText());
+		
 		if(user==null) {
 			System.out.println("User is not register before");
 			user = new UserBean();
@@ -82,37 +83,34 @@ public class FacebookController {
 			user.setPassword("");
 			user.setActivated(true);
 			user.setPicUrl(profile.get("picture").get("data").get("url").asText());
-			userService.saveUserData(user);
-			/*if(i>0) {
-				String token = tokenGenerator.createJWT(user.getId(),null);
-    			String url = String.valueOf(request.getRequestURL());
-    			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
-    			System.out.println(url);
-    			sendMail.sendMail(user.getEmail(), url,"Confirmation email");
-    			HttpHeaders headers = new HttpHeaders();
-                headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
-                return new ResponseEntity<String>("Inserted successfully",headers, HttpStatus.CREATED);
-			}*/
+			int i=userService.saveUserData(user);
+			if(i>0) {
+				String token = tokenGenerator.createJWT(user.getId(),user.getEmail());
+    			response.setHeader("Authorization", token);
+    			session.setAttribute("token", token);
+    			response.sendRedirect("http://localhost:8080/ToDo/#!/dummy");
+			}
+			else
+			{
+				response.sendRedirect("http://localhost:8080/ToDo/#!/login");
+			}
 		}else {
 			logger.warn("User data already exists in database");
-		System.out.println(" user is not new to our db ,it is there in our db");
+			System.out.println(" user is not new to our db ,it is there in our db");
+			String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
+			user.setPicUrl(profile.get("picture").get("data").get("url").asText());
+			userService.updateUser(user);
+			session.setAttribute("token", token);
+			response.sendRedirect("http://localhost:8080/ToDo/#!/dummy");
 		}
-		String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
-		/*user.setProfile(profile.get("picture").get("data").get("url").asText());
-		userService.updateUserProfile(user);
-
-		tokens.setGetUser(user);
-		tokenService.saveToken(tokens);
-		 */
-		/*Cookie acccookie = new Cookie("socialaccessToken", token);
-		Cookie refreshcookie = new Cookie("socialrefreshToken", token);
-		response.addCookie(acccookie);
-		response.addCookie(refreshcookie);*/
-		errorMessage.setResponseMessage(token);
-		logger.info("login successfull");
-		response.sendRedirect("http://localhost:8080/ToDo/#!/home");
 		
 	}
-
-
+	
+	@RequestMapping(value="/gettoken")
+	public ResponseEntity<ResponseMessage> getToken(HttpSession session){
+		ResponseMessage responseMessage = new ResponseMessage();
+		responseMessage.setResponseMessage((String) session.getAttribute("token"));
+		session.removeAttribute("token");
+		return  ResponseEntity.ok(responseMessage);
+	}
 }

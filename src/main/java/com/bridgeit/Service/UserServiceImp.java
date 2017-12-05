@@ -1,5 +1,7 @@
 package com.bridgeit.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bridgeit.Dao.UserDao;
@@ -39,6 +41,12 @@ public class UserServiceImp implements UserService{
 	@Override
 	public boolean deleteUser(UserBean user) {
 		return userDao.deleteUser(user);
+	}
+
+	@Override
+	public List<String> getUsers(String keyword) {
+		keyword = "%" + keyword + "%";
+		return userDao.getUsers(keyword);
 	}
 
 
