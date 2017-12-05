@@ -25,7 +25,7 @@ public interface NoteService {
 	
 	public int addLabel(Label label,int userId);
 	
-	public boolean deleteLabel(int id,int userId);
+	public boolean deleteLabel(Label label,UserBean user);
 	
 	public boolean updateLabel(Label label,int userId);
 	

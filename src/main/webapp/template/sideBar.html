@@ -17,9 +17,9 @@
         
       </md-list-item>
          <p> Labels</p>
-         		<div ng-repeat="labels in user.labels">
+         		<div ng-repeat="label in user.labels">
   				<md-icon md-svg-src="images/label.svg" ></md-icon>
-  					{{labels.name}}	
+  					{{label.name}}	<md-icon class="labelIcon" md-svg-src="images/clear.svg" ng-click="deleteLabel(label)"></md-icon>
   				</div>
   		<md-list-item ng-click="createLabel($event,user)">
   				

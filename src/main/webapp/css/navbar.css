@@ -17,4 +17,44 @@
 	 padding-right: 227px;
     padding-top: 15px;
 }
+
+
+md-icon.labelIcon
+{
+	min-height: 15px;
+}
+
+.collabIcon{
+	border-radius: 50px;
+    width: 27px;
+    padding: 10px;
+}
    
+.labellist{
+	margin-left: 5px;
+}
+
+
+.chip {
+	width: 55px;
+    display: inline-block;
+    padding: 0 10px;
+    height: 25px;
+    font-size: 14px;
+    line-height: 25px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+}
+
+.closebtn {
+    padding-left: 5px;
+    color: #888;
+    font-weight: bold;
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.closebtn:hover {
+    color: #000;
+}

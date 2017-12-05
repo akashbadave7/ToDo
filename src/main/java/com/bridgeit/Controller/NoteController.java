@@ -268,10 +268,10 @@ public class NoteController {
 	{
 		String token = request.getHeader("Authorization");
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		List<Label> labels=null;
+		Set<Label> labels=null;
 		if(user!=null)
 		{
-			 labels=(List<Label>) user.getLabels();
+			 labels= user.getLabels();
 		}
 		else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
@@ -280,6 +280,22 @@ public class NoteController {
 	
 	}
 	
+	@RequestMapping(value="/deleteLabel",method=RequestMethod.POST)
+	public ResponseEntity<Object> detelelabel (@RequestBody Label label,HttpServletRequest request)
+	{
+		System.out.println("Inside delete label");
+		String token = request.getHeader("Authorization");
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		ResponseMessage responseMessage = new ResponseMessage();
+		if(user!=null){
+			noteService.deleteLabel(label, user);
+		}else{
+			responseMessage.setResponseMessage("User Not exits");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+		}
+		return null;
+		
+	}
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value=Exception.class)
 	public String handlerException(Exception e){

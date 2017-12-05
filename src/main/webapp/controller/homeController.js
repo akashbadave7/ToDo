@@ -170,7 +170,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     	$scope.note.body = document.getElementById("body").innerHTML;
     	
 		var url='addNote';
-		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="")
+		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="" && $scope.imageSrc == "")
 			{
 				$scope.displayDiv=false;
 			}
@@ -178,6 +178,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			
 			$scope.note.pinned=pinStatus;
 			$scope.note.color=$scope.color;
+			$scope.note.image=$scope.addImg;
+			$scope.imageSrc = "";
+			$scope.addImg="";
 		/*	if(date!=null)
 				{
 				$scope.note.color=date;
@@ -498,6 +501,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		
 		$scope.openImageUploader = function(type) {
 			$scope.type = type;
+			console.log(type);
 			$('#image').trigger('click');
 			return false;
 		}
@@ -518,10 +522,16 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		        $scope.stepsModel.push(e.target.result);
 		        console.log(e.target.result);
 		        var imageSrc=e.target.result;
-		        $scope.type.image=imageSrc;
-		        console.log(e.target.result);
-		        console.log(imageSrc);
-		        update($scope.type);
+		        if($scope.type ==='input')
+	        	{
+		        	
+		        	$scope.addImg= imageSrc;
+	        	}else{
+	        		$scope.type.image=imageSrc;
+	        		console.log(e.target.result);
+	        		console.log(imageSrc);
+	        		update($scope.type);
+		        }
 		    });
 		};
 		
@@ -716,6 +726,31 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 					}
 				}
 				return false;
+			}
+			
+			/*==========================DELETE LABEL==============================*/
+			
+			$scope.deleteLabel=function(label){
+				var url = 'deleteLabel';
+				var deletelabel = noteService.label(url,'POST',label);
+				deletelabel.then(function(response){
+					console.log("Label deleted successfully");
+					$state.reload();
+				},function(response){
+					console.log("label deletion failed")
+				})
+			}
+			
+			/*==========================REMOVE LABEL==============================*/
+
+			$scope.removeLabel=function(note,label){
+				console.log("inside remove label");
+				var removeLabel = note.labels;
+				console.log("inside remove label"+removeLabel);
+				var indexOfLabel = removeLabel.indexOf(label);
+				removeLabel.splice(indexOfLabel, 1);
+				update(note);
+				
 			}
 	      
     getNotes();

@@ -64,9 +64,9 @@ public class NoteServiceImp implements NoteService{
 	}
 
 	@Override
-	public boolean deleteLabel(int id, int userId) {
+	public boolean deleteLabel(Label label, UserBean user) {
 		// TODO Auto-generated method stub
-		return noteDao.deleteLabel(id,userId);
+		return noteDao.deleteLabel(label,user);
 	}
 
 

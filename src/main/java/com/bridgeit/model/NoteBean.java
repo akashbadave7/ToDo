@@ -66,15 +66,8 @@ public class NoteBean {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "collaborator", joinColumns = @JoinColumn(name = "note_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private Set<UserBean> collaborators = new HashSet<>(); 
+	private Set<UserBean> collaborator = new HashSet<>(); 
 	
-	public Set<UserBean> getCollaborator() {
-		return collaborators;
-	}
-
-	public void setCollaborator(Set<UserBean> collaborators) {
-		this.collaborators = collaborators;
-	}
 
 	@ManyToOne
 	@JsonIgnore
@@ -190,14 +183,6 @@ public class NoteBean {
 		this.reminder = reminder;
 	}
 
-	public Set<UserBean> getCollaborators() {
-		return collaborators;
-	}
-
-	public void setCollaborators(Set<UserBean> collaborators) {
-		this.collaborators = collaborators;
-	}
-
 	public Set<Label> getLabels() {
 		return labels;
 	}
@@ -211,8 +196,18 @@ public class NoteBean {
 		return "NoteBean [noteId=" + noteId + ", title=" + title + ", body=" + body + ", color=" + color
 				+ ", createDate=" + createDate + ", lastUpdated=" + lastUpdated + ", isArchive=" + isArchive
 				+ ", isPinned=" + isPinned + ", isTrash=" + isTrash + ", reminder=" + reminder + ", image=" + image
-				+ ", collaborators=" + collaborators + ", user=" + user + ", labels=" + labels + "]";
+				+ ", collaborator=" + collaborator + ", user=" + user + ", labels=" + labels + "]";
 	}
+
+	public Set<UserBean> getCollaborator() {
+		return collaborator;
+	}
+
+	public void setCollaborator(Set<UserBean> collaborator) {
+		this.collaborator = collaborator;
+	}
+	
+	
 	
 	
 }

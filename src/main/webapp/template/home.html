@@ -1,4 +1,4 @@
-
+        
 <div>
 	<tool-bar></tool-bar>
 </div>
@@ -9,7 +9,7 @@
 	  
  	  <div flex="10"></div>
  	 	 <div flex="80">
- <md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible; margin-top: 5em;">
+ 	<md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible; margin-top: 5em;">
     <div flex="33">
       <md-card style="background-color: {{color}}">
      
@@ -21,6 +21,9 @@
            				<img ng-if="pinStatus" ng-src="images/pin.svg"  style="width:21px;float:right" />
            			</span>
            			</div>
+           	<div ><!-- ng-show="imageSrc.length" -->
+      				<img ng-if="addImg!=''" ng-src="{{addImg}}" style=" max-width: 100%;"/>
+    		</div>
            	<div>
             	<div contenteditable="true"  ng-bind-html="note.title" ng-show="displayDiv" id="title" placeholder="Title"  style="width:500px;border:0px;outline:0px"></div>
             </div>
@@ -60,7 +63,7 @@
 	        				<!-- <md-icon md-svg-src="images/color.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button> -->
 	        			
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Add Image" ng-click="openImageUploader(note)">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Add Image" ng-click="openImageUploader('input')">
 	
 						<input ng-show="false" id="image" type='file' ng-model-instant ng-model="file" onchange="angular.element(this).scope().imageUpload(this)" />
   						
@@ -123,8 +126,17 @@
 	       
 	     	 	<p class="lastDive" ng-if="note.reminder" style="font-size:10px;padding:8px">Reminder : {{note.reminder | date:'medium'}}
 		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
-	         <span ng-repeat="label in note.labels">{{label.name}}</span>
 	        
+	        <div ng-if="note.labels">
+  				 <span  ng-repeat="label in note.labels" class="chip">{{label.name}}
+  				<span class="closebtn" ng-click="removeLabel(note,label)">&times;</span></span>
+			</div>
+	        
+	     	<div>
+	     		<span ng-repeat="user in note.collaborator">
+	   				  <img ng-src="{{user.picUrl}}" class="collabIcon">
+	     		</span>
+	     	</div>
 	        <md-card-actions>
 	        <md-panel>
 		      <p id="lastDiv" class="icon">
@@ -232,7 +244,17 @@
 		           
 		          </md-card-title-text>
 	        </md-card-title>
-	      <span ng-repeat="label in note.labels">{{label.name}}</span>
+	        
+	        <div ng-if="note.labels">
+  				 <span ng-repeat="label in note.labels" class="chip">{{label.name}}
+  				<span class="closebtn" ng-click="removeLabel(note,label)">&times;</span></span>
+			</div>
+	      
+	      	<div>
+	     		<span ng-repeat="user in note.collaborator">
+	   				  <img ng-src="{{user.picUrl}}" class="collabIcon">
+	     		</span>
+	     	</div>
 	     	<p class="lastDive" ng-if="note.reminder" style="font-size:10px;padding:8px">Reminder : {{note.reminder | date:'medium'}}
 		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
 	        <md-card-actions>
