@@ -4,9 +4,10 @@ angular.module('tb-color-picker', [])
             '<img class="selected-color" src="images/color.svg" style="border:none;">' +
             '<div class="color-palette">'+
                 '<div ng-repeat="option in vm.options"'+
-                'ng-style="{\'background-color\': option}"'+
-                'ng-class="{\'palette-selected-color\': option == vm.color, \'transparent-color\': option == \'transparent\'}"'+
-                'ng-click="vm.changeColor(option)"></div>'+
+                'ng-style="{\'background-color\': option.color}"'+
+                'ng-class="{\'palette-selected-color\': option.color == note.color, \'transparent-color\': option.color == \'transparent\'}"'+
+                'ng-click="vm.changeColor(option)">'+'<md-tooltip class="tool" md-direction="bottom">{{option.name}}</md-tooltip>'+'</div>'+
+                
             '</div>'+
         '</div>');
     }])
@@ -28,10 +29,10 @@ angular.module('tb-color-picker', [])
             var vm = this;
             
             vm.changeColor = function (option) {
-                if(vm.color != option) {
+                if(vm.color != option.color) {
                     var old = vm.color;
-                    vm.color = option;
-                    vm.onColorChanged({newColor: option, oldColor: old});
+                    vm.color = option.color;
+                    vm.onColorChanged({newColor: option.color, oldColor: old});
                 }
             }
 

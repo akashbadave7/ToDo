@@ -58,3 +58,24 @@ md-icon.labelIcon
 .closebtn:hover {
     color: #000;
 }
+
+.cardImage {
+	width: 100%;
+}
+
+
+.card{
+	position: relative;
+}
+.pin{
+	width:22px;
+	right: 0;
+	position: absolute;	
+	padding: 0;
+}
+
+.removeImage {
+	position: absolute;
+    top: 20em;
+    right: -2em;
+}

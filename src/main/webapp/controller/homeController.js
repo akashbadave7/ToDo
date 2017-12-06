@@ -4,6 +4,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 							,$filter,$interval,$state,Upload, $base64,$q) {
    
 	
+	$scope.closeAddNote=function(){
+		$scope.displayDiv=false;
+	}
 	
 	/*//////////////////////////////=====LIST/GRID VIEW======///////////////////////////// */
 	
@@ -21,19 +24,23 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	$scope.displayView=function(type){
 		
 		if(type=='list'){
+			
 			$scope.view='90';
 			$scope.width='100%';
-			$scope.list=false
-			$scope.grid=true
+			$scope.list=false;
+			$scope.grid=true;
+			getNotes();
 			localStorage.setItem('view','list');
 		}else{
+			
 			$scope.view='30';
 			$scope.width='260px';
 			$scope.grid=false;
 			$scope.list=true;
+			getNotes();
 			localStorage.setItem('view','grid');
 		}
-			
+		
 	}
 	
 	
@@ -86,9 +93,20 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	/*//////////////////////////////=====COLOR======///////////////////////////// */
 
 	
-	$scope.colors = [ '#fff', '#ff8a80', '#ffd180', '#ffff8d',
-		'#ccff90', '#a7ffeb', '#80d8ff', '#82b1ff',
-		'#b388ff', '#f8bbd0', '#d7ccc8', '#cfd8dc' ];
+	$scope.colors = [ 
+		 {	color:'#fff',name : 'White'},
+		 {	color:'#ff8a80',name : 'Red'},
+		 {	color:'#ffd180',name : 'Orange'},
+		 {	color:'#ffff8d',name : 'Yellow'},
+		 {	color:'#ccff90',name : 'Green'},
+		 {	color:'#a7ffeb',name : 'Teal'},
+		 {	color:'#80d8ff',name : 'Blue'},
+		 {	color:'#82b1ff',name : 'Dark Blue'},
+		 {	color:'#b388ff',name : 'Purple'},
+		 {	color:'#f8bbd0',name : 'Pink'},
+		 {	color:'#d7ccc8',name : 'Brown'},
+		 {	color:'#cfd8dc',name : 'Grey'}
+		 ];
 	
 	 
 	 
@@ -170,7 +188,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     	$scope.note.body = document.getElementById("body").innerHTML;
     	
 		var url='addNote';
-		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="" && $scope.imageSrc == "")
+		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="")
 			{
 				$scope.displayDiv=false;
 			}
@@ -338,6 +356,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				a.then(function(response){
 					console.log(response.data);
 					$scope.owner=response.data;
+					
 				},function(response){
 					$scope.error=response.data;
 				})
@@ -348,6 +367,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				var b = noteService.service(url,'POST',dataToPass);
 				b.then(function(response){
 					$scope.users=response.data;
+					
 				},function(response){
 					$scope.error=response.data;
 				});
@@ -402,7 +422,14 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		console.log(note);
 	    $mdDialog.show({
 	      locals: {
-	        dataToPass: note  // Pass the note data into dialog box
+	        dataToPass: note,
+	        pin:$scope.pinned,
+	        changeImage : $scope.openImageUploader,
+	        deletelebel : $scope.removeLabel,
+	        collaborator : $scope.collaborators,
+	        colors :$scope.colors,
+	        changeColor :$scope.colorChanged
+	        
 	      },
 	      templateUrl: 'template/UpdateNote.html',
 	      parent: angular.element(document.body),
@@ -413,9 +440,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    });
 	}
 	
-	function mdDialogController($scope, $state, dataToPass) {
+	function mdDialogController($scope, $state, dataToPass,pin,changeImage,deletelebel,collaborator,colors,changeColor) {
 	      $scope.mdDialogData = dataToPass;
-
+	      $scope.colors = colors;
 	      /*=========================Remove Image=============*/
 	      
 	      $scope.removeImage=function(mdDialogData){
@@ -431,23 +458,24 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    	dataToPass.title = document.getElementById("updatedNoteTitle").innerHTML;
 	    	
 	    	dataToPass.body = document.getElementById("updatedNoteBody").innerHTML;
-	    	/*var updatedNoteTitle = document.getElementById("updatedNoteTitle").innerHTML;
 	    	
-	    	var updatedNoteBody = document.getElementById("updatedNoteBody").innerHTML;*/
 	    	
 	    	update(dataToPass);
 			$mdDialog.hide();
 
-	  		/*var notes = noteService.service(url,'POST',dataToPass)
-	  		
-	  		notes.then(function(response){
-				console.log("success")
-			},function(response){
-				$scope.error=response.data.responseMessage;
-			});*/
 	      }
-	
-	   }
+	      	
+	     /* $scope.pinned=function(note,status){
+	    	  note.pinned= status;
+	    	  update(note);
+	      }*/
+	      
+	      	$scope.pinned=pin;
+	  		$scope.openImageUploader = changeImage;
+	  		$scope.removeLabel = deletelebel;
+	  		$scope.collaborators = collaborator;
+	  		$scope.colorChanged=changeColor;
+	}
 	
 	/*//////////////////////////////=====DELETE REMINDER======///////////////////////////// */
 
@@ -465,6 +493,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		user.then(function(response) {
 			
 			var User=response.data;
+			console.log("user label");
 			console.log(User.labels);
 			console.log("label"+response.data.labels);
 			
@@ -526,7 +555,11 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	        	{
 		        	
 		        	$scope.addImg= imageSrc;
-	        	}else{
+	        	}else if($scope.type ==='update'){
+	        		$scope.changeIamge.image=imageSrc;
+	        		update($scope.changeIamge);
+	        	}
+		        else{
 	        		$scope.type.image=imageSrc;
 	        		console.log(e.target.result);
 	        		console.log(imageSrc);
@@ -623,8 +656,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		/*//////////////////////////////=====REFRESH OWNER ======///////////////////////////// */
 	
 		$scope.refresh=function(){
-			$state.reload()
-
+			$state.reload();
 		}
 		
 		

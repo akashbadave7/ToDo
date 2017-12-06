@@ -1,4 +1,4 @@
-        
+<!--  <div ng-click="closeAddNote()">    -->   
 <div>
 	<tool-bar></tool-bar>
 </div>
@@ -96,20 +96,21 @@
       </md-card>
    </div>
  </md-content> 
+ 	 <p ng-click="closeAddNote()">
 		<h4 >Pinned</h4>
 	
 	<div layout="row" layout-wrap flex>
 		<!--=========================Pinned=============================================  -->
-	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="{{view}}" >
-	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex>	
-		 <div aria-label="unpin note">
-      		<md-button style="min-width:15px;float:right" >
+	<div ng-repeat="note in notes" ng-if="note.pinned" id="note-scope" flex="{{view}}">
+	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex class="card">	
+		
+      		<md-button style="min-width:15px" class="pin"  aria-label="unpin note" >
       		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
-     				<img ng-src="images/pin.svg" style="width:21px;float:right" ng-click="pinned(note,false)"/>
+     				<img ng-src="images/pin.svg" ng-click="pinned(note,false)"/>
      		</md-button>
          				
-        </div>
-	        <div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
+        
+	        <div ng-if="note.image"><img ng-click="updateEditedNote(note,$event)" ng-src={{note.image}}  class="cardImage"></div>
 	        <md-card-title>
 		          <md-card-title-text class="update">
 		         
@@ -118,7 +119,7 @@
 		            </div>
 		            <br>
 		            <div>
-		            	<div ng-bind-html="note.body" ng-show="true" id="body" style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body" style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
 		            </div>
 		           
 		          </md-card-title-text>
@@ -171,8 +172,8 @@
 	        			</md-button>
 	        			 -->
 	        			<md-button style="min-width:25px;padding:5px" aria-label="Add image" ng-click="openImageUploader(note)">
-	        			<md-tooltip md-direction="bottom">Add image</md-tooltip>
-	        				<md-icon md-svg-src="images/uploadImg.svg" style="width:21px;"></md-icon>
+	        				<md-tooltip md-direction="bottom">Add image</md-tooltip>
+	        			<md-icon md-svg-src="images/uploadImg.svg" style="width:21px;"></md-icon>
 	        				
 	        			</md-button>
 	        			
@@ -223,14 +224,14 @@
 		<!--=========================OTHER=============================================  -->
 	<div ng-repeat="note in notes | filter:{pinned:false,trash:false,archive:false} "  id="note-scope" flex="{{view}}" >
 	
-	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex>
-	        <span>
-		         	 	<md-button style="min-width:15px;float:right" arial-label="Pin note">
-		          		<md-tooltip md-direction="bottom">Pin note</md-tooltip>
-           				<md-icon id="lastDiv" md-svg-src="images/unpin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"></md-icon>
-           				</md-button>
-           	</span>
-	       	<div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
+	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex class="card">
+  
+      	 	<md-button style="min-width:15px;" class="pin" arial-label="Pin note">
+       		<md-tooltip md-direction="bottom">Pin note</md-tooltip>
+      				<md-icon id="lastDiv" md-svg-src="images/unpin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"></md-icon>
+      				</md-button>
+          
+	       	<div ng-if="note.image"><img ng-click="updateEditedNote(note,$event)" ng-src={{note.image}} class="cardImage"></div>
 	        <md-card-title>
 		          <md-card-title-text class="update">
 		         	 
@@ -239,7 +240,7 @@
 		            </div>
 		            <br>
 		            <div>
-		            	<div ng-bind-html="note.body" ng-show="true" id="body"   style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body"   style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
 		            </div>
 		           
 		          </md-card-title-text>
@@ -327,7 +328,7 @@
 			            </md-menu>
 		          </p>
 	        	</md-card-actions>
-     			 </md-card>
+     		</md-card>
          	</div>
 			</div>
 	
@@ -336,4 +337,4 @@
     <div flex="5">
   </div>
 </div>
- 
+ </p>

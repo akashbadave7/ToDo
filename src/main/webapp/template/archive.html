@@ -14,15 +14,15 @@
 	
 	<div ng-repeat="note in notes" ng-if="note.archive" id="note-scope" flex={{view}}>
 
-	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex>
+	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex class="card">
 	<div aria-label="unpin note">
-   		<md-button style="min-width:15px;float:right" >
+   		<md-button style="min-width:15px" class="pin">
    		<md-tooltip md-direction="bottom">Unpin note</md-tooltip>
   				<img id="pinIcon" ng-src="images/pin.svg" style="width:21px;float:right" ng-click="pinned(note,true)"/>
   				</md-button>
   				
   			</div>
-	          <div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
+	          <div ng-if="note.image"><img updateEditedNote(note,$event)" ng-src={{note.image}} class="cardImage"></div>
 	        <md-card-title>
 		          <md-card-title-text class="update">
 		          
@@ -32,7 +32,7 @@
 		            </div>
 		            <br>
 		            <div>
-		            	<div ng-bind-html="note.body" ng-show="true" id="body"   style="width:70px;border:0px;outline:0px">{{note.body}}</div>
+		            	<div updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body"   style="width:70px;border:0px;outline:0px">{{note.body}}</div>
 		            </div>
 		           
 		          </md-card-title-text>
