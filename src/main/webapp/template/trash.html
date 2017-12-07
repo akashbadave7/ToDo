@@ -15,15 +15,15 @@
 	<div ng-repeat="note in notes" ng-if="note.trash" id="note-scope" flex="{{view}}">
 
 	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex class="card">
-	         <div ng-if="note.image"><img ng-src={{note.image}} class="cardImage"></div>
+	         <div ng-if="note.image"><img ng-click="updateEditedNote(note,$event)" ng-src={{note.image}} class="cardImage"></div>
 	        <md-card-title>
 		          <md-card-title-text>
 		           	<div>
-		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="word-break: break-all;border:0px;outline:0px">{{note.title}}</div>
 		            </div>
 		            <br>
 		            <div>
-		            	<div ng-bind-html="note.body" ng-show="true" id="body"   style="width:70px;border:0px;outline:0px">{{note.body}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body"   style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
 		            </div>
 		           
 		          </md-card-title-text>

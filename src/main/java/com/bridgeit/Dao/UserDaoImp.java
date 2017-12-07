@@ -173,8 +173,15 @@ public class UserDaoImp implements UserDao{
 			
 		}
 		return null;
-		
-		
+	}
+	
+	public List<UserBean> getUserList() {
+		Session session=factory.openSession();
+
+       Criteria criteria = session.createCriteria(UserBean.class);
+       criteria.setProjection(Projections.property("email"));
+        List<UserBean> userList=criteria.list();
+		return userList;
 	}
 	
 }

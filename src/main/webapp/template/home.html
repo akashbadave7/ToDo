@@ -3,24 +3,25 @@
 	<tool-bar></tool-bar>
 </div>
 
-<div layout="row">
+<div layout="row" layout-gt-xs>
 
  	<side-bar></side-bar>	
 	  
  	  <div flex="10"></div>
- 	 	 <div flex="80">
- 	<md-content  layout-align="center center" flex="66" layout-gt-xs	style="overflow: visible; margin-top: 5em;">
-    <div flex="33">
-      <md-card style="background-color: {{color}}">
-     
-        <md-card-title>
+ <div flex="80">
+ 	
+ 	<md-content layout="row" layout-align="start center"  flex  style="overflow: visible; margin-top: 5em;">
+    <div flex="15"></div>
+    
+      <md-card flex style="background-color: {{color}}">
+        
+     	   <div style="cursor: pointer;" layout-padding aria-label="unpin note" layout="row" layout-align="end center" ng-click="pinUnpin()">
+           				<img ng-if="!pinStatus" ng-src="images/unpin.svg"  ng-show="displayDiv"/>
+           				<img ng-if="pinStatus" ng-src="images/pin.svg"  />
+           	</div>
+      <md-card-title>
           <md-card-title-text>
-            <div aria-label="unpin note">
-            <span style="cursor: pointer" ng-click="pinUnpin()">
-           				<img ng-if="!pinStatus" ng-src="images/unpin.svg"  ng-show="displayDiv" style="width:21px;float:right" />
-           				<img ng-if="pinStatus" ng-src="images/pin.svg"  style="width:21px;float:right" />
-           			</span>
-           			</div>
+        
            	<div ><!-- ng-show="imageSrc.length" -->
       				<img ng-if="addImg!=''" ng-src="{{addImg}}" style=" max-width: 100%;"/>
     		</div>
@@ -94,8 +95,9 @@
 		          </md-panel>
 	        	</md-card-actions>
       </md-card>
-   </div>
+   <div flex="15"></div>
  </md-content> 
+ 
  	 <p ng-click="closeAddNote()">
 		<h4 >Pinned</h4>
 	
@@ -337,4 +339,4 @@
     <div flex="5">
   </div>
 </div>
- </p>
+

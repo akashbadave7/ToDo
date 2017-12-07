@@ -4,10 +4,21 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 							,$filter,$interval,$state,Upload, $base64,$q) {
    
 	
-	$scope.closeAddNote=function(){
+/*	$scope.closeAddNote=function(){
 		$scope.displayDiv=false;
 	}
 	
+	$scope.openSideNav = function(){
+		  dash.openInfo = !dash.openInfo;
+		  $mdSidenav('left').open();
+		};
+
+		$scope.closeSideNav = function(){
+		  $mdSidenav('left').close().then(function(){
+			  $scope.openInfo = !$scope.openInfo;
+		  });
+		};
+	*/
 	/*//////////////////////////////=====LIST/GRID VIEW======///////////////////////////// */
 	
 	
@@ -34,7 +45,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		}else{
 			
 			$scope.view='30';
-			$scope.width='260px';
+			$scope.width='280px';
 			$scope.grid=false;
 			$scope.list=true;
 			getNotes();
@@ -188,7 +199,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     	$scope.note.body = document.getElementById("body").innerHTML;
     	
 		var url='addNote';
-		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="")
+		if((document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="") || imageSrc!="" )
 			{
 				$scope.displayDiv=false;
 			}
@@ -354,7 +365,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				var url = 'getOwner';
 				var a= noteService.service(url,'POST',dataToPass)
 				a.then(function(response){
-					console.log(response.data);
+					
 					$scope.owner=response.data;
 					
 				},function(response){
@@ -367,23 +378,14 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				var b = noteService.service(url,'POST',dataToPass);
 				b.then(function(response){
 					$scope.users=response.data;
-					
+					console.log($scope.users);
 				},function(response){
 					$scope.error=response.data;
 				});
 			}
 			
 			$scope.removeCollaborator=function(user){
-				/*console.log('remove collab='+user.name);
-				var url='removeCollaborator';
-				console.log(note);
-				var a = noteService.collaborate(url,'POST',dataToPass,user.email);
-				a.then(function(response){
-					console.log('removed successfully');
-					getNotes();
-				},function(response){
-					console.log("remove collabe fail");
-				});*/
+	
 				
 				var array = dataToPass.collaborator;
 				console.log(dataToPass);
@@ -411,7 +413,87 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    	})
 	    	
 	      }
-	
+			
+			
+			 /*var userList=[];
+				var getUsers=function(){
+					var url = "getUserList";
+					var users = noteService.service(url, 'GET');
+					users.then(function(response) {
+						console.log("ALL USER");
+						console.log(response.data);
+						userList=response.data;
+					}, function(response) {
+
+					});
+			    }
+				getUsers();
+				
+				var self = this;
+
+			    self.simulateQuery = false;
+			    self.isDisabled    = false;
+
+			    self.repos         = loadAll();
+			    console.log("respo "+self.repos);
+			    console.log("respo "+userList);
+			    self.querySearch   = $scope.querySearch;
+			    
+			    self.selectedItemChange = $scope.selectedItemChange;
+			    self.searchTextChange   = $scope.searchTextChange;
+
+			    // ******************************
+			    // Internal methods
+			    // ******************************
+
+			    *//**
+			     * Search for repos... use $timeout to simulate
+			     * remote dataservice call.
+			     *//*
+			    $scope.querySearch=function(query) {
+			    	
+			      var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+			          deferred;
+			      if (self.simulateQuery) {
+			        deferred = $q.defer();
+			        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+			        return deferred.promise;
+			      } else {
+			        return results;
+			      }
+			    }
+
+			    $scope.searchTextChange=function(text) {
+			      console.log('Text changed to ' + text);
+			    }
+
+			    $scope.selectedItemChange=function(item) {
+			    	
+			    }
+
+			    *//**
+			     * Build `components` list of key/value pairs
+			     *//*
+			    function loadAll() {
+			        var repos = userList;
+		
+			        return repos.map( function (repo) {
+			          repo.value = repo.name.toLowerCase();
+			          return repo;
+			        });
+			      }
+			    *//**
+			     * Create filter function for a query string
+			     *//*
+			    function createFilterFor(query) {
+			      var lowercaseQuery = angular.lowercase(query);
+
+			      return function filterFn(item) {
+			        return (item.value.indexOf(lowercaseQuery) === 0);
+			      };
+
+			    }*/
+			  
 	   }
 	
 	/*//////////////////////////////=====UPDATE NOTE======///////////////////////////// */
@@ -428,7 +510,13 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	        deletelebel : $scope.removeLabel,
 	        collaborator : $scope.collaborators,
 	        colors :$scope.colors,
-	        changeColor :$scope.colorChanged
+	        changeColor :$scope.colorChanged,
+	        modelDeleteNote :$scope.deleteNote,
+	        modelMakeCopy : $scope.makeCopy,
+	        user : $scope.user,
+	        labelAdd:$scope.labelToggle,
+	        checkbox:$scope.checkboxCheck,
+	        mdArchive:$scope.archive
 	        
 	      },
 	      templateUrl: 'template/UpdateNote.html',
@@ -440,9 +528,13 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    });
 	}
 	
-	function mdDialogController($scope, $state, dataToPass,pin,changeImage,deletelebel,collaborator,colors,changeColor) {
-	      $scope.mdDialogData = dataToPass;
+	function mdDialogController($scope, $state, dataToPass,pin,changeImage,deletelebel,collaborator,colors,changeColor,modelDeleteNote,modelMakeCopy,user
+			,labelAdd,checkbox,mdArchive) {
+	      
+		
+		  $scope.mdDialogData = dataToPass;
 	      $scope.colors = colors;
+	      $scope.user=user;
 	      /*=========================Remove Image=============*/
 	      
 	      $scope.removeImage=function(mdDialogData){
@@ -475,6 +567,13 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	  		$scope.removeLabel = deletelebel;
 	  		$scope.collaborators = collaborator;
 	  		$scope.colorChanged=changeColor;
+	  		$scope.deleteNote=modelDeleteNote;
+	  		$scope.makeCopy=modelMakeCopy;
+	        $scope.labelToggle=labelAdd
+	        $scope.checkboxCheck=checkbox;
+	        $scope.archive=mdArchive; 
+	        
+	       
 	}
 	
 	/*//////////////////////////////=====DELETE REMINDER======///////////////////////////// */
@@ -498,7 +597,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			console.log("label"+response.data.labels);
 			
 			$scope.user=User;
-			
+			console.log($scope.user);
 		}, function(response) {
 
 		});
@@ -510,6 +609,24 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			
 			var url='update';
 			var notes = noteService.service(url,'POST',note);
+			notes.then(function(response) {
+
+				getNotes();
+
+			}, function(response) {
+
+				getNotes();
+				console.log(response);
+				$scope.error = response.data.responseMessage;
+
+			});
+		}
+		
+		
+			var updateUser=function(user){
+			
+			var url='updateUser';
+			var notes = noteService.service(url,'POST',user);
 			notes.then(function(response) {
 
 				getNotes();
@@ -553,8 +670,10 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		        var imageSrc=e.target.result;
 		        if($scope.type ==='input')
 	        	{
-		        	
 		        	$scope.addImg= imageSrc;
+	        	}else if($scope.type ==='user'){
+	        		$scope.user.picUrl=imageSrc;
+	        		updateUser($scope.user);
 	        	}else if($scope.type ==='update'){
 	        		$scope.changeIamge.image=imageSrc;
 	        		update($scope.changeIamge);
@@ -568,33 +687,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		    });
 		};
 		
-		
 
-	/*	$scope.$on("fileProgress", function(e, progress) {
-			$scope.progress = progress.loaded / progress.total;
-		});
-		
-		$scope.type = {};
-		$scope.type.image = ''; */
-		
-		 /*$scope.$watch('file', function () {
-			 console.log($scope.file);
-		        if ($scope.file != null) {
-		        	 $scope.files = [$scope.file]; 
-			            console.log($scope.files);
-			            console.log("note"+' '+$scope.type.image);
-			            $scope.type.image=$scope.file;
-			            
-		        	if ($scope.type === 'input') {
-						$scope.addimg = $scope.files;
-					} else{
-						console.log("upload:"+imageSrc);
-					}
-		        }
-		    });*/
-		
-		 
-	    
 		
 		/*//////////////////////////////=====Make a Copy of  note======///////////////////////////// */
 		
@@ -784,10 +877,53 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				update(note);
 				
 			}
-	      
+			
+			/*============================GET ALL USER=========================================*/
+			/*var userList=[];
+			var getUsers=function(){
+				var url = "getUserList";
+				var users = noteService.service(url, 'GET');
+				users.then(function(response) {
+					console.log("ALL USER");
+					console.log(response.data);
+					userList=response.data;
+				}, function(response) {
+
+				});
+		    }
+			
+			
+			 $scope.localSearch=function(searchText){
+					var userArray=[];
+					j=-1;
+				//	console.log('ssdsdas'+search);
+					for(var i=0;i<userList.length;i++)
+						{
+							if(searchText==userList[i]){
+								j++;
+								userArray[j]=userList[i];
+							}
+						}
+					console.log(userArray);
+					return arr;
+				 }
+			 
+			 $scope.searchUser = function(searchText) {
+		          var userArray = [];
+		          var j = -1;
+		          for(var i=0; i<userList.length; i++) {
+		            if(userList[i] == searchText)  {
+		              // console.log(res.data.notes[i]);
+		              ++j;
+		              userArray[j] = userList[i];
+		            }
+		          }
+		          $scope.searchResultNotes = userArray;
+		      }*/
+			
     getNotes();
     getUser();
-    
+ 
     
     
   

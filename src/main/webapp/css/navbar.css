@@ -79,3 +79,8 @@ md-icon.labelIcon
     top: 20em;
     right: -2em;
 }
+	
+	md-dialog{
+		overflow: visible;
+	}
+

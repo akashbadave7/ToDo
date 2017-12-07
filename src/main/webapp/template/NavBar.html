@@ -19,27 +19,8 @@
 		    md-items=""
 		    placeholder="Search Note"
 		    ui-sref="search">
-		    <!-- <md-item-template>
-		          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.title}}</span>
-		        </md-item-template> -->
-		
-		    </md-autocomplete>
-		<!-- <md-autocomplete flex="50"
-          md-selected-item="selectedItem"
-          md-search-text-change="searchTextChange(searchText)"
-          md-search-text="searchText"
-          md-items="item in querySearch(searchText)"
-          md-min-length="1"
-          placeholder="Search."
-          md-menu-class="autocomplete-custom-template">
-
-        <md-item-template>
-          <span class="item-title">
-            <span> {{item.name}} </span>
-          </span>
-        </md-item-template>
-
-      </md-autocomplete> -->
+		    
+      		</md-autocomplete> 
 	  </div>
 	
 	    </div>
@@ -88,6 +69,7 @@
 	  				 <md-divider></md-divider>
 	  				 
 	  				 	<!--  <md-button class="md-raised">Change Profile</md-button> -->
+	  				 	<md-button class="md-raised " ng-click="openImageUploader('user')">Change Profile</md-button>
 	  					<md-button class="md-raised md-primary" ng-click="logout()">Logout</md-button>
 	  				
   				</div>

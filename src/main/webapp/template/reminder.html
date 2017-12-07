@@ -21,17 +21,17 @@
 				</md-button>
 				
 			</div>
-	 <div ng-if="note.image"><img updateEditedNote(note,$event)" ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
+	 <div ng-if="note.image"><img ng-click="updateEditedNote(note,$event)" ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
 	        <md-card-title>
 		          <md-card-title-text class="update">
 		          
 		          
 		           	<div>
-		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="word-break: break-all;border:0px;outline:0px">{{note.title}}</div>
 		            </div>
 		            <br>
 		            <div>
-		            	<div updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body"   style="width:70px;border:0px;outline:0px">{{note.body}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body"   style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
 		            </div>
 		           
 		          </md-card-title-text>
