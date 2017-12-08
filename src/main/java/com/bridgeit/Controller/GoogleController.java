@@ -3,10 +3,11 @@ package com.bridgeit.Controller;
 import java.io.IOException;
 import java.util.UUID;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,11 @@ public class GoogleController {
 	UserService userService;
 	
 	@Autowired
-	TokenGenerator tokenService;
+	TokenGenerator tokenGenerator;
+	
+	private static final Logger logger = Logger.getLogger("loginFile");
+	private static final Logger logger1 = Logger.getRootLogger(); 
+	
 	@RequestMapping(value = "/loginWithGoogle")
 	public void googleConnection(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println(" in googleLoginURL  ");
@@ -38,7 +43,7 @@ public class GoogleController {
 	}
 	
 	@RequestMapping(value="/connectgoogle")
-	public void redirectFromGoogle(HttpServletRequest request, HttpServletResponse response)
+	public void redirectFromGoogle(HttpServletRequest request, HttpServletResponse response,HttpSession session)
 			throws IOException {
 		String sessionState = (String) request.getSession().getAttribute("STATE");
 		String googlestate = request.getParameter("state");
@@ -72,24 +77,27 @@ public class GoogleController {
 			user.setEmail(profile.get("emails").get(0).get("value").asText());
 			user.setPassword("");
 			user.setPicUrl(profile.get("image").get("url").asText());
-			userService.saveUserData(user);
+			int i=userService.saveUserData(user);
+			if(i>0) {
+				String token = tokenGenerator.createJWT(user.getId(),user.getEmail());
+    			response.setHeader("Authorization", token);
+    			session.setAttribute("token", token);
+    			response.sendRedirect("http://localhost:8080/ToDo/#!/dummy");
+			}
+			else
+			{
+				response.sendRedirect("http://localhost:8080/ToDo/#!/login");
+			}
 		}
-		
-		System.out.println(" user is not new to our db ,it is there in our db");
-		/*tokens = tokenManupulation.generateTokens();
-		user.setProfile(profile.get("image").get("url").asText());
-		userService.updateUserProfile(user);
-		
-		tokens.setGetUser(user);
-		tokenService.saveToken(tokens);*/
-		user = userService.getUserByEmail(user.getEmail());
-		String token = tokenService.createJWT(user.getId(), user.getEmail());
-		response.setHeader("Authentication", token);
-		System.out.println(token);
-		Cookie accCookie = new Cookie("socialaccessToken", token);
-		response.addCookie(accCookie);
-		
-		response.sendRedirect("http://localhost:8080/ToDo/#!/home");
+		else {
+			logger.warn("User data already exists in database");
+			System.out.println(" user is not new to our db ,it is there in our db");
+			String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
+			user.setPicUrl(profile.get("image").get("url").asText());
+			userService.updateUser(user);
+			session.setAttribute("token", token);
+			response.sendRedirect("http://localhost:8080/ToDo/#!/dummy");
+		}
 	}
 	
 }

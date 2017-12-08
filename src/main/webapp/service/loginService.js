@@ -7,11 +7,11 @@ var ToDo = angular.module('ToDo')
 ToDo.factory('loginService',function($http,$location){
 	var login ={};
 	
-	login.loginUser = function(user){
-	
+	login.service = function(method,url,user){
+	console.log(user);
 		return $http({
-			method :"POST",
-			url :'login',
+			method :method,
+			url :url,
 			data : user
 		});
 	}

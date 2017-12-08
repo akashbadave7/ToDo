@@ -47,29 +47,12 @@
          
          <md-input-container>
         <label>Email</label>
-        	<input ng-model="search" type="text" style="width: 26em;">
+        	<input ng-model="search" type="text" style="width: 26em;" list="dataList">
+        	<datalist id="dataList">
+        	<option ng-repeat="email in userList">{{email}}</option>
+        	</datalist>
      	 </md-input-container>
-	<!-- 	    <md-autocomplete
-          ng-disabled="isDisabled"
-          md-no-cache="noCache"
-          md-selected-item="selectedItem"
-          md-search-text-change="searchTextChange(searchText)"
-          md-search-text="searchText"
-          md-selected-item-change="selectedItemChange(item)"
-          md-items="item in querySearch(searchText)"
-          md-item-text="item.display"
-          md-min-length="0"
-          placeholder="Pick an Angular repository"
-          md-menu-class="autocomplete-custom-template">
-        <md-item-template>
-          <span class="item-title">
-            <md-icon md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
-            <span> {{item.display}} </span>
-          </span>
-       
-        </md-item-template>
-      </md-autocomplete> -->
-      	
+		
       </div>
 	   			<md-divider></md-divider>
 	   			<md-panel>

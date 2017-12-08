@@ -159,7 +159,7 @@
 			              </md-menu-content>
 			       </md-menu>
 	        			
-	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="collaborators(note,$event)">
+	        			<md-button style="min-width:25px;padding:5px" aria-label="Share" ng-click="collaborators(note,$event)" ng-init="getOwner(note)">
 	        			<md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" style="width:21px"></md-icon>
 	        			</md-button>
@@ -191,7 +191,10 @@
 			              </md-button>
 			              <md-menu-content>
 			                <md-menu-item>
-			                  <md-button class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                
+			                  <md-button ng-show="note.owner.email==user.email" class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                   <md-button ng-show="note.owner.email!=user.email" class="primary" ng-click="removeMySelf(note,user)">RemoveMySelf</md-button>
+			                
 			                </md-menu-item>
 			                <md-menu-item>
 			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
@@ -307,7 +310,8 @@
 			              </md-button>
 			             <md-menu-content>
 			                <md-menu-item>
-			                  <md-button class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                  <md-button ng-show="note.owner.email==user.email" class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                   <md-button ng-show="note.owner.email!=user.email" class="primary" ng-click="removeMySelf(note,user)">RemoveMySelf</md-button>
 			                </md-menu-item>
 			                <md-menu-item>
 			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>

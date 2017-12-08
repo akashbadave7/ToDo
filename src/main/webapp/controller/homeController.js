@@ -1,6 +1,6 @@
 var ToDo = angular.module('ToDo')
 
-ToDo.controller('homeController', function ($scope,fileReader,$location, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog,toastr
+ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$location, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog,toastr
 							,$filter,$interval,$state,Upload, $base64,$q) {
    
 	
@@ -169,6 +169,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     		 for (var i = 0; i < response.data.length; i++) {
     			 search.push(response.data[i]);
     		 }
+    		
     		/*==============REMINDER CHECKER====================*/
       		   $interval(function () {
     		       
@@ -199,7 +200,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     	$scope.note.body = document.getElementById("body").innerHTML;
     	
 		var url='addNote';
-		if((document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="") || imageSrc!="" )
+		if((document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML==""))
 			{
 				$scope.displayDiv=false;
 			}
@@ -348,7 +349,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		console.log("inside collaboarator");
 		$mdDialog.show({
 			locals:{
-				dataToPass : note
+				dataToPass : note,
+				ownerDetails :$scope.owner,
+				listOfUser: $scope.userList
 			},
 			templateUrl : 'template/collaborator.html',
 			 parent: angular.element(document.body),
@@ -359,19 +362,10 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		});
 	}
 	
-	function opencollaboratorsModel($scope, $state, dataToPass) {
+	function opencollaboratorsModel($scope, $state, dataToPass,ownerDetails,listOfUser) {
+				$scope.owner = ownerDetails;
+				$scope.userList=listOfUser;
 			
-			var getOwner=function(){
-				var url = 'getOwner';
-				var a= noteService.service(url,'POST',dataToPass)
-				a.then(function(response){
-					
-					$scope.owner=response.data;
-					
-				},function(response){
-					$scope.error=response.data;
-				})
-			}
 		
 			var getCollabUser=function(){
 				var url = 'getCollabUser';
@@ -396,7 +390,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			}
 			
 			
-			getOwner();
+			/*getOwner();*/
 			getCollabUser();
 			
 			$scope.getUserEmail = function() {
@@ -412,89 +406,23 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    		console.log("Error");
 	    	})
 	    	
-	      }
-			
-			
-			 /*var userList=[];
-				var getUsers=function(){
-					var url = "getUserList";
-					var users = noteService.service(url, 'GET');
-					users.then(function(response) {
-						console.log("ALL USER");
-						console.log(response.data);
-						userList=response.data;
-					}, function(response) {
-
-					});
-			    }
-				getUsers();
-				
-				var self = this;
-
-			    self.simulateQuery = false;
-			    self.isDisabled    = false;
-
-			    self.repos         = loadAll();
-			    console.log("respo "+self.repos);
-			    console.log("respo "+userList);
-			    self.querySearch   = $scope.querySearch;
-			    
-			    self.selectedItemChange = $scope.selectedItemChange;
-			    self.searchTextChange   = $scope.searchTextChange;
-
-			    // ******************************
-			    // Internal methods
-			    // ******************************
-
-			    *//**
-			     * Search for repos... use $timeout to simulate
-			     * remote dataservice call.
-			     *//*
-			    $scope.querySearch=function(query) {
-			    	
-			      var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
-			          deferred;
-			      if (self.simulateQuery) {
-			        deferred = $q.defer();
-			        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
-			        return deferred.promise;
-			      } else {
-			        return results;
-			      }
-			    }
-
-			    $scope.searchTextChange=function(text) {
-			      console.log('Text changed to ' + text);
-			    }
-
-			    $scope.selectedItemChange=function(item) {
-			    	
-			    }
-
-			    *//**
-			     * Build `components` list of key/value pairs
-			     *//*
-			    function loadAll() {
-			        var repos = userList;
-		
-			        return repos.map( function (repo) {
-			          repo.value = repo.name.toLowerCase();
-			          return repo;
-			        });
-			      }
-			    *//**
-			     * Create filter function for a query string
-			     *//*
-			    function createFilterFor(query) {
-			      var lowercaseQuery = angular.lowercase(query);
-
-			      return function filterFn(item) {
-			        return (item.value.indexOf(lowercaseQuery) === 0);
-			      };
-
-			    }*/
-			  
+	      }  
 	   }
+	
+	/*//////////////////////////////=====GET OWNER NOTE======///////////////////////////// */
+
+
+	$scope.getOwner=function(note){
+		var url = 'getOwner';
+		var a= noteService.service(url,'POST',note)
+		a.then(function(response){
+			
+			$scope.owner=response.data;
+			note.owner=response.data;
+		},function(response){
+			$scope.error=response.data;
+		})
+	}
 	
 	/*//////////////////////////////=====UPDATE NOTE======///////////////////////////// */
 
@@ -877,53 +805,100 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				update(note);
 				
 			}
+			/*//////////////////////////////=====Remove my self======///////////////////////////// */
+
+			$scope.removeMySelf=function(note,user){
+				
+				var array = note.collaborator;
+				console.log(note);
+				var index = array.indexOf(user);
+				array.splice(index, 1);
+				update(note);
+				
+			}
+			
 			
 			/*============================GET ALL USER=========================================*/
-			/*var userList=[];
+			
 			var getUsers=function(){
 				var url = "getUserList";
 				var users = noteService.service(url, 'GET');
 				users.then(function(response) {
 					console.log("ALL USER");
-					console.log(response.data);
-					userList=response.data;
+					
+					$scope.userList=response.data;
+					console.log($scope.userList);
 				}, function(response) {
 
 				});
 		    }
 			
 			
-			 $scope.localSearch=function(searchText){
-					var userArray=[];
-					j=-1;
-				//	console.log('ssdsdas'+search);
-					for(var i=0;i<userList.length;i++)
-						{
-							if(searchText==userList[i]){
-								j++;
-								userArray[j]=userList[i];
-							}
-						}
-					console.log(userArray);
-					return arr;
-				 }
-			 
-			 $scope.searchUser = function(searchText) {
-		          var userArray = [];
-		          var j = -1;
-		          for(var i=0; i<userList.length; i++) {
-		            if(userList[i] == searchText)  {
-		              // console.log(res.data.notes[i]);
-		              ++j;
-		              userArray[j] = userList[i];
-		            }
-		          }
-		          $scope.searchResultNotes = userArray;
-		      }*/
+			/*
+			$scope.simulateQuery = false;
+			$scope.isDisabled    = false;
+
+		    // list of `state` value/display objects
+			$scope.states        = $scope.loadAll;
+			$scope.querySearch   = $scope.querySearch;
+			$scope.selectedItemChange = $scope.selectedItemChange;
+			$scope.searchTextChange   = $scope.searchTextChange;
+
+			$scope.newState = newState;
+
+		    function newState(state) {
+		      alert("Sorry! You'll need to create a Constitution for " + state + " first!");
+		    }
+
+		   $scope.querySearch =function(query) {
+		        var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
+		            deferred;
+		        if (self.simulateQuery) {
+		          deferred = $q.defer();
+		          $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+		          return deferred.promise;
+		        } else {
+		          return results;
+		        }
+		      }
+
+		   $scope.searchTextChange=function(text) {
+		        console.log('Text changed to ' + text);
+		      }
+
+		   $scope.selectedItemChange=function(item) {
+		       console.log('Item changed to ' + item);
+		      }
+		      
+		      
+		   $scope.loadAll=function() {
+			   
+			   for (var i=0;i<$scope.userList.length;i++)
+				   {
+				   var allStates = "'"+$scope.userList[i]+",";
+				   }
+
+		          return allStates.split(/, +/g).map( function (state) {
+		            return {
+		              value: state.toLowerCase(),
+		              display: state
+		            };
+		          });
+		        }
+		      
+		      function createFilterFor(query) {
+		          var lowercaseQuery = angular.lowercase(query);
+
+		          return function filterFn(state) {
+		            return (state.value.indexOf(lowercaseQuery) === 0);
+		          };
+
+		        }*/
+				
 			
     getNotes();
     getUser();
- 
+    getUsers();
     
     
   
