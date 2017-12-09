@@ -4,6 +4,41 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
 							,$filter,$interval,$state,Upload, $base64,$q) {
    
 	
+	var urls=[];
+	$scope.checkUlr=function(note){
+		var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
+		var url  = note.body.match(urlPattern);
+		var link=[];
+		if(note.size==undefined){
+			note.size=0;
+			note.url=[];
+			note.link=[];
+		}
+		if((url!=null || url!=undefined) && note.size<url.length){
+			for (var i=0;i<url.length;i++){
+				note.url=url[i];
+				var getUrlData=noteService.getUrl(url[i]);
+				getUrlData.then(function(response){
+					
+					var responseData = response.data;
+					console.log("resposeData",responseData);
+					/*if(responseData.title.length>35){
+						responseData.title=responseData.title.substr(0,35)+'...';
+					}*/
+					link[note.size]={
+							urlTitle:responseData.urlTitle, 
+							urlImage:responseData.ulrImage,
+							urlDomain:responseData.urlDomain
+							}
+					note.link[note.size]=link[note.size];
+					note.size=note.size+1;
+					
+				},function(response){
+					
+				})
+			}
+		}
+	}
 /*	$scope.closeAddNote=function(){
 		$scope.displayDiv=false;
 	}
@@ -84,7 +119,7 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
   		
 	  		var notes = noteService.service(url,'POST',note);
 	  		notes.then(function(response) {
-	  			console.log(respose.data);
+	  			
 	  			getNotes();
 	
 	  		}, function(response) {
@@ -196,9 +231,10 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
     	$scope.note = {};
     	/*var token = localStorage.getItem('token');*/
     	$scope.note.title = document.getElementById("title").innerHTML;
-    	
+    
     	$scope.note.body = document.getElementById("body").innerHTML;
     	
+    	console.log($scope.note.body )
 		var url='addNote';
 		if((document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML==""))
 			{
@@ -576,7 +612,9 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
 		$scope.openImageUploader = function(type) {
 			$scope.type = type;
 			console.log(type);
+			/*$timeout(function(){*/
 			$('#image').trigger('click');
+			/*},0);*/
 			return false;
 		}
 		

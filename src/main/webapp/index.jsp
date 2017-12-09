@@ -13,6 +13,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script
 	src="bower_components/angular/angular.js"></script>
 
@@ -23,14 +24,16 @@
 
 		
 		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
 		
 	  <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
       <script src = "bower_components/angular-animate/angular-animate.min.js"></script>
       <script src = "bower_components/angular-aria/angular-aria.min.js"></script>
       <script src = "bower_components/angular-messages/angular-messages.min.js"></script>
       <script src="bower_components/angular-material/angular-material.min.js"></script> 
-      
+     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+      <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+     
       <link rel="stylesheet" href="bower_components/ui-navbar/css/ui-navbar.css">
       <script src="bower_components/ui-navbar/src/navbar.js"></script>
      
@@ -63,6 +66,7 @@
 <!-- <link rel="stylesheet" type="text/css" href="css/signup.css"> -->
 <link rel="stylesheet" type="text/css" href="css/card.css">
 <link rel="stylesheet" type="text/css" href="css/navbar.css">
+<link rel="stylesheet" type="text/css" href="css/urlLink.css">
 
 <!-- JAVASCRIPT -->
 <script type="text/javascript" src="script/app.js"></script>

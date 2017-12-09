@@ -1,5 +1,6 @@
 package com.bridgeit.Controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgeit.Service.NoteService;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.VerifyToken;
+import com.bridgeit.Util.GetLinkInformation;
+import com.bridgeit.Util.pojo.UrlData;
 import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.ResponseMessage;
@@ -263,6 +266,8 @@ public class NoteController {
 		
 	}
 	
+	/*----------------------------------GET LABEL-------------------------------*/
+
 	@RequestMapping(value = "/getAllLabel", method = RequestMethod.POST)
 	public ResponseEntity<Object> getAllLabel(HttpServletRequest request)
 	{
@@ -280,6 +285,9 @@ public class NoteController {
 	
 	}
 	
+	/*----------------------------------DELETE LABEL-------------------------------*/
+
+	
 	@RequestMapping(value="/deleteLabel",method=RequestMethod.POST)
 	public ResponseEntity<Object> detelelabel (@RequestBody Label label,HttpServletRequest request)
 	{
@@ -296,6 +304,24 @@ public class NoteController {
 		return null;
 		
 	}
+	
+	
+	/*----------------------------------URL INFO-------------------------------*/
+
+	@RequestMapping(value = "/geturl", method = RequestMethod.POST)
+	public ResponseEntity<?> getUrlData(HttpServletRequest request){
+		String urlmap=request.getHeader("url");
+		GetLinkInformation link=new GetLinkInformation();
+		UrlData urlData=null;
+		try {
+			urlData = link.getMetaData(urlmap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(urlData);
+	}
+	
+	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value=Exception.class)
 	public String handlerException(Exception e){
