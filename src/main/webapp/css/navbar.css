@@ -54,6 +54,7 @@ md-icon.labelIcon
     float: right;
     font-size: 20px;
     cursor: pointer;
+   
 }
 
 .closebtn:hover {
@@ -84,4 +85,16 @@ md-icon.labelIcon
 	md-dialog{
 		overflow: visible;
 	}
+	
+.gotoicon{
+	position: relative;
+    right: -120px;
+	
+}
+
+.linkStyle{
+	    font-size: 13px;
+    font-style: italic;
+    font-family: -webkit-body;
+}
 

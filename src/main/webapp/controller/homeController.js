@@ -16,7 +16,7 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
 		}
 		if((url!=null || url!=undefined) && note.size<url.length){
 			for (var i=0;i<url.length;i++){
-				note.url=url[i];
+				note.url[i]=url[i];
 				var getUrlData=noteService.getUrl(url[i]);
 				getUrlData.then(function(response){
 					
@@ -28,7 +28,8 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
 					link[note.size]={
 							urlTitle:responseData.urlTitle, 
 							urlImage:responseData.ulrImage,
-							urlDomain:responseData.urlDomain
+							urlDomain:responseData.urlDomain,
+							url:note.url[note.size]
 							}
 					note.link[note.size]=link[note.size];
 					note.size=note.size+1;
@@ -38,6 +39,7 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
 				})
 			}
 		}
+		
 	}
 /*	$scope.closeAddNote=function(){
 		$scope.displayDiv=false;
@@ -239,6 +241,8 @@ ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$locati
 		if((document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML==""))
 			{
 				$scope.displayDiv=false;
+				$scope.imageSrc = "";
+				$scope.addImg="";
 			}
 		else{
 			

@@ -13,9 +13,9 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="bower_components/angular/angular.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script
-	src="bower_components/angular/angular.js"></script>
 
 <script type="text/javascript"
 	src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>

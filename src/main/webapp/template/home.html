@@ -133,11 +133,11 @@
 	        </md-card-title>
 	       
 	     	 	<p class="lastDive" ng-if="note.reminder" style="font-size:10px;padding:8px">Reminder : {{note.reminder | date:'medium'}}
-		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
-	        
+<!-- 		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p> -->
+	        	 <span class="closebtn" ng-click="deleteRemender(note)">&times;</span></span>
 	        <div ng-if="note.labels">
   				 <span  ng-repeat="label in note.labels" class="chip">{{label.name}}
-  				<span class="closebtn" ng-click="removeLabel(note,label)">&times;</span></span>
+  				 <span class="closebtn" style="display: none;" ng-click="removeLabel(note,label)">&times;</span></span>
 			</div>
 	        
 	     	<div>
@@ -223,21 +223,31 @@
 		          </p>
 		          </md-panel>
 	        	</md-card-actions>
-     		<md-divider>
-     			<div layout="column"  layout-padding ng-style="{ 'background-color': '#fff'}" flex ng-init="checkUlr(note)">
-     				<div layout="row" flex ng-repeat="link in note.link">
-     					<img class"linkimage" ng-src="{{link.urlImage}}" width="50px" height="50px"/>
-     					<span layout-padding>{{link.urlTitle}}<br>
-     					{{link.urlDomain}}</span>
-     				</div>
-     			</div>
-     		</md-divider>
      		
+     		<md-divider></md-divider>
+     		
+
+     			<span layout="column" ng-show="note.link.length"  ng-style="{ 'background-color': '#fff'}" flex ng-init="checkUlr(note)">
+     				<md-card flex>
+     				<div layout="row" flex ng-repeat="link in note.link" >
+     					
+     					<img class"linkimage" ng-src="{{link.urlImage}}" width="50px" height="50px"/>
+     					<span class="linkStyle">{{link.urlTitle}}<br>
+     					
+     						{{link.urlDomain}}
+     						<a href="{{link.url}}" target="_blank"><img class="gotoicon" ng-src="images/gotolink.svg" style="width:21px"></a>
+     					</span>
+     					 
+     				</div>
+     				<md-divider></md-divider>
+     				</md-card>
+     			</span>
+     
+     			
      		
      	
      		</md-card>
          </div>
-      
 	</div>
 	
 		<h4>Others</h4>
@@ -325,9 +335,10 @@
 			                <img ng-src="images/menu.svg" style="width:21px">
 			              </md-button>
 			             <md-menu-content>
+			             
 			                <md-menu-item>
-			                  <md-button ng-show="note.owner.email==user.email" class="primary" ng-click="deleteNote(note)">Delete</md-button>
-			                   <md-button ng-show="note.owner.email!=user.email" class="primary" ng-click="removeMySelf(note,user)">RemoveMySelf</md-button>
+			                  <md-button ng-show="note.owner.email!=user.email" class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                   <md-button ng-show="note.owner.email==user.email" class="primary" ng-click="removeMySelf(note,user)">RemoveMySelf</md-button>
 			                </md-menu-item>
 			                <md-menu-item>
 			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>
@@ -350,6 +361,25 @@
 			            </md-menu>
 		          </p>
 	        	</md-card-actions>
+	        	
+	        		<md-divider></md-divider>
+     		
+
+     			<span layout="column" ng-show="note.link.length"  ng-style="{ 'background-color': '#fff'}" flex ng-init="checkUlr(note)">
+     				<md-card flex>
+     				<div layout="row" flex ng-repeat="link in note.link" >
+     					
+     					<img class"linkimage" ng-src="{{link.urlImage}}" width="50px" height="50px"/>
+     					<span class="linkStyle">{{link.urlTitle}}<br>
+     					
+     						{{link.urlDomain}}
+     		<a href="{{link.url}}" target="_blank"><img class="gotoicon" ng-src="images/gotolink.svg" style="width:21px"></a>
+     					</span>
+     				</div>
+     				<md-divider></md-divider>
+     				</md-card>
+     			</span>
+     
      		</md-card>
          	</div>
 			</div>

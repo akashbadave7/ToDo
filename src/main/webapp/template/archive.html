@@ -2,15 +2,15 @@
 	<div>
 		<tool-bar></tool-bar>
 	</div>
-<div layout="row">	
-	<div flex="15">
+<div layout="row">
+	
 			 <side-bar></side-bar>
-	</div>
+	
 
 	<div flex="10" style="margin-left: 50px;"></div>
 
 
-	<div flex="75" layout="row" layout-wrap style=" margin-top: 5em;">
+	<div flex="80" layout="row" layout-wrap style=" margin-top: 5em;">
 	
 	<div ng-repeat="note in notes" ng-if="note.archive" id="note-scope" flex={{view}}>
 
@@ -80,8 +80,10 @@
 			              </md-button>
 			           <md-menu-content>
 			                <md-menu-item>
-			                <md-button ng-show="note.owner.email==user.email" class="primary" ng-click="deleteNote(note)">Delete</md-button>
-			                   <md-button ng-show="note.owner.email!=user.email" class="primary" ng-click="removeMySelf(note)">RemoveMySelf</md-button>
+			                
+			                  <md-button ng-show="note.owner.email==user.email" class="primary" ng-click="deleteNote(note)">Delete</md-button>
+			                   <md-button ng-show="note.owner.email!=user.email" class="primary" ng-click="removeMySelf(note,user)">RemoveMySelf</md-button>
+			                
 			                </md-menu-item>
 			                <md-menu-item>
 			                  <md-button class="primary" ng-click="makeCopy(note)">Make Copy</md-button>

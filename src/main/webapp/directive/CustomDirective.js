@@ -47,13 +47,13 @@ ToDo.factory("fileReader", function($q, $log) {
 		};
 	};
 
-	var onError = function(reader, deferred, scope) {
+	/*var onError = function(reader, deferred, scope) {
 		return function() {
 			scope.$apply(function() {
 				deferred.reject(reader.result);
 			});
 		};
-	};
+	};*/
 
 	var onProgress = function(reader, scope) {
 		return function(event) {
