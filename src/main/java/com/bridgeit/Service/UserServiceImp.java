@@ -48,6 +48,12 @@ public class UserServiceImp implements UserService{
 		keyword = "%" + keyword + "%";
 		return userDao.getUsers(keyword);
 	}
+	
+	
+	public List<UserBean> getUserList() {
+		// TODO Auto-generated method stub
+		return userDao.getUserList();
+	}
 
 
 }

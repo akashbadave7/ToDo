@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.Service.MailImp;
+import com.bridgeit.Service.Producer;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
-
+import com.bridgeit.model.Email;
+import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 
 @RestController
@@ -32,11 +34,14 @@ public class ForgotPasswordController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	Producer producer;
 	 //-------------------Forgot password--------------------------------------------------------
 
 		@RequestMapping(value="/forgotpassword",method=RequestMethod.POST)
-		public ResponseEntity<String> forgot(@RequestBody UserBean user,HttpServletResponse response,HttpServletRequest request/*,UriComponentsBuilder ucBuilder*/)
+		public ResponseEntity<ResponseMessage> forgot(@RequestBody UserBean user,HttpServletResponse response,HttpServletRequest request/*,UriComponentsBuilder ucBuilder*/)
 		{
+			ResponseMessage responseMessage = new ResponseMessage();
 			String email = user.getEmail();
 			user = userService.getUserByEmail(email);
 			if(user!=null)
@@ -45,25 +50,32 @@ public class ForgotPasswordController {
 				String url = String.valueOf(request.getRequestURL());
 				System.out.println(url);
 				
-				url = "http://localhost:8080/ToDo/resetpass/"+token;
+				url = "http://localhost:8080/ToDo/#!/resetPassword/"+token;
 				System.out.println(request.getScheme()+" "+request.getAuthType()+" "+request.getContentType()+" "+request.getContextPath()+" "+request.getLocalPort());
 				System.out.println(url);
-				sendMail.sendMail(email, url,"Reset password link");
-				response.setHeader("Location", "http://localhost:8080/ToDo");
-				/*HttpHeaders headers = new HttpHeaders();
-	            headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
-	            return new ResponseEntity<String>("Inserted successfully",headers, HttpStatus.CREATED);*/
-				return ResponseEntity.ok().body("ok");
+				
+				
+				Email emailObject = new Email();
+				emailObject.setTo(email);
+				emailObject.setSubject("Reset password link");
+				emailObject.setBody(url);	
+				// Storing message in JMS queue
+    			producer.send(emailObject);
+
+    			responseMessage.setResponseMessage("Check your Email!");
+    			return ResponseEntity.ok(responseMessage);
 				
 			}else{
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not found");
+				responseMessage.setResponseMessage("User Does not exist");
+				return ResponseEntity.ok(responseMessage);
 			}
 		}
 		
 		
-		@RequestMapping(value="/resetpass/{token:.+}",method=RequestMethod.POST)
+		@RequestMapping(value="/resetPassword/{token:.+}",method=RequestMethod.POST)
 		public ResponseEntity resetpass(@PathVariable("token") String token,@RequestBody UserBean user)
 		{
+			ResponseMessage responseMessage = new ResponseMessage();
 			int id = verifyToken.parseJWT(token);
 			String newPassword = user.getPassword();
 			if(id!=0)
@@ -76,10 +88,12 @@ public class ForgotPasswordController {
 				user.setPassword(encoder.encode(newPassword));
 				/*user.setPassword(newPassword);*/
 				userService.updateUser(user);
-				return ResponseEntity.ok().body("Password reset succefull");
+				responseMessage.setResponseMessage("password changed");
+				return ResponseEntity.ok(responseMessage);
 			}
 			else{
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token or expire token");
+				responseMessage.setResponseMessage("Invalid token");
+				return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessage);
 			}
 		}
 

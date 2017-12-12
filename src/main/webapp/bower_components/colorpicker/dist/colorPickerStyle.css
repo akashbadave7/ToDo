@@ -18,7 +18,9 @@
     visibility: visible;
     opacity: 1;
 }
-
+.color-palette{
+	   margin-top: -135px;
+}
 .color-palette div.transparent-color {
     border-color: rgb(224,224,224);
 }

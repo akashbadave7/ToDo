@@ -1,10 +1,61 @@
 var ToDo = angular.module('ToDo')
 
-ToDo.controller('homeController', function ($scope,fileReader,$location, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog,toastr
+ToDo.controller('homeController', function ($rootScope,$scope,fileReader,$location, $timeout, $mdSidenav,noteService,$mdDialog,mdcDateTimeDialog,toastr
 							,$filter,$interval,$state,Upload, $base64,$q) {
    
 	
+	var urls=[];
+	$scope.checkUlr=function(note){
+		var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
+		var url  = note.body.match(urlPattern);
+		var link=[];
+		if(note.size==undefined){
+			note.size=0;
+			note.url=[];
+			note.link=[];
+		}
+		if((url!=null || url!=undefined) && note.size<url.length){
+			for (var i=0;i<url.length;i++){
+				note.url[i]=url[i];
+				var getUrlData=noteService.getUrl(url[i]);
+				getUrlData.then(function(response){
+					
+					var responseData = response.data;
+					console.log("resposeData",responseData);
+					/*if(responseData.title.length>35){
+						responseData.title=responseData.title.substr(0,35)+'...';
+					}*/
+					link[note.size]={
+							urlTitle:responseData.urlTitle, 
+							urlImage:responseData.ulrImage,
+							urlDomain:responseData.urlDomain,
+							url:note.url[note.size]
+							}
+					note.link[note.size]=link[note.size];
+					note.size=note.size+1;
+					
+				},function(response){
+					
+				})
+			}
+		}
+		
+	}
+/*	$scope.closeAddNote=function(){
+		$scope.displayDiv=false;
+	}
 	
+	$scope.openSideNav = function(){
+		  dash.openInfo = !dash.openInfo;
+		  $mdSidenav('left').open();
+		};
+
+		$scope.closeSideNav = function(){
+		  $mdSidenav('left').close().then(function(){
+			  $scope.openInfo = !$scope.openInfo;
+		  });
+		};
+	*/
 	/*//////////////////////////////=====LIST/GRID VIEW======///////////////////////////// */
 	
 	
@@ -21,19 +72,23 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	$scope.displayView=function(type){
 		
 		if(type=='list'){
+			
 			$scope.view='90';
 			$scope.width='100%';
-			$scope.list=false
-			$scope.grid=true
+			$scope.list=false;
+			$scope.grid=true;
+			getNotes();
 			localStorage.setItem('view','list');
 		}else{
+			
 			$scope.view='30';
-			$scope.width='260px';
+			$scope.width='280px';
 			$scope.grid=false;
 			$scope.list=true;
+			getNotes();
 			localStorage.setItem('view','grid');
 		}
-			
+		
 	}
 	
 	
@@ -66,7 +121,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
   		
 	  		var notes = noteService.service(url,'POST',note);
 	  		notes.then(function(response) {
-	  			console.log(respose.data);
+	  			
 	  			getNotes();
 	
 	  		}, function(response) {
@@ -86,9 +141,20 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	/*//////////////////////////////=====COLOR======///////////////////////////// */
 
 	
-	$scope.colors = [ '#fff', '#ff8a80', '#ffd180', '#ffff8d',
-		'#ccff90', '#a7ffeb', '#80d8ff', '#82b1ff',
-		'#b388ff', '#f8bbd0', '#d7ccc8', '#cfd8dc' ];
+	$scope.colors = [ 
+		 {	color:'#fff',name : 'White'},
+		 {	color:'#ff8a80',name : 'Red'},
+		 {	color:'#ffd180',name : 'Orange'},
+		 {	color:'#ffff8d',name : 'Yellow'},
+		 {	color:'#ccff90',name : 'Green'},
+		 {	color:'#a7ffeb',name : 'Teal'},
+		 {	color:'#80d8ff',name : 'Blue'},
+		 {	color:'#82b1ff',name : 'Dark Blue'},
+		 {	color:'#b388ff',name : 'Purple'},
+		 {	color:'#f8bbd0',name : 'Pink'},
+		 {	color:'#d7ccc8',name : 'Brown'},
+		 {	color:'#cfd8dc',name : 'Grey'}
+		 ];
 	
 	 
 	 
@@ -140,6 +206,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     		 for (var i = 0; i < response.data.length; i++) {
     			 search.push(response.data[i]);
     		 }
+    		
     		/*==============REMINDER CHECKER====================*/
       		   $interval(function () {
     		       
@@ -166,18 +233,24 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
     	$scope.note = {};
     	/*var token = localStorage.getItem('token');*/
     	$scope.note.title = document.getElementById("title").innerHTML;
-    	
+    
     	$scope.note.body = document.getElementById("body").innerHTML;
     	
+    	console.log($scope.note.body )
 		var url='addNote';
-		if(document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML=="")
+		if((document.getElementById("title").innerHTML=="" && document.getElementById("body").innerHTML==""))
 			{
 				$scope.displayDiv=false;
+				$scope.imageSrc = "";
+				$scope.addImg="";
 			}
 		else{
 			
 			$scope.note.pinned=pinStatus;
 			$scope.note.color=$scope.color;
+			$scope.note.image=$scope.addImg;
+			$scope.imageSrc = "";
+			$scope.addImg="";
 		/*	if(date!=null)
 				{
 				$scope.note.color=date;
@@ -316,7 +389,9 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		console.log("inside collaboarator");
 		$mdDialog.show({
 			locals:{
-				dataToPass : note
+				dataToPass : note,
+				ownerDetails :$scope.owner,
+				listOfUser: $scope.userList
 			},
 			templateUrl : 'template/collaborator.html',
 			 parent: angular.element(document.body),
@@ -327,40 +402,24 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		});
 	}
 	
-	function opencollaboratorsModel($scope, $state, dataToPass) {
+	function opencollaboratorsModel($scope, $state, dataToPass,ownerDetails,listOfUser) {
+				$scope.owner = ownerDetails;
+				$scope.userList=listOfUser;
 			
-			var getOwner=function(){
-				var url = 'getOwner';
-				var a= noteService.service(url,'POST',dataToPass)
-				a.then(function(response){
-					console.log(response.data);
-					$scope.owner=response.data;
-				},function(response){
-					$scope.error=response.data;
-				})
-			}
 		
 			var getCollabUser=function(){
 				var url = 'getCollabUser';
 				var b = noteService.service(url,'POST',dataToPass);
 				b.then(function(response){
 					$scope.users=response.data;
+					console.log($scope.users);
 				},function(response){
 					$scope.error=response.data;
 				});
 			}
 			
 			$scope.removeCollaborator=function(user){
-				/*console.log('remove collab='+user.name);
-				var url='removeCollaborator';
-				console.log(note);
-				var a = noteService.collaborate(url,'POST',dataToPass,user.email);
-				a.then(function(response){
-					console.log('removed successfully');
-					getNotes();
-				},function(response){
-					console.log("remove collabe fail");
-				});*/
+	
 				
 				var array = dataToPass.collaborator;
 				console.log(dataToPass);
@@ -371,7 +430,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 			}
 			
 			
-			getOwner();
+			/*getOwner();*/
 			getCollabUser();
 			
 			$scope.getUserEmail = function() {
@@ -387,9 +446,23 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    		console.log("Error");
 	    	})
 	    	
-	      }
-	
+	      }  
 	   }
+	
+	/*//////////////////////////////=====GET OWNER NOTE======///////////////////////////// */
+
+
+	$scope.getOwner=function(note){
+		var url = 'getOwner';
+		var a= noteService.service(url,'POST',note)
+		a.then(function(response){
+			
+			$scope.owner=response.data;
+			note.owner=response.data;
+		},function(response){
+			$scope.error=response.data;
+		})
+	}
 	
 	/*//////////////////////////////=====UPDATE NOTE======///////////////////////////// */
 
@@ -399,7 +472,20 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		console.log(note);
 	    $mdDialog.show({
 	      locals: {
-	        dataToPass: note  // Pass the note data into dialog box
+	        dataToPass: note,
+	        pin:$scope.pinned,
+	        changeImage : $scope.openImageUploader,
+	        deletelebel : $scope.removeLabel,
+	        collaborator : $scope.collaborators,
+	        colors :$scope.colors,
+	        changeColor :$scope.colorChanged,
+	        modelDeleteNote :$scope.deleteNote,
+	        modelMakeCopy : $scope.makeCopy,
+	        user : $scope.user,
+	        labelAdd:$scope.labelToggle,
+	        checkbox:$scope.checkboxCheck,
+	        mdArchive:$scope.archive
+	        
 	      },
 	      templateUrl: 'template/UpdateNote.html',
 	      parent: angular.element(document.body),
@@ -410,9 +496,13 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    });
 	}
 	
-	function mdDialogController($scope, $state, dataToPass) {
-	      $scope.mdDialogData = dataToPass;
-
+	function mdDialogController($scope, $state, dataToPass,pin,changeImage,deletelebel,collaborator,colors,changeColor,modelDeleteNote,modelMakeCopy,user
+			,labelAdd,checkbox,mdArchive) {
+	      
+		
+		  $scope.mdDialogData = dataToPass;
+	      $scope.colors = colors;
+	      $scope.user=user;
 	      /*=========================Remove Image=============*/
 	      
 	      $scope.removeImage=function(mdDialogData){
@@ -428,23 +518,31 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 	    	dataToPass.title = document.getElementById("updatedNoteTitle").innerHTML;
 	    	
 	    	dataToPass.body = document.getElementById("updatedNoteBody").innerHTML;
-	    	/*var updatedNoteTitle = document.getElementById("updatedNoteTitle").innerHTML;
 	    	
-	    	var updatedNoteBody = document.getElementById("updatedNoteBody").innerHTML;*/
 	    	
 	    	update(dataToPass);
 			$mdDialog.hide();
 
-	  		/*var notes = noteService.service(url,'POST',dataToPass)
-	  		
-	  		notes.then(function(response){
-				console.log("success")
-			},function(response){
-				$scope.error=response.data.responseMessage;
-			});*/
 	      }
-	
-	   }
+	      	
+	     /* $scope.pinned=function(note,status){
+	    	  note.pinned= status;
+	    	  update(note);
+	      }*/
+	      
+	      	$scope.pinned=pin;
+	  		$scope.openImageUploader = changeImage;
+	  		$scope.removeLabel = deletelebel;
+	  		$scope.collaborators = collaborator;
+	  		$scope.colorChanged=changeColor;
+	  		$scope.deleteNote=modelDeleteNote;
+	  		$scope.makeCopy=modelMakeCopy;
+	        $scope.labelToggle=labelAdd
+	        $scope.checkboxCheck=checkbox;
+	        $scope.archive=mdArchive; 
+	        
+	       
+	}
 	
 	/*//////////////////////////////=====DELETE REMINDER======///////////////////////////// */
 
@@ -462,11 +560,12 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		user.then(function(response) {
 			
 			var User=response.data;
+			console.log("user label");
 			console.log(User.labels);
 			console.log("label"+response.data.labels);
 			
 			$scope.user=User;
-			
+			console.log($scope.user);
 		}, function(response) {
 
 		});
@@ -492,13 +591,34 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		}
 		
 		
+			var updateUser=function(user){
+			
+			var url='updateUser';
+			var notes = noteService.service(url,'POST',user);
+			notes.then(function(response) {
+
+				getNotes();
+
+			}, function(response) {
+
+				getNotes();
+				console.log(response);
+				$scope.error = response.data.responseMessage;
+
+			});
+		}
+		
+		
 		/*//////////////////////////////=====UPLOAD Image======///////////////////////////// */
 		
 		
 		
 		$scope.openImageUploader = function(type) {
 			$scope.type = type;
+			console.log(type);
+			/*$timeout(function(){*/
 			$('#image').trigger('click');
+			/*},0);*/
 			return false;
 		}
 		
@@ -518,40 +638,26 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		        $scope.stepsModel.push(e.target.result);
 		        console.log(e.target.result);
 		        var imageSrc=e.target.result;
-		        $scope.type.image=imageSrc;
-		        console.log(e.target.result);
-		        console.log(imageSrc);
-		        update($scope.type);
+		        if($scope.type ==='input')
+	        	{
+		        	$scope.addImg= imageSrc;
+	        	}else if($scope.type ==='user'){
+	        		$scope.user.picUrl=imageSrc;
+	        		updateUser($scope.user);
+	        	}else if($scope.type ==='update'){
+	        		$scope.changeIamge.image=imageSrc;
+	        		update($scope.changeIamge);
+	        	}
+		        else{
+	        		$scope.type.image=imageSrc;
+	        		console.log(e.target.result);
+	        		console.log(imageSrc);
+	        		update($scope.type);
+		        }
 		    });
 		};
 		
-		
 
-	/*	$scope.$on("fileProgress", function(e, progress) {
-			$scope.progress = progress.loaded / progress.total;
-		});
-		
-		$scope.type = {};
-		$scope.type.image = ''; */
-		
-		 /*$scope.$watch('file', function () {
-			 console.log($scope.file);
-		        if ($scope.file != null) {
-		        	 $scope.files = [$scope.file]; 
-			            console.log($scope.files);
-			            console.log("note"+' '+$scope.type.image);
-			            $scope.type.image=$scope.file;
-			            
-		        	if ($scope.type === 'input') {
-						$scope.addimg = $scope.files;
-					} else{
-						console.log("upload:"+imageSrc);
-					}
-		        }
-		    });*/
-		
-		 
-	    
 		
 		/*//////////////////////////////=====Make a Copy of  note======///////////////////////////// */
 		
@@ -613,8 +719,7 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 		/*//////////////////////////////=====REFRESH OWNER ======///////////////////////////// */
 	
 		$scope.refresh=function(){
-			$state.reload()
-
+			$state.reload();
 		}
 		
 		
@@ -717,10 +822,125 @@ ToDo.controller('homeController', function ($scope,fileReader,$location, $timeou
 				}
 				return false;
 			}
-	      
+			
+			/*==========================DELETE LABEL==============================*/
+			
+			$scope.deleteLabel=function(label){
+				var url = 'deleteLabel';
+				var deletelabel = noteService.label(url,'POST',label);
+				deletelabel.then(function(response){
+					console.log("Label deleted successfully");
+					$state.reload();
+				},function(response){
+					console.log("label deletion failed")
+				})
+			}
+			
+			/*==========================REMOVE LABEL==============================*/
+
+			$scope.removeLabel=function(note,label){
+				console.log("inside remove label");
+				var removeLabel = note.labels;
+				console.log("inside remove label"+removeLabel);
+				var indexOfLabel = removeLabel.indexOf(label);
+				removeLabel.splice(indexOfLabel, 1);
+				update(note);
+				
+			}
+			/*//////////////////////////////=====Remove my self======///////////////////////////// */
+
+			$scope.removeMySelf=function(note,user){
+				
+				var array = note.collaborator;
+				console.log(note);
+				var index = array.indexOf(user);
+				array.splice(index, 1);
+				update(note);
+				
+			}
+			
+			
+			/*============================GET ALL USER=========================================*/
+			
+			var getUsers=function(){
+				var url = "getUserList";
+				var users = noteService.service(url, 'GET');
+				users.then(function(response) {
+					console.log("ALL USER");
+					
+					$scope.userList=response.data;
+					console.log($scope.userList);
+				}, function(response) {
+
+				});
+		    }
+			
+			
+			/*
+			$scope.simulateQuery = false;
+			$scope.isDisabled    = false;
+
+		    // list of `state` value/display objects
+			$scope.states        = $scope.loadAll;
+			$scope.querySearch   = $scope.querySearch;
+			$scope.selectedItemChange = $scope.selectedItemChange;
+			$scope.searchTextChange   = $scope.searchTextChange;
+
+			$scope.newState = newState;
+
+		    function newState(state) {
+		      alert("Sorry! You'll need to create a Constitution for " + state + " first!");
+		    }
+
+		   $scope.querySearch =function(query) {
+		        var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
+		            deferred;
+		        if (self.simulateQuery) {
+		          deferred = $q.defer();
+		          $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+		          return deferred.promise;
+		        } else {
+		          return results;
+		        }
+		      }
+
+		   $scope.searchTextChange=function(text) {
+		        console.log('Text changed to ' + text);
+		      }
+
+		   $scope.selectedItemChange=function(item) {
+		       console.log('Item changed to ' + item);
+		      }
+		      
+		      
+		   $scope.loadAll=function() {
+			   
+			   for (var i=0;i<$scope.userList.length;i++)
+				   {
+				   var allStates = "'"+$scope.userList[i]+",";
+				   }
+
+		          return allStates.split(/, +/g).map( function (state) {
+		            return {
+		              value: state.toLowerCase(),
+		              display: state
+		            };
+		          });
+		        }
+		      
+		      function createFilterFor(query) {
+		          var lowercaseQuery = angular.lowercase(query);
+
+		          return function filterFn(state) {
+		            return (state.value.indexOf(lowercaseQuery) === 0);
+		          };
+
+		        }*/
+				
+			
     getNotes();
     getUser();
-    
+    getUsers();
     
     
   

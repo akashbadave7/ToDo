@@ -2,28 +2,28 @@
 <div>
 	<tool-bar></tool-bar>
 </div>
-<div layout="row">	
-	<div flex="15">
+<div layout="row" >
+	
 			 <side-bar></side-bar>
-	</div>
+	
 
-	<div flex="5"></div>
+	<div flex="10" style="margin-left: 50px;"></div>
 
 
-	<div flex="85" layout="row" layout-wrap style="margin-top: 5em">
+	<div flex="80" layout="row" layout-wrap style="margin-top: 5em">
 	
 	<div ng-repeat="note in notes" ng-if="note.trash" id="note-scope" flex="{{view}}">
 
-	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex>
-	         <div ng-if="note.image"><img ng-src={{note.image}} style="width: 95%;padding-left: 5px;"></div>
+	<md-card style="width:{{width}}" id="float" ng-style="{'background-color' : note.color}" flex class="card">
+	         <div ng-if="note.image"><img ng-click="updateEditedNote(note,$event)" ng-src={{note.image}} class="cardImage"></div>
 	        <md-card-title>
 		          <md-card-title-text>
 		           	<div>
-		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="width:50px;border:0px;outline:0px">{{note.title}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.title" ng-show="true" id="title"  style="word-break: break-all;border:0px;outline:0px">{{note.title}}</div>
 		            </div>
 		            <br>
 		            <div>
-		            	<div ng-bind-html="note.body" ng-show="true" id="body"   style="width:70px;border:0px;outline:0px">{{note.body}}</div>
+		            	<div ng-click="updateEditedNote(note,$event)" ng-bind-html="note.body" ng-show="true" id="body"   style="word-break: break-all;border:0px;outline:0px">{{note.body}}</div>
 		            </div>
 		           
 		          </md-card-title-text>

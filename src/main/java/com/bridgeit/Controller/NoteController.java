@@ -1,5 +1,6 @@
 package com.bridgeit.Controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgeit.Service.NoteService;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.VerifyToken;
+import com.bridgeit.Util.GetLinkInformation;
+import com.bridgeit.Util.pojo.UrlData;
 import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.ResponseMessage;
@@ -263,15 +266,17 @@ public class NoteController {
 		
 	}
 	
+	/*----------------------------------GET LABEL-------------------------------*/
+
 	@RequestMapping(value = "/getAllLabel", method = RequestMethod.POST)
 	public ResponseEntity<Object> getAllLabel(HttpServletRequest request)
 	{
 		String token = request.getHeader("Authorization");
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		List<Label> labels=null;
+		Set<Label> labels=null;
 		if(user!=null)
 		{
-			 labels=(List<Label>) user.getLabels();
+			 labels= user.getLabels();
 		}
 		else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
@@ -279,6 +284,43 @@ public class NoteController {
 		return ResponseEntity.ok(labels);
 	
 	}
+	
+	/*----------------------------------DELETE LABEL-------------------------------*/
+
+	
+	@RequestMapping(value="/deleteLabel",method=RequestMethod.POST)
+	public ResponseEntity<Object> detelelabel (@RequestBody Label label,HttpServletRequest request)
+	{
+		System.out.println("Inside delete label");
+		String token = request.getHeader("Authorization");
+		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		ResponseMessage responseMessage = new ResponseMessage();
+		if(user!=null){
+			noteService.deleteLabel(label, user);
+		}else{
+			responseMessage.setResponseMessage("User Not exits");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+		}
+		return null;
+		
+	}
+	
+	
+	/*----------------------------------URL INFO-------------------------------*/
+
+	@RequestMapping(value = "/geturl", method = RequestMethod.POST)
+	public ResponseEntity<?> getUrlData(HttpServletRequest request){
+		String urlmap=request.getHeader("url");
+		GetLinkInformation link=new GetLinkInformation();
+		UrlData urlData=null;
+		try {
+			urlData = link.getMetaData(urlmap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(urlData);
+	}
+	
 	
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value=Exception.class)

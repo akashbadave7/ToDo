@@ -1,5 +1,6 @@
 package com.bridgeit.Controller;
 
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 
@@ -81,7 +82,7 @@ public class UserController {
         if(valid.signUpValidator(user))
         {
         	// setting user activation false bydefault
-        	user.setActivated(false);
+        	user.setActivated(true);
         	if (userService.isUserExits(user.getEmail(),user.getMobilenumber())) 
         	{	
         		int i= userService.saveUserData(user);
@@ -233,6 +234,37 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<>(emails, HttpStatus.OK);
+	}
+	
+    //-------------------GET ALL USERS--------------------------------------------------------
+
+	@RequestMapping(value = "/getUserList", method = RequestMethod.GET)
+	public ResponseEntity<List<UserBean>> getUserList(HttpServletRequest request){
+		String token =request.getHeader("Authorization");
+		UserBean user=userService.getUserById(verifyToken.parseJWT(token));
+		if(user!=null){
+			List<UserBean> list=userService.getUserList();
+			return ResponseEntity.ok(list);
+		}else{
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+		}
+	}
+	
+	@RequestMapping(value="/updateUser",method=RequestMethod.POST)
+	public ResponseEntity<ResponseMessage> updateUser(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
+	{
+		 ResponseMessage responseMessage = new ResponseMessage();
+		 String token = request.getHeader("Authorization");
+		 UserBean userProfile = userService.getUserById(verifyToken.parseJWT(token));
+		 if(userProfile!=null){
+			userProfile.setPicUrl(user.getPicUrl());
+			userService.updateUser(userProfile);
+		 }else{
+			 responseMessage.setResponseMessage("User Not logged in");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessage);
+		 }
+		 responseMessage.setResponseMessage("Successfull");
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 	}
 	
 	

@@ -1,5 +1,6 @@
-<!-- md-sidenav --><nav class="md-sidenav-left" id="left" padding-top="20px" style=" margin-top:50px;width:10em">
-
+<nav class="md-sidenav-left" id="left" padding-top="20px" style=" margin-top:50px;width:10em">
+<!-- <md-sidenav class="md-sidenav-left" style=" margin-top:50px;width:10em" md-component-id="left" md-is-locked-open="dash.openInfo">
+ -->
     <md-list >
       <md-list-item ui-sref="home">
         
@@ -17,9 +18,9 @@
         
       </md-list-item>
          <p> Labels</p>
-         		<div ng-repeat="labels in user.labels">
+         		<div ng-repeat="label in user.labels">
   				<md-icon md-svg-src="images/label.svg" ></md-icon>
-  					{{labels.name}}	
+  					{{label.name}}	<md-icon class="labelIcon" md-svg-src="images/clear.svg" ng-click="deleteLabel(label)"></md-icon>
   				</div>
   		<md-list-item ng-click="createLabel($event,user)">
   				
@@ -34,5 +35,5 @@
       
     </md-list>
 
-<nav>
+</nav>
 <!-- </md-sidenav> -->

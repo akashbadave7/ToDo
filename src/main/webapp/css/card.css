@@ -118,5 +118,7 @@ md-content{
 }
 
 
-
+.tool{
+	z-index: 1000;
+}
 

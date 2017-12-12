@@ -139,7 +139,7 @@ public class NoteDaoImp implements NoteDao{
 		System.out.println(notes.to);*/
 		
 		Criteria criteria = session.createCriteria(NoteBean.class);
-		criteria.createAlias("collaborators", "c");
+		criteria.createAlias("collaborator", "c");
 		criteria.add(Restrictions.eq("c.id", userId));
 		List<NoteBean> collaboratedNotes = criteria.list();
 		
@@ -186,8 +186,26 @@ public class NoteDaoImp implements NoteDao{
 	/*-----------------------------DELETE LABEL------------------------------*/
 
 	@Override
-	public boolean deleteLabel(int id, int userId) {
-		// TODO Auto-generated method stub
+	public boolean deleteLabel(Label label, UserBean user) {
+		Session session = factory.openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(label );
+			for(NoteBean note : label.getNotes())
+			{
+				note.getLabels().remove(label);
+			}
+			label.getNotes().clear();
+			transaction.commit();
+		} catch (HibernateException e) {
+			if(transaction!=null){
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
 		return false;
 	}
 

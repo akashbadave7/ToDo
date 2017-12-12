@@ -47,11 +47,12 @@
          
          <md-input-container>
         <label>Email</label>
-        	<input ng-model="search" type="text">
+        	<input ng-model="search" type="text" style="width: 26em;" list="dataList">
+        	<datalist id="dataList">
+        	<option ng-repeat="email in userList">{{email}}</option>
+        	</datalist>
      	 </md-input-container>
-         
-          
-      	
+		
       </div>
 	   			<md-divider></md-divider>
 	   			<md-panel>

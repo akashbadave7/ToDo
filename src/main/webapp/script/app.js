@@ -1,4 +1,4 @@
-var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker','ngMaterialDatePicker','toastr','ngFileUpload','base64'])
+var ToDo = angular.module('ToDo', ['ui.router', 'ngSanitize','ngAnimate', 'ngMaterial','tb-color-picker','ngMaterialDatePicker','toastr','ngFileUpload','base64','ngMessages'])
 
 
 ToDo.config(['$stateProvider','$urlRouterProvider',
@@ -24,15 +24,21 @@ ToDo.config(['$stateProvider','$urlRouterProvider',
 				controller: 'homeController'
 			})
 		
-			.state('fb',{
+			/*.state('fb',{
 				url :'/fb',
 				controller : 'facebookController'
+			})*/
+			
+			.state('forgotPassword',{
+				url:'/forgotpassword',
+				templateUrl : 'template/forgotPassword.html',
+				controller : 'loginController'
 			})
 			
-			.state('ResetEmail',{
-				url:'/ResetEmail',
-				templateUrl : 'template/ResetEmail.html',
-				/*controller : 'resetPasswordController'*/
+			.state('resetPassword', {
+				url : '/resetPassword/:token',
+				templateUrl : 'template/resetPassword.html',
+				controller : 'loginController'
 			})
 			
 			.state('trash',{

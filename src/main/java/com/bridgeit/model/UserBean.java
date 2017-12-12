@@ -44,7 +44,7 @@ public class UserBean
 	@Column(name="isActivated")
 	private boolean isActivated;
 	
-	@Column(name="picUrl")
+	@Column(name="picUrl",columnDefinition = "LONGBLOB")
 	private String picUrl;
 	
 	@JsonIgnore
