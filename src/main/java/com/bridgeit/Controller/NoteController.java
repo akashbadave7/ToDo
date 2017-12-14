@@ -49,7 +49,7 @@ public class NoteController {
 	public ResponseEntity<ResponseMessage> addNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request) {
 		
 		 /*UserBean user = (UserBean) session.getAttribute(session.getId());*/
-		ResponseMessage responseMessage = new ResponseMessage();
+		ResponseMessage responseMessage = new ResponseMessage(); 
 		String token = request.getHeader("Authorization");
 		System.out.println(token);
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
@@ -149,7 +149,7 @@ public class NoteController {
 		//UserBean user = (UserBean) session.getAttribute(session.getId());
 		String token = request.getHeader("Authorization");
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		List<NoteBean> notes=null;
+		List<NoteBean> notes=null; 
 		if(user!=null)
 		{
 			 notes = noteService.getAllNotes(user);

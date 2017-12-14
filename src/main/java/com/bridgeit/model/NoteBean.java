@@ -59,7 +59,7 @@ public class NoteBean {
 	@Column(name="REMINDER")
 	private Date reminder;
 	
-	
+	@JsonIgnore
 	@Column(columnDefinition = "LONGBLOB")
 	private String image;
 	
