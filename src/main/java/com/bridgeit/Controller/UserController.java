@@ -1,15 +1,12 @@
 package com.bridgeit.Controller;
 
-import java.util.Date;
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
 import javax.jms.JMSException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Request;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +22,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
-import com.bridgeit.Service.MailImp;
 import com.bridgeit.Service.Producer;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
 import com.bridgeit.Validation.Validation;
 import com.bridgeit.model.Email;
-import com.bridgeit.model.NoteBean;
 import com.bridgeit.model.ResponseMessage;
 import com.bridgeit.model.UserBean;
 
@@ -57,6 +51,21 @@ public class UserController {
 	
 	private static final Logger logger = Logger.getLogger("loginFile");
 	private static final Logger logger1 = Logger.getRootLogger();
+	
+	@RequestMapping(value="/user/{id}",method=RequestMethod.GET)
+	public ResponseEntity<UserBean> user(@PathVariable ("id") int id)
+	{
+		ResponseMessage message = new ResponseMessage();
+		System.out.println(id);
+		System.out.println(userService);
+		UserBean user = userService.getUserById(id);
+		if(user==null) {
+			
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		System.out.println(user.getEmail());
+		return ResponseEntity.ok(user);
+	}
     //-------------------Retrieve Single User--------------------------------------------------------
 
 	@RequestMapping(value="/getUser",method=RequestMethod.GET)
@@ -166,13 +175,18 @@ public class UserController {
 	{
 		String email= user.getEmail();
 		String password=user.getPassword();
+		System.out.println(user.getEmail());
+		System.out.println(user.getPassword());
 		ResponseMessage errorMessage = new ResponseMessage();
 		UserBean getUser = userService.getUserByEmail(email);
+		
+		
 		if(getUser == null){
 			errorMessage.setResponseMessage("Email does not exists try again");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
 		}
-			else{		
+			else{	
+				System.out.println(getUser.getEmail());
 			if(BCrypt.checkpw(password,getUser.getPassword())){
 				if(getUser.isActivated()){
 					String token = tokenGenerator.createJWT(getUser.getId(),getUser.getPassword());
@@ -238,10 +252,11 @@ public class UserController {
 	
     //-------------------GET ALL USERS--------------------------------------------------------
 
-	@RequestMapping(value = "/getUserList", method = RequestMethod.GET)
-	public ResponseEntity<List<UserBean>> getUserList(HttpServletRequest request){
+	@RequestMapping(value = "/getUserList/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<UserBean>> getUserList(@PathVariable ("id") int id,HttpServletRequest request){
 		String token =request.getHeader("Authorization");
-		UserBean user=userService.getUserById(verifyToken.parseJWT(token));
+		/*UserBean user=userService.getUserById(verifyToken.parseJWT(token));*/
+		UserBean user=userService.getUserById(id);
 		if(user!=null){
 			List<UserBean> list=userService.getUserList();
 			return ResponseEntity.ok(list);
@@ -254,7 +269,7 @@ public class UserController {
 	public ResponseEntity<ResponseMessage> updateUser(@RequestBody UserBean user,HttpServletRequest request,HttpServletResponse response)
 	{
 		 ResponseMessage responseMessage = new ResponseMessage();
-		 String token = request.getHeader("Authorization");
+		 String token = request.getHeader("Authorization");  
 		 UserBean userProfile = userService.getUserById(verifyToken.parseJWT(token));
 		 if(userProfile!=null){
 			userProfile.setPicUrl(user.getPicUrl());

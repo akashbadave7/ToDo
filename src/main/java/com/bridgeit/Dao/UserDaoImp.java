@@ -91,7 +91,7 @@ public class UserDaoImp implements UserDao{
 
 	@Override
 	public UserBean getUserById(int id) {
-			
+			System.out.println("userDaoimpl"+id);
 		Session session = factory.openSession();
 		UserBean user = session.get(UserBean.class, id);
 		session.close();

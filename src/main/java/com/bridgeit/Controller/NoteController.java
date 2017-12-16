@@ -147,8 +147,9 @@ public class NoteController {
 	public ResponseEntity<Object> getAllNotes(HttpSession session,HttpServletRequest request)
 	{
 		//UserBean user = (UserBean) session.getAttribute(session.getId());
-		String token = request.getHeader("Authorization");
-		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
+		//String token = request.getHeader("Authorization");
+		//System.out.println(token);
+		UserBean user = userService.getUserById(4);
 		List<NoteBean> notes=null; 
 		if(user!=null)
 		{
