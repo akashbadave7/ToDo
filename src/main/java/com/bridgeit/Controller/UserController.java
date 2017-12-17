@@ -102,7 +102,8 @@ public class UserController {
         			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
         			
         			Email email = new Email();
-    				email.setTo(user.getEmail());
+    				/*email.setTo(user.getEmail());*/
+    				email.setTo("akash.badave7@gmail.com");
     				email.setSubject("Confirmation email");
     				email.setBody(url);	
     				// Storing message in JMS queue
