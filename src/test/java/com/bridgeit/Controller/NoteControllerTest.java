@@ -1,38 +1,33 @@
 package com.bridgeit.Controller;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.View;
 
 import com.bridgeit.Service.NoteService;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.Token.VerifyToken;
+import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -52,8 +47,6 @@ public class NoteControllerTest {
 	    @Autowired
 	    @Spy
 	    private TokenGenerator tokenService;
-	 /*   @Mock
-	    View mockView;*/
 
 	    @Autowired
 	    @Spy
@@ -69,118 +62,189 @@ public class NoteControllerTest {
 	    public void setUp() throws Exception {
 	        MockitoAnnotations.initMocks(this);
 	        mockMvc = MockMvcBuilders.standaloneSetup(noteController)
-	                
 	                .build();
 	    }
-
-	    @Test
-	    @Ignore
-	    public void getNotes() throws Exception {
-	       /* List<NoteBean> expectedPeople = asList(new NoteBean());
-	        when(noteService.getAllNotes(user)("someGroup")).thenReturn(expectedPeople);
-*/				System.out.println(mockMvc);
-	        mockMvc.perform(MockMvcRequestBuilders.get("/getNotes"))
-	                .andExpect(status().isOk());
-	    }
+	    
 	    
 	    
 	    @Test
-	    @Ignore
-	    public void update() throws Exception{
-	    	String email="akash.badave7@gmail.com";
-	    	int id = 1;
-	    	String token=tokenService.createJWT(id, email);
-	    	NoteBean note = new NoteBean();
-	    	note.setNoteId(1);
-	    	note.setTitle("Jnuit");
-	    	note.setBody("Test");
-	    	mockMvc.perform(MockMvcRequestBuilders.post("/update")
-	    			.header("Authorization", token)
-	    			.contentType(MediaType.APPLICATION_JSON)
-	    			.content(asJsonString(note)))
-	    			.andExpect(status().isOk());
-	    }
-	    
-	    @Test
-	    @Ignore
+	   // @Ignore
 	    public void addNote() throws Exception{
 	    	String email="akash.badave7@gmail.com";
-	    	int id = 1;
+	    	int id = 4;
+	    	String token=tokenService.createJWT(id, email);
+	    	NoteBean note = new NoteBean();
+	    	note.setTitle("Note 4");
+	    	note.setBody("Note 4");
+	    	mockMvc.perform(post("/addNote")
+	    			.header("Authorization", token)
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    @Test
+	    //@Ignore
+	    public void update() throws Exception{
+	    	String email="akash.badave7@gmail.com";
+	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	NoteBean note = new NoteBean();
 	    	note.setNoteId(1);
-	    	note.setTitle("Add note");
-	    	note.setBody("Using Junit");
-	    	mockMvc.perform(MockMvcRequestBuilders.post("/addNote")
+	    	note.setTitle("Note 2 update");
+	    	note.setBody("Note 2 update");
+	    	mockMvc.perform(post("/update")
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
 	    			.andExpect(status().isOk());
 	    }
 
+
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void deleteNoteById() throws Exception{
 	    	String email="akash.badave7@gmail.com";
-	    	int id = 1;
+	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
-	    	int noteId=5;
+	    	int noteId=3;
 	    	
-	    	mockMvc.perform(MockMvcRequestBuilders.delete("/delete/"+noteId)
+	    	mockMvc.perform(delete("/delete/"+noteId)
 	    			.header("Authorization", token))
 	    			.andExpect(status().isOk());
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void getAllNotes() throws Exception{
 	    	String email="akash.badave7@gmail.com";
-	    	int id = 1;
+	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	
 	    	
-	    	mockMvc.perform(MockMvcRequestBuilders.get("/getNotes")
+	    	mockMvc.perform(get("/getNotes")
 	    			.header("Authorization", token))
 	    			.andExpect(status().isOk());
+	    	
+	  /*  	mockMvc.perform(get("/getNotes")
+			    	.header("Authorization", token))
+		            .andExpect(status().isOk())
+		            .andExpect(view().name("todo/list"))
+		            .andExpect(model().attribute("todo", hasSize(8)));*/
 	    }
 	    
+	    
+	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void collaborate() throws Exception{
 	    	String email="akash.badave7@gmail.com";
-	    	int id = 1;
+	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	
 	    	NoteBean note = new NoteBean();
 	    	note.setNoteId(1);
-	    	mockMvc.perform(MockMvcRequestBuilders.post("/collaborate")
+	    	mockMvc.perform(post("/collaborate")
 	    			.header("Authorization", token)
-	    			.header("email", "akash@gmail.com")
+	    			.header("email","rollingcola@yahoo.com")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
 	    			.andExpect(status().isOk());
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void getOwner() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
 	    	note.setNoteId(1);
-	    	mockMvc.perform(MockMvcRequestBuilders.post("/getOwner")
+	    	mockMvc.perform(post("/getOwner")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
 	    			.andExpect(status().isOk());
 	    }
 	    
 	    @Test
+	    //@Ignore
 	    public void getCollabUser() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
 	    	note.setNoteId(1);
-	    	mockMvc.perform(MockMvcRequestBuilders.post("/getCollabUser")
+	    	mockMvc.perform(post("/getCollabUser")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    
+	    @Test
+	    //@Ignore
+	    public void removeCollaborator() throws Exception{
+	    	
+	    	NoteBean note = new NoteBean();
+	    	note.setNoteId(2);
+	    	mockMvc.perform(post("/removeCollaborator")
+	    			.header("email","test@gmail.com")
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    @Test
+	    //@Ignore
+	    public void addlabel() throws Exception{
+	    	
+	    	String email="akash.badave7@gmail.com";
+	    	int id = 4;
+	    	String token=tokenService.createJWT(id, email);
+	    	Label label = new Label();
+	    	label.setName("junit test");
+	    	mockMvc.perform(post("/addlabel")
+	    			.header("Authorization",token)
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(label)))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    @Test
+	    //@Ignore
+	    public void getAllLabel() throws Exception{
+	    	
+	    	String email="akash.badave7@gmail.com";
+	    	int id = 4;
+	    	String token=tokenService.createJWT(id, email);
+	    
+	    	mockMvc.perform(post("/getAllLabel")
+	    			.header("Authorization",token)
+	    			.contentType(MediaType.APPLICATION_JSON))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    @Test
+	    //@Ignore
+	    public void deleteLabel() throws Exception{
+	    	
+	    	String email="akash.badave7@gmail.com";
+	    	int id = 4;
+	    	String token=tokenService.createJWT(id, email);
+	    	Label label = new Label();
+	    	label.setLabelId(1);
+	    	mockMvc.perform(post("/deleteLabel")
+	    			.header("Authorization",token)
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(label)))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    
+	    
+	    @Test
+	    //@Ignore
+	    public void geturl() throws Exception{
+	    	
+	    	mockMvc.perform(post("/geturl")
+	    			.header("url","https://www.ndtv.com/india-news/gujarat-assembly-election-result-2017-live-updates-will-it-be-pm-narendra-modis-bjp-or-rahul-gandhis-1789005")
+	    			.contentType(MediaType.APPLICATION_JSON))
 	    			.andExpect(status().isOk());
 	    }
 

@@ -227,7 +227,6 @@ public class NoteController {
 	@RequestMapping(value="/removeCollaborator",method=RequestMethod.POST)
 	public ResponseEntity<Void> removeCollaborator(@RequestBody NoteBean note,HttpServletRequest request)
 	{
-		
 		NoteBean oldNote = noteService.getNoteById(note.getNoteId());
 		String collabeUserEmail= request.getHeader("email");
 		UserBean user=userService.getUserByEmail(collabeUserEmail);
@@ -240,7 +239,7 @@ public class NoteController {
 			noteService.updateNote(oldNote);
 			
 		}else{
-			
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return null;
 		
@@ -283,6 +282,7 @@ public class NoteController {
 		if(user!=null)
 		{
 			 labels= user.getLabels();
+			 System.out.println(labels.size());
 		}
 		else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");

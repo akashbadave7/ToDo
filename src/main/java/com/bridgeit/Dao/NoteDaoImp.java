@@ -191,7 +191,7 @@ public class NoteDaoImp implements NoteDao{
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			session.delete(label );
+			session.delete(label);
 			for(NoteBean note : label.getNotes())
 			{
 				note.getLabels().remove(label);
