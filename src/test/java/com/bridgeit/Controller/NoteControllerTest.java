@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.bridgeit.Service.NoteService;
 import com.bridgeit.Service.UserService;
@@ -40,35 +41,41 @@ public class NoteControllerTest {
 	 	@InjectMocks
 	    private NoteController noteController;
 
-	    @Autowired
+/*	    @Autowired
 	    @Spy
 	    private NoteService noteService;
 
+	    
+
+	    @Autowired
+	    @Spy
+	    private UserService userService;*/
+	    
 	    @Autowired
 	    @Spy
 	    private TokenGenerator tokenService;
+	    
+	   /* @Autowired
+	    @Spy
+		private VerifyToken verifyToken;*/
+	    
+	    @Autowired
+	    private WebApplicationContext wac;
 
-	    @Autowired
-	    @Spy
-	    private UserService userService;
-	    
-	    @Autowired
-	    @Spy
-		private VerifyToken verifyToken;
-	    
-	   private MockMvc mockMvc;
+	    private MockMvc mockMvc;
 
 	    @Before 
 	    public void setUp() throws Exception {
-	        MockitoAnnotations.initMocks(this);
+	        /*MockitoAnnotations.initMocks(this);
 	        mockMvc = MockMvcBuilders.standaloneSetup(noteController)
-	                .build();
+	                .build();*/
+	    	 this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	    }
 	    
 	    
 	    
 	    @Test
-	   // @Ignore
+	   @Ignore
 	    public void addNote() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -80,11 +87,11 @@ public class NoteControllerTest {
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
-	    			.andExpect(status().isOk());
+	    			.andExpect(status().is(200));
 	    }
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void update() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -102,7 +109,7 @@ public class NoteControllerTest {
 
 
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void deleteNoteById() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -115,7 +122,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    //@Ignore
+	   // @Ignore
 	    public void getAllNotes() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -125,18 +132,13 @@ public class NoteControllerTest {
 	    	mockMvc.perform(get("/getNotes")
 	    			.header("Authorization", token))
 	    			.andExpect(status().isOk());
-	    	
-	  /*  	mockMvc.perform(get("/getNotes")
-			    	.header("Authorization", token))
-		            .andExpect(status().isOk())
-		            .andExpect(view().name("todo/list"))
-		            .andExpect(model().attribute("todo", hasSize(8)));*/
+	    			
 	    }
 	    
 	    
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void collaborate() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -153,7 +155,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void getOwner() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
@@ -165,7 +167,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void getCollabUser() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
@@ -178,7 +180,7 @@ public class NoteControllerTest {
 	    
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void removeCollaborator() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
@@ -191,7 +193,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void addlabel() throws Exception{
 	    	
 	    	String email="akash.badave7@gmail.com";
@@ -207,7 +209,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void getAllLabel() throws Exception{
 	    	
 	    	String email="akash.badave7@gmail.com";
@@ -221,7 +223,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void deleteLabel() throws Exception{
 	    	
 	    	String email="akash.badave7@gmail.com";
@@ -239,7 +241,7 @@ public class NoteControllerTest {
 	    
 	    
 	    @Test
-	    //@Ignore
+	    @Ignore
 	    public void geturl() throws Exception{
 	    	
 	    	mockMvc.perform(post("/geturl")

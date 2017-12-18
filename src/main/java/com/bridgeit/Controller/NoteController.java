@@ -163,7 +163,7 @@ public class NoteController {
 			 notes.addAll(collborated);
 		}
 		else{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not logged in");
 		}
 		return ResponseEntity.ok(notes);
 	}
