@@ -16,14 +16,13 @@
  
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/" />
-		<property name="suffix" value=".jsp" />
+		
 	</bean>
 	
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/ToDo" />
+		<property name="url" value="jdbc:mysql://fundoonotes.cc7rf0cdiioz.us-east-2.rds.amazonaws.com:3306/Todo" />
 		<property name="username" value="root" />
 		<property name="password" value="password"/>
 	</bean>
