@@ -46,4 +46,4 @@ Thumbs.db
 *.orig
 build
 /target/
-bin/target
+bin/
