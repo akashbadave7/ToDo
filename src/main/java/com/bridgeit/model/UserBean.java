@@ -56,6 +56,10 @@ public class UserBean
 	@OneToMany(mappedBy = "user",fetch=FetchType.EAGER)
 	private Set<Label> labels = new HashSet<Label>();
 
+	
+	
+	
+
 	public int getId() {
 		return id;
 	}

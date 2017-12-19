@@ -3,10 +3,13 @@ package com.bridgeit.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bridgeit.Dao.UserDao;
 import com.bridgeit.model.UserBean;
 
+
+@Service("userService")
 public class UserServiceImp implements UserService{
 
 	@Autowired
@@ -18,6 +21,7 @@ public class UserServiceImp implements UserService{
 
 	@Override
 	public UserBean getUserById(int id) {
+		System.out.println("user service impl"+id);
 		return userDao.getUserById(id);
 	}
 

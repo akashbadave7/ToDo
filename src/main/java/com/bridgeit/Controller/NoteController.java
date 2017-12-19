@@ -46,10 +46,10 @@ public class NoteController {
 	/*----------------------------------Adding note-------------------------------*/
 
 	@RequestMapping(value="/addNote",method=RequestMethod.POST)
-	public ResponseEntity<ResponseMessage> addNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request) {
+	public ResponseEntity addNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request) {
 		
 		 /*UserBean user = (UserBean) session.getAttribute(session.getId());*/
-		ResponseMessage responseMessage = new ResponseMessage();
+		ResponseMessage responseMessage = new ResponseMessage(); 
 		String token = request.getHeader("Authorization");
 		System.out.println(token);
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
@@ -64,15 +64,18 @@ public class NoteController {
 			 id = noteService.saveNote(note);
 			 
 		 }else{
-			 responseMessage.setResponseMessage("User does not exist");
-			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+			 return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			 /*responseMessage.setResponseMessage("User does not exist");
+			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);*/
 		 }
 		 if(id!=0){
-			 responseMessage.setResponseMessage("Note successfully added");
-			 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+			 return new ResponseEntity(HttpStatus.OK);
+			 /*responseMessage.setResponseMessage("Note successfully added");
+			 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);*/
 		 }else{
-			 responseMessage.setResponseMessage("note could not be added");
-			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+			 return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+			 /*responseMessage.setResponseMessage("note could not be added");
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);*/
 		 }
 	}
 	
@@ -85,6 +88,8 @@ public class NoteController {
 		
 		ResponseMessage responseMessage = new ResponseMessage();
 		 String token = request.getHeader("Authorization");
+		 System.out.println(token);
+		
 		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		 if(user!=null){
 			 /*if(user.getId()==note.getNoteId()){*/
@@ -131,14 +136,14 @@ public class NoteController {
 			}else
 			{
 				responseMessage.setResponseMessage(" deleted unsuccessfull");
-				return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
 			}
 		}else {
 			responseMessage.setResponseMessage("User Not logged in");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
 		}
-		responseMessage.setResponseMessage("Deletion not possible.");
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+		responseMessage.setResponseMessage("Deletion successfull.");
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 	}
 	
 	/*----------------------------------getAllNotes note-------------------------------*/
@@ -146,10 +151,11 @@ public class NoteController {
 	@RequestMapping(value="/getNotes",method=RequestMethod.GET)
 	public ResponseEntity<Object> getAllNotes(HttpSession session,HttpServletRequest request)
 	{
-		//UserBean user = (UserBean) session.getAttribute(session.getId());
+		
 		String token = request.getHeader("Authorization");
+		System.out.println(token);
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		List<NoteBean> notes=null;
+		List<NoteBean> notes=null; 
 		if(user!=null)
 		{
 			 notes = noteService.getAllNotes(user);
@@ -157,7 +163,7 @@ public class NoteController {
 			 notes.addAll(collborated);
 		}
 		else{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not logged in");
 		}
 		return ResponseEntity.ok(notes);
 	}
@@ -221,7 +227,6 @@ public class NoteController {
 	@RequestMapping(value="/removeCollaborator",method=RequestMethod.POST)
 	public ResponseEntity<Void> removeCollaborator(@RequestBody NoteBean note,HttpServletRequest request)
 	{
-		
 		NoteBean oldNote = noteService.getNoteById(note.getNoteId());
 		String collabeUserEmail= request.getHeader("email");
 		UserBean user=userService.getUserByEmail(collabeUserEmail);
@@ -234,7 +239,7 @@ public class NoteController {
 			noteService.updateNote(oldNote);
 			
 		}else{
-			
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return null;
 		
@@ -277,6 +282,7 @@ public class NoteController {
 		if(user!=null)
 		{
 			 labels= user.getLabels();
+			 System.out.println(labels.size());
 		}
 		else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not logged in");
