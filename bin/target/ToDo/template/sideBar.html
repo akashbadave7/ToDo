@@ -1,0 +1,39 @@
+<nav class="md-sidenav-left" id="left" padding-top="20px" style=" margin-top:50px;width:10em">
+<!-- <md-sidenav class="md-sidenav-left" style=" margin-top:50px;width:10em" md-component-id="left" md-is-locked-open="dash.openInfo">
+ -->
+    <md-list >
+      <md-list-item ui-sref="home">
+        
+        Notes
+   
+      </md-list-item>
+      <md-list-item ui-sref="archive">
+   
+          Archives
+        
+      </md-list-item>
+      <md-list-item ui-sref="reminder">
+      
+          Reminders
+        
+      </md-list-item>
+         <p> Labels</p>
+         		<div ng-repeat="label in user.labels">
+  				<md-icon md-svg-src="images/label.svg" ></md-icon>
+  					{{label.name}}	<md-icon class="labelIcon" md-svg-src="images/clear.svg" ng-click="deleteLabel(label)"></md-icon>
+  				</div>
+  		<md-list-item ng-click="createLabel($event,user)">
+  				
+  				Create new label
+  		</md-list-item>
+
+      </md-list-item>
+      <md-list-item  ui-sref="trash">
+            Trash
+        
+      </md-list-item>
+      
+    </md-list>
+
+</nav>
+<!-- </md-sidenav> -->
