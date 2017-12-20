@@ -13,6 +13,5 @@ public interface UserService {
 		public boolean updateUser(UserBean user);
 		public boolean isUserExits(String email,String mobilenumber);
 		public boolean deleteUser(UserBean user);
-		public List<String> getUsers(String keyword);
 		public List<UserBean> getUserList();
 }

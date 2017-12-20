@@ -1,12 +1,12 @@
 package com.bridgeit.Controller;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,9 +19,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
@@ -35,24 +39,14 @@ public class NoteControllerTest {
 
 	 	@InjectMocks
 	    private NoteController noteController;
-
-/*	    @Autowired
-	    @Spy
-	    private NoteService noteService;
-
 	    
-
-	    @Autowired
+	 	@Autowired
 	    @Spy
-	    private UserService userService;*/
-	    
+	    private UserService userService;
 	    @Autowired
 	    @Spy
 	    private TokenGenerator tokenService;
-	    
-	   /* @Autowired
-	    @Spy
-		private VerifyToken verifyToken;*/
+
 	    
 	    @Autowired
 	    private WebApplicationContext wac;
@@ -82,7 +76,7 @@ public class NoteControllerTest {
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
-	    			.andExpect(status().is(200));
+	    			.andExpect(status().isOk());
 	    }
 	    
 	    @Test
@@ -117,18 +111,21 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	   // @Ignore
+	   @Ignore
 	    public void getAllNotes() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	
 	    	
-	    	mockMvc.perform(get("/getNotes")
+	    ResultActions resultActions =	mockMvc.perform(get("/getNotes")
+	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.header("Authorization", token))
-	    			.andExpect(status().isOk());
-	    			/*.andExpect(jsonPath("$", hasSize(36)));*/
-	    			
+	    			.andExpect(status().isOk())
+	    			 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+	    			 .andDo(MockMvcResultHandlers.print())
+	    			 .andExpect((jsonPath("$", Matchers.hasSize(3))));
+	    
 	    }
 	    
 	    

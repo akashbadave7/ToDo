@@ -47,11 +47,6 @@ public class UserServiceImp implements UserService{
 		return userDao.deleteUser(user);
 	}
 
-	@Override
-	public List<String> getUsers(String keyword) {
-		keyword = "%" + keyword + "%";
-		return userDao.getUsers(keyword);
-	}
 	
 	
 	public List<UserBean> getUserList() {
