@@ -19,7 +19,6 @@ public interface UserDao {
 	
 	boolean isUserExits(String email,String mobilenumber);
 	
-	public List<String> getUsers(String keyword);
 	
 	List<UserBean> getUserList();
 }

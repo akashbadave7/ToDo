@@ -1,5 +1,7 @@
 package com.bridgeit.Controller;
 
+import static org.mockito.Mockito.reset;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -48,50 +51,38 @@ public class UserController {
 	@Autowired
 	Producer producer;
 
+    //-------------------Retrieve Single User--------------------------------------------------------
+
 	
 	private static final Logger logger = Logger.getLogger("loginFile");
 	private static final Logger logger1 = Logger.getRootLogger();
 	
-	@RequestMapping(value="/user/{id}",method=RequestMethod.GET)
-	public ResponseEntity<UserBean> user(@PathVariable ("id") int id)
+	@RequestMapping(value="/user",method=RequestMethod.GET)
+	public ResponseEntity<Object> user(@RequestParam(value="email",required=true) String email)
 	{
-		ResponseMessage message = new ResponseMessage();
-		System.out.println(id);
-		System.out.println(userService);
-		UserBean user = userService.getUserById(id);
+		ResponseMessage responseMessage = new ResponseMessage();
+		System.out.println(email);
+		UserBean user = userService.getUserByEmail(email);
 		if(user==null) {
-			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			responseMessage.setResponseMessage("User not found!!");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
 		}
-		System.out.println(user.getEmail());
 		return ResponseEntity.ok(user);
 	}
-    //-------------------Retrieve Single User--------------------------------------------------------
 
-	@RequestMapping(value="/getUser",method=RequestMethod.GET)
-	public ResponseEntity<UserBean> getUser(HttpServletRequest request) {
-		
-		String token= request.getHeader("Authorization");
-		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		 if (user!=null) {
-			 	return ResponseEntity.ok(user);
-	        }else {
-	        	 return ResponseEntity.ok(user);
-	        }
-		
-	}
 	
     //-------------------Insert a User--------------------------------------------------------
 
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> createUser(@RequestBody UserBean user,UriComponentsBuilder ucBuilder,HttpServletRequest request) throws JMSException {
-		ResponseMessage errorMessage = new ResponseMessage();
+		ResponseMessage responseMessage = new ResponseMessage();
 		System.out.println("Creating User " + user.getName());
-		System.out.println(user);
+		System.out.println(user.getEmail()+" "+user.getPassword()+" "+user.getName()+" "+user.getMobilenumber());
+		System.out.println(valid.signUpValidator(user));
         if(valid.signUpValidator(user))
         {
         	// setting user activation false bydefault
-        	user.setActivated(true);
+        	user.setActivated(false);
         	if (userService.isUserExits(user.getEmail(),user.getMobilenumber())) 
         	{	
         		int i= userService.saveUserData(user);
@@ -102,37 +93,32 @@ public class UserController {
         			url = url.substring(0,url.lastIndexOf("/"))+"/activate/"+token;
         			
         			Email email = new Email();
-    				/*email.setTo(user.getEmail());*/
     				email.setTo("akash.badave7@gmail.com");
     				email.setSubject("Confirmation email");
     				email.setBody(url);	
     				// Storing message in JMS queue
         			producer.send(email);
         			System.out.println(email);
-        			/*System.out.println("Verification mail sent");*/
         			HttpHeaders headers = new HttpHeaders();
-                    /*headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());*/
                     logger.info("Registration successfull");
-                   /* System.out.println("Registration successfull");*/
-                    errorMessage.setResponseMessage("Registration successfull");
-                    return ResponseEntity.status(HttpStatus.OK).body(errorMessage);
+                    responseMessage.setResponseMessage("Registration successfull");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         		}
         	}
         	else
     		{
         		logger.info("User already exits");
     			System.out.println("A User with email " + user.getEmail() + " or mobile "+user.getMobilenumber()+" already exist");
-    			errorMessage.setResponseMessage("Email or Mobile number already register.");
-    			return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+    			responseMessage.setResponseMessage("Email or Mobile number already register.");
+    			return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessage);
     		}
         }
-        System.out.println("Error occured");
-        logger.warn("Error occure");
-        errorMessage.setResponseMessage("Error Occured");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        logger.warn("Enter valid data");
+        responseMessage.setResponseMessage("Enter valid data");
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
 	}
 	
-    //-------------------Activate a User--------------------------------------------------------
+    /*//-------------------Activate a User--------------------------------------------------------
 	@RequestMapping(value="/activate/{token:.+}",method=RequestMethod.GET)
 	public ResponseMessage activateUser(@PathVariable("token") String token,HttpServletResponse response,HttpServletRequest request){
 		int id = verifyToken.parseJWT(token);
@@ -151,7 +137,7 @@ public class UserController {
 							e.printStackTrace();
 						}
 						
-						/*response.sendRedirect("#!/login");*/
+						response.sendRedirect("#!/login");
 					
 					errorMessage.setResponseMessage("Activation successfull");
 					return errorMessage;
@@ -168,7 +154,7 @@ public class UserController {
 			return errorMessage;
 		}
 		
-	}
+	}*/
     //-------------------Login a User--------------------------------------------------------
 
 	@RequestMapping(value="/login",method=RequestMethod.POST)
@@ -188,30 +174,28 @@ public class UserController {
 		}
 			else{	
 				System.out.println(getUser.getEmail());
-			if(BCrypt.checkpw(password,getUser.getPassword())){
 				if(getUser.isActivated()){
+					if(BCrypt.checkpw(password,getUser.getPassword())){
 					String token = tokenGenerator.createJWT(getUser.getId(),getUser.getPassword());
 					System.out.println(token);
 					response.setHeader("Authorization", token);
-					/*HttpSession session = request.getSession();
-					session.setAttribute(session.getId(), getUser);*/
 					logger.info("Login Successfull");
 					errorMessage.setResponseMessage(token);
 					return ResponseEntity.status(HttpStatus.OK).body(errorMessage);
 				}else{
-					logger.info("User not activated");
-					errorMessage.setResponseMessage("User not activated");
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+					logger.info("Invalid password or email");
+					errorMessage.setResponseMessage("Wrong Password");
+					return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
 				}
 			}else{
-				logger.info("Invalid password or email");
-				errorMessage.setResponseMessage("Wrong Password");
-				return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+				logger.info("User not activated");
+				errorMessage.setResponseMessage("User not activated");
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(errorMessage);
 			}
 		}
 	}
 	
-	@RequestMapping(value="/isActive",method=RequestMethod.GET)
+/*	@RequestMapping(value="/isActive",method=RequestMethod.GET)
 	public ResponseEntity<Object> isActivated(HttpSession session)
 	{
 		UserBean user = (UserBean) session.getAttribute(session.getId());
@@ -220,49 +204,35 @@ public class UserController {
 		}else{
 			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("No user logged in.");
 		}
-	}
+	}*/
 	
-    //-------------------Login a User--------------------------------------------------------
+    //-------------------Logout a User--------------------------------------------------------
 
 	@RequestMapping(value="/Logout",method=RequestMethod.POST)
-	public void logout(@RequestHeader(value="token") String header,HttpServletRequest request){
+	public ResponseEntity<String> logout(@RequestHeader(value="Authorization") String header,HttpServletRequest request,HttpServletResponse response){
 	
-			int id = verifyToken.parseJWT(header);
+			
+			System.out.println("Before logout "+request.getHeader("Authorization"));
 			/*UserBean user = userService.getUserById(id);*/
-			request.removeAttribute(header);
+			System.out.println(request.getHeader("Authorization"));
+			return ResponseEntity.ok().body("Logout succefull");
 	}
 	
 	
-	@RequestMapping(value="/getUsers/{keyword}" ,method=RequestMethod.GET)
-	public ResponseEntity<List<String>> getUsers(@RequestHeader(value="token") String header, @PathVariable("keyword") String keyword,HttpServletRequest request){
-		//ResponseMessage responseMessage = new ResponseMessage();
-		String token = request.getHeader("Authorization");
-		List<String> emails= null;
-		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		
-		if(user!=null)
-		{
-			emails = userService.getUsers(keyword);
-		}
-		else{
-			//responseMessage.setResponseMessage("User Not Logged In");
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		return new ResponseEntity<>(emails, HttpStatus.OK);
-	}
 	
     //-------------------GET ALL USERS--------------------------------------------------------
 
-	@RequestMapping(value = "/getUserList/{id}", method = RequestMethod.GET)
-	public ResponseEntity<List<UserBean>> getUserList(@PathVariable ("id") int id,HttpServletRequest request){
+	@RequestMapping(value = "/getUserList", method = RequestMethod.GET)
+	public ResponseEntity<List<UserBean>> getUserList(HttpServletRequest request){
 		String token =request.getHeader("Authorization");
-		/*UserBean user=userService.getUserById(verifyToken.parseJWT(token));*/
-		UserBean user=userService.getUserById(id);
+		ResponseMessage responseMessage = new ResponseMessage();
+		UserBean user=userService.getUserById(verifyToken.parseJWT(token));
 		if(user!=null){
 			List<UserBean> list=userService.getUserList();
 			return ResponseEntity.ok(list);
 		}else{
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			
+			return new ResponseEntity<List<UserBean>>(HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
@@ -272,15 +242,17 @@ public class UserController {
 		 ResponseMessage responseMessage = new ResponseMessage();
 		 String token = request.getHeader("Authorization");  
 		 UserBean userProfile = userService.getUserById(verifyToken.parseJWT(token));
-		 if(userProfile!=null){
+		 if(userProfile!=null){ 
+			userProfile.setName(user.getName());
 			userProfile.setPicUrl(user.getPicUrl());
 			userService.updateUser(userProfile);
+			responseMessage.setResponseMessage("Successfull updated");
+			return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
 		 }else{
 			 responseMessage.setResponseMessage("User Not logged in");
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessage);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessage);
 		 }
-		 responseMessage.setResponseMessage("Successfull");
-		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 	}
 	
 	

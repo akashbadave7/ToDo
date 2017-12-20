@@ -157,23 +157,6 @@ public class UserDaoImp implements UserDao{
 			return false;
 	}
 
-	@Override
-	public List<String> getUsers(String keyword) {
-		Session session = factory.openSession();
-		
-		List<UserBean> users= null;
-		try {
-			Criteria criteria = session.createCriteria(UserBean.class);
-			
-			criteria.add(Restrictions.ilike("email", keyword));
-			criteria.setProjection(Projections.property("email"));
-			List<String> emails = criteria.list();
-			return emails;
-		} catch (Exception e) {
-			
-		}
-		return null;
-	}
 	
 	public List<UserBean> getUserList() {
 		Session session=factory.openSession();
