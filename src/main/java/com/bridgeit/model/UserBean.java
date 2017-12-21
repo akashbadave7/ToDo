@@ -132,6 +132,31 @@ public class UserBean
 	public void setLabels(Set<Label> labels) {
 		this.labels = labels;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		//result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + id;
+		/*result = prime * result + (isActivated ? 1231 : 1237);
+		result = prime * result + ((labels == null) ? 0 : labels.hashCode());
+		result = prime * result + ((mobilenumber == null) ? 0 : mobilenumber.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((picUrl == null) ? 0 : picUrl.hashCode());*/
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		UserBean user = (UserBean) obj;
+		if (user.getId() == id) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 }
