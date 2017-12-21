@@ -25,7 +25,7 @@ development.properties
 
 #eclipse files
 .metadata
-RemoteSystemsTempFiles
+/RemoteSystemsTempFiles/
 
 /target/
 
