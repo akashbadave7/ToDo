@@ -234,9 +234,9 @@ public class NoteController {
 		if(user!=null)
 		{
 			System.out.println("Collabeuser "+user.getEmail());
-			System.out.println("Before remove ="+oldNote.getCollaborator());
+			System.out.println("Before remove ="+oldNote.getCollaborator().size());
 			oldNote.getCollaborator().remove(user);
-			System.out.println("After Remove ="+oldNote.getCollaborator());
+			System.out.println("After Remove ="+oldNote.getCollaborator() + "size: " + oldNote.getCollaborator().size());
 			noteService.updateNote(oldNote);
 			
 		}else{
