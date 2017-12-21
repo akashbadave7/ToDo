@@ -26,9 +26,11 @@ development.properties
 #eclipse files
 .metadata
 RemoteSystemsTempFiles
-
+target
+bin/
+**/.settings
 .project
-.settings
+
 
 #angular dependancy
 bower_components
