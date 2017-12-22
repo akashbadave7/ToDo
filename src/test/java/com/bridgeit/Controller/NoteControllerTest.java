@@ -40,9 +40,10 @@ public class NoteControllerTest {
 	 	@InjectMocks
 	    private NoteController noteController;
 	    
-	 	@Autowired
+	 /*	@Autowired
 	    @Spy
-	    private UserService userService;
+	    private UserService userService;*/
+	 	
 	    @Autowired
 	    @Spy
 	    private TokenGenerator tokenService;
@@ -61,27 +62,85 @@ public class NoteControllerTest {
 	    	 this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	    }
 	    
+	 /*=======================================ADD NOTE TEST CASES============================*/   
 	    
-	    
+	    /**
+	     * @throws Exception
+	     * Test case for adding note with valid user
+	     */
 	    @Test
-	   @Ignore
+	    @Ignore
 	    public void addNote() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	NoteBean note = new NoteBean();
-	    	note.setTitle("Note 4");
-	    	note.setBody("Note 4");
+	    	note.setTitle("Note 5");
+	    	note.setBody("Note 5");
 	    	mockMvc.perform(post("/addNote")
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
+	    			.andDo(MockMvcResultHandlers.print())
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("Note successfully added")))
 	    			.andExpect(status().isOk());
 	    }
 	    
+	    
+	    /**
+	     * @throws Exception
+	     * Test case for adding note with invalid user
+	     */
+	    @Test
+	    @Ignore
+	    public void addNoteInvalidUser() throws Exception{
+	    	String email="akash7@gmail.com";
+	    	int id = 20;
+	    	String token=tokenService.createJWT(id, email);
+	    	NoteBean note = new NoteBean();
+	    	note.setTitle("Note 5");
+	    	note.setBody("Note 5");
+	    	mockMvc.perform(post("/addNote")
+	    			.header("Authorization", token)
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+	    			.andDo(MockMvcResultHandlers.print())
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("User does not exist")))
+	    			.andExpect(status().isUnauthorized());
+	    }
+	    
+		 /*=======================================UPDATE NOTE TEST CASES============================*/   
+
+	    /**
+	     * @throws Exception
+	     * Test Case for update note with valid user
+	     */
 	    @Test
 	    @Ignore
 	    public void update() throws Exception{
+	    	String email="akash.badave7@gmail.com";
+	    	int id = 4;
+	    	String token=tokenService.createJWT(id, email);
+	    	NoteBean note = new NoteBean();
+	    	note.setNoteId(2);
+	    	note.setTitle("Note 2 update");
+	    	note.setBody("Note 2 update");
+	    	mockMvc.perform(post("/update")
+	    			.header("Authorization", token)
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+			    	.andDo(MockMvcResultHandlers.print())
+					.andExpect(jsonPath("$.responseMessage", Matchers.is("Updated Successfully")))
+	    			.andExpect(status().isOk());
+	    }
+	    
+	    /**
+	     * @throws Exception
+	     * Test Case for update note failed
+	     */
+	    @Test
+	   @Ignore
+	    public void updateFailed() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
@@ -93,41 +152,119 @@ public class NoteControllerTest {
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
-	    			.andExpect(status().isOk());
+	    			.andDo(MockMvcResultHandlers.print())
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("Update failed")))
+	    			.andExpect(status().isInternalServerError());
 	    }
-
-
+	    
+	    /**
+	     * @throws Exception
+	     * Test Case for update note with invalid user
+	     */
 	    @Test
 	    @Ignore
+	    public void updateWithInvalidUser() throws Exception{
+	    	String email="akash.7@gmail.com";
+	    	int id = 20;
+	    	String token=tokenService.createJWT(id, email);
+	    	NoteBean note = new NoteBean();
+	    	note.setNoteId(1);
+	    	note.setTitle("Note 2 update");
+	    	note.setBody("Note 2 update");
+	    	mockMvc.perform(post("/update")
+	    			.header("Authorization", token)
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+			    	.andDo(MockMvcResultHandlers.print())
+					.andExpect(jsonPath("$.responseMessage", Matchers.is("User Not logged in")))
+	    			.andExpect(status().isUnauthorized());
+	    }
+	    
+	   
+		 /*=======================================DELETE NOTE TEST CASES============================*/   
+
+	    /**
+	     * @throws Exception
+	     * Test Case for delete note with invalid user
+	     */
+	    @Test
+	    @Ignore
+	    public void deleteWithInvalidUser() throws Exception{
+	    	String email="akash.7@gmail.com";
+	    	int id = 20;
+	    	String token=tokenService.createJWT(id, email);
+	    	int noteId=2;
+	    	
+	    	mockMvc.perform(delete("/delete/"+noteId)
+	    			.header("Authorization", token)
+	    			.contentType(MediaType.APPLICATION_JSON))
+			    	.andDo(MockMvcResultHandlers.print())
+					.andExpect(jsonPath("$.responseMessage", Matchers.is("User Not logged in")))
+	    			.andExpect(status().isUnauthorized());
+	    }
+	    
+	    
+	    /**
+	     * @throws Exception
+	     * Test Case for delete note with valid user
+	     */
+	    @Test
+	   @Ignore
 	    public void deleteNoteById() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
-	    	int noteId=3;
+	    	int noteId=4;
 	    	
 	    	mockMvc.perform(delete("/delete/"+noteId)
-	    			.header("Authorization", token))
+	    			.header("Authorization", token)
+	    			.contentType(MediaType.APPLICATION_JSON))
+	    			.andDo(MockMvcResultHandlers.print())
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("Deletion successfull.")))
 	    			.andExpect(status().isOk());
 	    }
 	    
+		 /*=======================================GET ALL NOTE TEST CASES============================*/   
+
+	    /**
+	     * @throws Exception
+	     * Test Case to get all note with valid user
+	     */
 	    @Test
-	   @Ignore
+	    @Ignore
 	    public void getAllNotes() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	
-	    	
-	    ResultActions resultActions =	mockMvc.perform(get("/getNotes")
+	     mockMvc.perform(get("/getNotes")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.header("Authorization", token))
 	    			.andExpect(status().isOk())
 	    			 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
 	    			 .andDo(MockMvcResultHandlers.print())
-	    			 .andExpect((jsonPath("$", Matchers.hasSize(3))));
-	    
+	    			 .andExpect((jsonPath("$", Matchers.hasSize(2))));
 	    }
 	    
+    	/**
+    	 * @throws Exception
+    	 * Test case for get all notes with invalid user
+    	 */
+    	@Test
+	    @Ignore
+	    public void getAllNotesWithInvalidUser() throws Exception{
+	    	String email="akash7@gmail.com";
+	    	int id = 20;
+	    	String token=tokenService.createJWT(id, email);
+	    	
+	    	mockMvc.perform(get("/getNotes")
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.header("Authorization", token))
+	    			.andExpect(status().isUnauthorized())
+	    			 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+	    			 .andExpect(jsonPath("$.responseMessage", Matchers.is("User Not logged in")))
+	    			 .andDo(MockMvcResultHandlers.print());
+	    }
 	    
 	    
 	    @Test

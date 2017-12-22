@@ -54,7 +54,6 @@ public class NoteController {
 		String token = request.getHeader("Authorization");
 		System.out.println(token);
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
-		 int id=0;
 		 if (user!=null) {
 			 note.setUser(user);
 			 Date createdDate  = new Date();
@@ -62,22 +61,13 @@ public class NoteController {
 			 note.setLastUpdated(createdDate);
 			 note.setTrash(false);
 			 System.out.println("notecolor::"+note.getColor());
-			 id = noteService.saveNote(note);
-			 
+			 noteService.saveNote(note);
 		 }else{
-			 return new ResponseEntity(HttpStatus.BAD_REQUEST);
-			 /*responseMessage.setResponseMessage("User does not exist");
-			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);*/
+			 responseMessage.setResponseMessage("User does not exist");
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessage);
 		 }
-		 if(id!=0){
-			 return new ResponseEntity(HttpStatus.OK);
-			 /*responseMessage.setResponseMessage("Note successfully added");
-			 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);*/
-		 }else{
-			 return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-			 /*responseMessage.setResponseMessage("note could not be added");
-			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);*/
-		 }
+		 responseMessage.setResponseMessage("Note successfully added");
+		 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 	}
 	
 	/*----------------------------------Update note-------------------------------*/
@@ -85,20 +75,12 @@ public class NoteController {
 	@RequestMapping(value="/update",method=RequestMethod.POST)
 	public ResponseEntity<ResponseMessage> updateNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request,HttpServletResponse response)
 	{
-		/* UserBean user = (UserBean) session.getAttribute(session.getId());*/
-		
 		ResponseMessage responseMessage = new ResponseMessage();
 		 String token = request.getHeader("Authorization");
-		 System.out.println(token);
 		
 		 UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		 if(user!=null){
-			 /*if(user.getId()==note.getNoteId()){*/
-
 				 Date updatedDate = new Date();
-			/*	 String url = String.valueOf(request.getRequestURL());
-	 			 url = url.substring(0,url.lastIndexOf("/"))+"/update/";
-	 			 System.out.println(url);*/
 				 note.setLastUpdated(updatedDate);
 				 NoteBean oldNote = noteService.getNoteById(note.getNoteId());
 				 note.setUser(oldNote.getUser());
@@ -108,14 +90,11 @@ public class NoteController {
 					 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 				 }else {
 					 responseMessage.setResponseMessage("Update failed");
-					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
 				 }
-			 /*} else {
-				 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not modify");
-			 }*/
 		 }else{
 			 responseMessage.setResponseMessage("User Not logged in");
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessage);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessage);
 		 }
 	}
 	
@@ -130,18 +109,18 @@ public class NoteController {
 		System.out.println("Inside delete");
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
 		NoteBean oldNote = noteService.getNoteById(id);
-		if(user!=null)
+		if(user!=null && oldNote!=null)
 		{
 			if(user.getId()==oldNote.getUser().getId()){
 				noteService.deleteNote(oldNote);
 			}else
 			{
-				responseMessage.setResponseMessage(" deleted unsuccessfull");
+				responseMessage.setResponseMessage(" Note deletion unsuccessfull");
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
 			}
 		}else {
 			responseMessage.setResponseMessage("User Not logged in");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessage);
 		}
 		responseMessage.setResponseMessage("Deletion successfull.");
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -152,7 +131,7 @@ public class NoteController {
 	@RequestMapping(value="/getNotes",method=RequestMethod.GET)
 	public ResponseEntity<Object> getAllNotes(HttpSession session,HttpServletRequest request)
 	{
-		
+		ResponseMessage responseMessage = new ResponseMessage();
 		String token = request.getHeader("Authorization");
 		System.out.println(token);
 		UserBean user = userService.getUserById(verifyToken.parseJWT(token));
@@ -164,7 +143,8 @@ public class NoteController {
 			 notes.addAll(collborated);
 		}
 		else{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not logged in");
+			responseMessage.setResponseMessage("User Not logged in");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessage);
 		}
 		return ResponseEntity.ok(notes);
 	}

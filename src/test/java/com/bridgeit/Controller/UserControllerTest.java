@@ -239,9 +239,9 @@ public class UserControllerTest {
 	//@Ignore
 	public void registeValidUser() throws Exception {
 		UserBean user = new UserBean();
-		user.setEmail("akash@gmail.com");
+		user.setEmail("akashasdasdasdsadasd@gmail.com");
 		user.setPassword("akash123");
-		user.setMobilenumber("8147990147");
+		user.setMobilenumber("8145256147");
 		user.setName("Akash");
 		mockMvc.perform(post("/userRegister")
 			       .contentType(MediaType.APPLICATION_JSON)
@@ -320,7 +320,7 @@ public class UserControllerTest {
 	public void updateUserFailed() throws Exception{
 		UserBean user = new UserBean();
 		user.setId(10);
-		user.setEmail("unknown@gmail.com");
+		user.setEmail("unknownasdasd@gmail.com");
 		user.setName("juni test");
 		String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
 		mockMvc.perform(post("/updateUser")
@@ -343,7 +343,7 @@ public class UserControllerTest {
 		UserBean user = new UserBean();
 		user.setId(5);
 		user.setEmail("test@gmail.com");
-		user.setName("Junit testing");
+		user.setName("Junit tesaasdsdting");
 		String token = tokenGenerator.createJWT(user.getId(), user.getEmail());
 		
 		mockMvc.perform(post("/updateUser")
