@@ -11,14 +11,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,7 +45,7 @@ public class NoteController {
 	/*----------------------------------Adding note-------------------------------*/
 
 	@RequestMapping(value="/addNote",method=RequestMethod.POST)
-	public ResponseEntity addNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request) {
+	public ResponseEntity<ResponseMessage> addNote(@RequestBody NoteBean note,HttpSession session,HttpServletRequest request) {
 		
 		 /*UserBean user = (UserBean) session.getAttribute(session.getId());*/
 		ResponseMessage responseMessage = new ResponseMessage(); 
@@ -154,7 +152,6 @@ public class NoteController {
 	@RequestMapping(value="/collaborate",method=RequestMethod.POST)
 	public ResponseEntity<Object> collaborate(@RequestBody NoteBean note,HttpServletRequest request)
 	{
-		System.out.println("inside collaborator");
 		ResponseMessage responseMessage = new ResponseMessage();
 		String token = request.getHeader("Authorization");
 		UserBean currentUser = userService.getUserById(verifyToken.parseJWT(token));
@@ -177,9 +174,10 @@ public class NoteController {
 		}else
 		{
 			responseMessage.setResponseMessage("User Not logged in");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessage);
 		}
-		return null;
+		responseMessage.setResponseMessage("Successfully collaborated");
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 		
 	}
 	

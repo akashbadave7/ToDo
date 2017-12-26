@@ -266,10 +266,65 @@ public class NoteControllerTest {
 	    			 .andDo(MockMvcResultHandlers.print());
 	    }
 	    
-	    
+	/*=======================================Collaborate NOTE TEST CASES============================*/   
+
+	    /**
+	     * @throws Exception
+	     * Test case to collaborate note  with invalid user
+	     */
 	    @Test
-	    @Ignore
-	    public void collaborate() throws Exception{
+	    //@Ignore
+	    public void collaborateIvalidUser() throws Exception{
+	    	String email="akash78@gmail.com";
+	    	int id = 20;
+	    	String token=tokenService.createJWT(id, email);
+	    	
+	    	NoteBean note = new NoteBean();
+	    	note.setNoteId(1);
+	    	mockMvc.perform(post("/collaborate")
+	    			.header("Authorization", token)
+	    			.header("email","rollingcola@yahoo.com")
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+	    			.andExpect(status().isUnauthorized())
+	    			.andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("User Not logged in")))
+	    			.andDo(MockMvcResultHandlers.print());
+	    }
+	    
+	    
+	    /**
+	     * @throws Exception
+	     * Test case to collaborate user with invalid collabortor email
+	     */
+	    @Test
+	    //@Ignore
+	    public void collaborateIvalidCollabUser() throws Exception{
+	    	String email="akash.badave7@gmail.com";
+	    	int id = 4;
+	    	String token=tokenService.createJWT(id, email);
+	    	
+	    	NoteBean note = new NoteBean();
+	    	note.setNoteId(1);
+	    	mockMvc.perform(post("/collaborate")
+	    			.header("Authorization", token)
+	    			.header("email","sadasdjkashdasd@yahoo.com")
+	    			.contentType(MediaType.APPLICATION_JSON)
+	    			.content(asJsonString(note)))
+	    			.andExpect(status().isBadRequest())
+	    			.andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("Enter Valid Email")))
+	    			.andDo(MockMvcResultHandlers.print());
+	    }
+	    
+	    
+	    /**
+	     * @throws Exception
+	     * Test case to collaborate user with valid email
+	     */
+	    @Test
+	    //@Ignore
+	    public void collaborateUser() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
@@ -281,7 +336,10 @@ public class NoteControllerTest {
 	    			.header("email","rollingcola@yahoo.com")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
-	    			.andExpect(status().isOk());
+	    			.andExpect(status().isOk())
+	    			.andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+	    			.andExpect(jsonPath("$.responseMessage", Matchers.is("Successfully collaborated")))
+	    			.andDo(MockMvcResultHandlers.print());
 	    }
 	    
 	    @Test

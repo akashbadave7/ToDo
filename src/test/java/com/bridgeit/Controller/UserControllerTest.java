@@ -239,7 +239,7 @@ public class UserControllerTest {
 	//@Ignore
 	public void registeValidUser() throws Exception {
 		UserBean user = new UserBean();
-		user.setEmail("akashasdasdasdsadasd@gmail.com");
+		user.setEmail("hello@gmail.com");
 		user.setPassword("akash123");
 		user.setMobilenumber("8145256147");
 		user.setName("Akash");
