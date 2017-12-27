@@ -41,20 +41,20 @@
 		     	<md-icon md-svg-src="images/delete.svg" ng-click="deleteRemender(note)" style="width:21px;float:right;margin-top:-13px"></md-icon></p>
 	        <md-card-actions>
 		       	<p id="lastDiv" class="icon">
-		       	<md-button style="min-width:25px";>
+		       	<md-button style="min-width:25px;">
 		       	<md-menu>
 	       			<!--  <md-button style="min-width:30px;" ng-click="$mdMenu.open($event)"> -->
 	       				<img src="images/remender.svg" ng-click="$mdMenu.open($event)">
 	       			<!-- </md-button> -->
 			              <md-menu-content>
 			                <md-menu-item>
-			                  <button class="md-raised md-primary md-button md-ink-ripple" type="button"=""
+			                  <button class="md-raised md-primary md-button md-ink-ripple" type="button"
 							ng-click="displayDialog(note)">Display Picker</button>
 			                </md-menu-item>
 			              </md-menu-content>
 			       </md-menu> 
 			       </md-button>
-			       		<md-button style="min-width:25px"; arial-label="Share" ng-click="collaborators(note,$event)">
+			       		<md-button style="min-width:25px;" arial-label="Share" ng-click="collaborators(note,$event)">
 			       			<md-tooltip md-direction="bottom">Share</md-tooltip>
 		       				<md-icon md-svg-src="images/share.svg" ng-click="" style="width:21px"></md-icon>
 	        			</md-button>

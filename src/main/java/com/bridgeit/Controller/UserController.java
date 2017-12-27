@@ -1,22 +1,16 @@
 package com.bridgeit.Controller;
 
-import static org.mockito.Mockito.reset;
-
-import java.io.IOException;
 import java.util.List;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,8 +49,6 @@ public class UserController {
 
 	
 	private static final Logger logger = Logger.getLogger("loginFile");
-	private static final Logger logger1 = Logger.getRootLogger();
-	
 	@RequestMapping(value="/user",method=RequestMethod.GET)
 	public ResponseEntity<Object> user(@RequestParam(value="email",required=true) String email)
 	{
@@ -99,8 +91,7 @@ public class UserController {
     				// Storing message in JMS queue
         			producer.send(email);
         			System.out.println(email);
-        			HttpHeaders headers = new HttpHeaders();
-                    logger.info("Registration successfull");
+        			logger.info("Registration successfull");
                     responseMessage.setResponseMessage("Registration successfull");
                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         		}
@@ -225,7 +216,6 @@ public class UserController {
 	@RequestMapping(value = "/getUserList", method = RequestMethod.GET)
 	public ResponseEntity<List<UserBean>> getUserList(HttpServletRequest request){
 		String token =request.getHeader("Authorization");
-		ResponseMessage responseMessage = new ResponseMessage();
 		UserBean user=userService.getUserById(verifyToken.parseJWT(token));
 		if(user!=null){
 			List<UserBean> list=userService.getUserList();

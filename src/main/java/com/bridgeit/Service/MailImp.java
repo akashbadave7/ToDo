@@ -1,6 +1,5 @@
 package com.bridgeit.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.mail.MessagingException;

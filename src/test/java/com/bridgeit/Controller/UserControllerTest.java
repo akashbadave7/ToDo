@@ -7,11 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.regex.Matcher;
-
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -239,9 +236,9 @@ public class UserControllerTest {
 	//@Ignore
 	public void registeValidUser() throws Exception {
 		UserBean user = new UserBean();
-		user.setEmail("hello@gmail.com");
+		user.setEmail("sadasdasd@gmail.com");
 		user.setPassword("akash123");
-		user.setMobilenumber("8145256147");
+		user.setMobilenumber("8143251147");
 		user.setName("Akash");
 		mockMvc.perform(post("/userRegister")
 			       .contentType(MediaType.APPLICATION_JSON)

@@ -1,6 +1,5 @@
 package com.bridgeit.model;
 
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,10 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import org.jboss.resteasy.annotations.providers.img.ImageWriterParams;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name="user")
@@ -35,6 +35,7 @@ public class UserBean
 	@Column(name="email")
 	private String email;
 	
+	@JsonProperty(access=Access.WRITE_ONLY)
 	@Column(name="password")
 	private String password;
 	

@@ -7,9 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -104,6 +102,7 @@ public class UserDaoImp implements UserDao{
 		UserBean user=null;
 		try {
 		
+		@SuppressWarnings("unchecked")
 		Query<UserBean> query = session.createQuery("from UserBean where email=:email");
 		query.setParameter("email", email);
 		List<UserBean> list = query.list();
@@ -142,6 +141,7 @@ public class UserDaoImp implements UserDao{
 		Session session = factory.openSession();
 		List<UserBean> list=null;
 		try {
+				@SuppressWarnings("unchecked")
 				Query<UserBean> query = session.createQuery("from UserBean where email=:email or mobilenumber=:mobilenumber");
 				query.setParameter("email", email);
 				query.setParameter("mobilenumber", mobilenumebr);
@@ -161,9 +161,11 @@ public class UserDaoImp implements UserDao{
 	public List<UserBean> getUserList() {
 		Session session=factory.openSession();
 
-       Criteria criteria = session.createCriteria(UserBean.class);
+       @SuppressWarnings("deprecation")
+	Criteria criteria = session.createCriteria(UserBean.class);
        criteria.setProjection(Projections.property("email"));
-        List<UserBean> userList=criteria.list();
+        @SuppressWarnings("unchecked")
+		List<UserBean> userList=criteria.list();
 		return userList;
 	}
 	

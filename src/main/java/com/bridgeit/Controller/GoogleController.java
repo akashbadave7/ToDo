@@ -30,8 +30,6 @@ public class GoogleController {
 	TokenGenerator tokenGenerator;
 	
 	private static final Logger logger = Logger.getLogger("loginFile");
-	private static final Logger logger1 = Logger.getRootLogger(); 
-	
 	@RequestMapping(value = "/loginWithGoogle")
 	public void googleConnection(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println(" in googleLoginURL  ");

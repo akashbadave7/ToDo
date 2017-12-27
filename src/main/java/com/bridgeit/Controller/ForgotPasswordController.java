@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bridgeit.Service.MailImp;
 import com.bridgeit.Service.Producer;
 import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
@@ -25,8 +24,6 @@ import com.bridgeit.model.UserBean;
 @RestController
 public class ForgotPasswordController {
 	
-	@Autowired
-	private MailImp sendMail;
 	@Autowired
 	TokenGenerator tokenGenerator;
 	@Autowired
@@ -73,7 +70,7 @@ public class ForgotPasswordController {
 		
 		
 		@RequestMapping(value="/resetPassword/{token:.+}",method=RequestMethod.POST)
-		public ResponseEntity resetpass(@PathVariable("token") String token,@RequestBody UserBean user)
+		public ResponseEntity<ResponseMessage> resetpass(@PathVariable("token") String token,@RequestBody UserBean user)
 		{
 			ResponseMessage responseMessage = new ResponseMessage();
 			int id = verifyToken.parseJWT(token);

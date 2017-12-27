@@ -1,14 +1,10 @@
 package com.bridgeit.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.SerializationUtils;
 
 import com.bridgeit.model.Email;
 public class Consumer implements MessageListener{

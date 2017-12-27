@@ -19,13 +19,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.bridgeit.Service.UserService;
 import com.bridgeit.Token.TokenGenerator;
 import com.bridgeit.model.Label;
 import com.bridgeit.model.NoteBean;
@@ -40,9 +38,6 @@ public class NoteControllerTest {
 	 	@InjectMocks
 	    private NoteController noteController;
 	    
-	 /*	@Autowired
-	    @Spy
-	    private UserService userService;*/
 	 	
 	    @Autowired
 	    @Spy
@@ -69,14 +64,14 @@ public class NoteControllerTest {
 	     * Test case for adding note with valid user
 	     */
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void addNote() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	NoteBean note = new NoteBean();
-	    	note.setTitle("Note 5");
-	    	note.setBody("Note 5");
+	    	note.setTitle("Note 9");
+	    	note.setBody("Note 9");
 	    	mockMvc.perform(post("/addNote")
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +87,7 @@ public class NoteControllerTest {
 	     * Test case for adding note with invalid user
 	     */
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void addNoteInvalidUser() throws Exception{
 	    	String email="akash7@gmail.com";
 	    	int id = 20;
@@ -116,15 +111,15 @@ public class NoteControllerTest {
 	     * Test Case for update note with valid user
 	     */
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void update() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	NoteBean note = new NoteBean();
 	    	note.setNoteId(2);
-	    	note.setTitle("Note 2 update");
-	    	note.setBody("Note 2 update");
+	    	note.setTitle("Note 2");
+	    	note.setBody("Note 2");
 	    	mockMvc.perform(post("/update")
 	    			.header("Authorization", token)
 	    			.contentType(MediaType.APPLICATION_JSON)
@@ -139,7 +134,7 @@ public class NoteControllerTest {
 	     * Test Case for update note failed
 	     */
 	    @Test
-	   @Ignore
+	   //@Ignore
 	    public void updateFailed() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -162,7 +157,7 @@ public class NoteControllerTest {
 	     * Test Case for update note with invalid user
 	     */
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void updateWithInvalidUser() throws Exception{
 	    	String email="akash.7@gmail.com";
 	    	int id = 20;
@@ -188,12 +183,12 @@ public class NoteControllerTest {
 	     * Test Case for delete note with invalid user
 	     */
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void deleteWithInvalidUser() throws Exception{
 	    	String email="akash.7@gmail.com";
 	    	int id = 20;
 	    	String token=tokenService.createJWT(id, email);
-	    	int noteId=2;
+	    	int noteId=1;
 	    	
 	    	mockMvc.perform(delete("/delete/"+noteId)
 	    			.header("Authorization", token)
@@ -209,12 +204,12 @@ public class NoteControllerTest {
 	     * Test Case for delete note with valid user
 	     */
 	    @Test
-	   @Ignore
+	   //@Ignore
 	    public void deleteNoteById() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
-	    	int noteId=4;
+	    	int noteId=3;
 	    	
 	    	mockMvc.perform(delete("/delete/"+noteId)
 	    			.header("Authorization", token)
@@ -231,7 +226,7 @@ public class NoteControllerTest {
 	     * Test Case to get all note with valid user
 	     */
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void getAllNotes() throws Exception{
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
@@ -251,7 +246,7 @@ public class NoteControllerTest {
     	 * Test case for get all notes with invalid user
     	 */
     	@Test
-	    @Ignore
+	    //@Ignore
 	    public void getAllNotesWithInvalidUser() throws Exception{
 	    	String email="akash7@gmail.com";
 	    	int id = 20;
@@ -280,7 +275,7 @@ public class NoteControllerTest {
 	    	String token=tokenService.createJWT(id, email);
 	    	
 	    	NoteBean note = new NoteBean();
-	    	note.setNoteId(1);
+	    	note.setNoteId(4);
 	    	mockMvc.perform(post("/collaborate")
 	    			.header("Authorization", token)
 	    			.header("email","rollingcola@yahoo.com")
@@ -305,7 +300,7 @@ public class NoteControllerTest {
 	    	String token=tokenService.createJWT(id, email);
 	    	
 	    	NoteBean note = new NoteBean();
-	    	note.setNoteId(1);
+	    	note.setNoteId(4);
 	    	mockMvc.perform(post("/collaborate")
 	    			.header("Authorization", token)
 	    			.header("email","sadasdjkashdasd@yahoo.com")
@@ -330,10 +325,10 @@ public class NoteControllerTest {
 	    	String token=tokenService.createJWT(id, email);
 	    	
 	    	NoteBean note = new NoteBean();
-	    	note.setNoteId(1);
+	    	note.setNoteId(4);
 	    	mockMvc.perform(post("/collaborate")
 	    			.header("Authorization", token)
-	    			.header("email","rollingcola@yahoo.com")
+	    			.header("email","akash@gmail.com")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
 	    			.andExpect(status().isOk())
@@ -343,11 +338,11 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void getOwner() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
-	    	note.setNoteId(1);
+	    	note.setNoteId(4);
 	    	mockMvc.perform(post("/getOwner")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
@@ -355,11 +350,11 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void getCollabUser() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
-	    	note.setNoteId(1);
+	    	note.setNoteId(4);
 	    	mockMvc.perform(post("/getCollabUser")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
@@ -368,27 +363,27 @@ public class NoteControllerTest {
 	    
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void removeCollaborator() throws Exception{
 	    	
 	    	NoteBean note = new NoteBean();
 	    	note.setNoteId(2);
 	    	mockMvc.perform(post("/removeCollaborator")
-	    			.header("email","test@gmail.com")
+	    			.header("email","akash@gmail.com")
 	    			.contentType(MediaType.APPLICATION_JSON)
 	    			.content(asJsonString(note)))
 	    			.andExpect(status().isOk());
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void addlabel() throws Exception{
 	    	
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	Label label = new Label();
-	    	label.setName("junit test");
+	    	label.setName("Label 3");
 	    	mockMvc.perform(post("/addlabel")
 	    			.header("Authorization",token)
 	    			.contentType(MediaType.APPLICATION_JSON)
@@ -397,7 +392,7 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void getAllLabel() throws Exception{
 	    	
 	    	String email="akash.badave7@gmail.com";
@@ -411,14 +406,14 @@ public class NoteControllerTest {
 	    }
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void deleteLabel() throws Exception{
 	    	
 	    	String email="akash.badave7@gmail.com";
 	    	int id = 4;
 	    	String token=tokenService.createJWT(id, email);
 	    	Label label = new Label();
-	    	label.setLabelId(1);
+	    	label.setLabelId(8);
 	    	mockMvc.perform(post("/deleteLabel")
 	    			.header("Authorization",token)
 	    			.contentType(MediaType.APPLICATION_JSON)
@@ -429,7 +424,7 @@ public class NoteControllerTest {
 	    
 	    
 	    @Test
-	    @Ignore
+	    //@Ignore
 	    public void geturl() throws Exception{
 	    	
 	    	mockMvc.perform(post("/geturl")

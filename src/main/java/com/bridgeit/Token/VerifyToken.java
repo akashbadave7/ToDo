@@ -1,9 +1,5 @@
 package com.bridgeit.Token;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.bridgeit.model.ResponseMessage;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jwts;
