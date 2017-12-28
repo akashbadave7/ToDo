@@ -27,9 +27,15 @@ development.properties
 .metadata
 RemoteSystemsTempFiles
 /target/
-bin/
+/bin/
 **/.settings
+.settings
+
+**/.project/
 .project
+.classpath
+**/.classpath/
+
 
 
 #angular dependancy
