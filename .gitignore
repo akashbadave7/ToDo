@@ -29,7 +29,7 @@ development.properties
 
 /target/
 
-bin/
+
 .settings
 **/.project
 **/.classpath
