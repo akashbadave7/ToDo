@@ -49,7 +49,6 @@ public class UserBean
 	private String picUrl;
 	
 	@JsonIgnore
-	//@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="user")
 	List<NoteBean> notes;
 
