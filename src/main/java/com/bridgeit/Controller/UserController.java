@@ -44,6 +44,13 @@ public class UserController {
 	
 	@Autowired
 	Producer producer;
+	
+	
+	@RequestMapping("/hello")
+	public String welcome() {
+		return "Welcome User";
+		
+	}
 
     //-------------------Retrieve Single User--------------------------------------------------------
 
